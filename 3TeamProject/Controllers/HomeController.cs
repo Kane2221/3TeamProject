@@ -7,10 +7,12 @@ namespace _3TeamProject.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly _3TeamProjectContext _DbContext;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, _3TeamProjectContext DbContext)
         {
             _logger = logger;
+            _DbContext = DbContext;
         }
 
         public IActionResult Index()
@@ -20,6 +22,7 @@ namespace _3TeamProject.Controllers
 
         public IActionResult Privacy()
         {
+            
             return View();
         }
 

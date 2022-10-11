@@ -2,9 +2,10 @@ using _3TeamProject.Models;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-var NorthwindconnectionString = builder.Configuration.GetConnectionString("Northwind");
-builder.Services.AddDbContext<NorthwindContext>(options =>
-    options.UseSqlServer(NorthwindconnectionString));
+
+//連線資料庫
+builder.Services.AddDbContext<_3TeamProjectContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("3TeamProject")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
