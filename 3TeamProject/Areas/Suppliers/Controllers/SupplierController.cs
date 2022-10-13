@@ -1,10 +1,12 @@
 ﻿using _3TeamProject.Areas.Sppliers.Data;
+using _3TeamProject.Areas.Suppliers.Data;
 using _3TeamProject.Models;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
+using System.Text.Json;
 
 namespace _3TeamProject.Areas.Sppliers.Controllers
 {
@@ -52,18 +54,16 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
                 };
                 _context.Suppliers.Add(supplier);
                 await _context.SaveChangesAsync();
-                return Ok("註冊成功");
+                return Ok("註冊成功，請等待驗證信件");
             }
         }
 
-        public async Task<IActionResult> Login([FromBody] SupplierLoginReuqest request)
+        public async Task<IActionResult> Login([FromBody]SupplierLoginReuqest request)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Account == request.Account);
-            if (user == null)
-            {
+            if (user == null) {
                 return BadRequest("帳號不存在");
             }
-
             var hmac = new HMACSHA512(user.PasswordSalt);
             var computeHsah = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(request.Password));
             if (!computeHsah.SequenceEqual(user.PasswordHash))
@@ -75,23 +75,51 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
             {
                 return BadRequest("未驗證帳號");
             }
-            hmac.Dispose();
-
             return Ok("登入成功");
         }
-        public async Task<IActionResult> Verify(string token)
+        //TODO 新增寄送Token給使用者作驗證
+        public async Task<IActionResult> Verify([FromBody]string token)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.VerficationToken == token);
-            if (user == null)
-            {
-                return BadRequest("失效的驗證碼");
+            if (user == null) {
+                return BadRequest("無效的驗證碼");
             }
             user.VerfiedAt = DateTime.Now;
             await _context.SaveChangesAsync();
-
-
-
             return Ok("驗證成功");
         }
+        //TODO 新增重設密碼寄送Token給使用者作驗證
+        public async Task<IActionResult> ForgotPassword([FromBody]string email)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            if (user == null)
+            {
+                return BadRequest("帳號不存在");
+            }
+            user.PasswordResetToken = Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
+            user.ResetTokenExpires = DateTime.Now.AddMinutes(30);
+            await _context.SaveChangesAsync();
+            return Ok("請等待驗證信件");
+        }
+        public async Task<IActionResult> ResetPassword([FromBody]ResetPasswordRequest request)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.PasswordResetToken == request.Token);
+            if (user == null || user.ResetTokenExpires < DateTime.Now) 
+            {
+                return BadRequest("驗證碼已過期，請重新申請!");
+            }
+            using (var hmac = new HMACSHA512())
+            {
+                var passwordSalt = hmac.Key;
+                var passwordHsah = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(request.Password));
+                user.PasswordSalt = passwordSalt;
+                user.PasswordHash = passwordHsah;
+                user.PasswordResetToken = null;
+                user.ResetTokenExpires = null;
+                await _context.SaveChangesAsync();
+                return Ok("密碼重設成功");
+            }
+        }
+        //TODO 新增Cookie驗證
     }
 }
