@@ -28,6 +28,11 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+//·s¼WSuppliers Area ªº Route
+app.MapControllerRoute(
+    name: "Suppliers",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

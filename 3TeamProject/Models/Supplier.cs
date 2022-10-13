@@ -12,7 +12,7 @@ namespace _3TeamProject.Models
 
         public int SuppliersId { get; set; }
         public string ContactName { get; set; } = null!;
-        public string CompanyName { get; set; } = null!;
+        public string? CompanyName { get; set; }
         public int TaxId { get; set; }
         public string? Fax { get; set; }
         public string CellPhoneNumber { get; set; } = null!;

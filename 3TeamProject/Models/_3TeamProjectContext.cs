@@ -38,11 +38,6 @@ namespace _3TeamProject.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=3TeamProject;user id=sa;password=hjc5201;Integrated Security=true");
-            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -53,20 +48,15 @@ namespace _3TeamProject.Models
 
                 entity.ToTable("Activities\nMessageBoard");
 
-                entity.Property(e => e.ActivitiesMessageId).HasColumnName("Activities\nMessageID");
+                entity.Property(e => e.ActivitiesMessageId).HasColumnName("ActivitiesMessageID");
 
-                entity.Property(e => e.ActivitiesCreatedDate)
-                    .HasColumnType("datetime")
-                    .HasColumnName("Activities\nCreatedDate");
+                entity.Property(e => e.ActivitiesCreatedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.ActivitiesId).HasColumnName("ActivitiesID");
 
-                entity.Property(e => e.ActivitiesMessageContent).HasColumnName("Activities\nMessageContent");
-
                 entity.Property(e => e.ActivitiesMessageState)
                     .HasMaxLength(10)
-                    .IsUnicode(false)
-                    .HasColumnName("Activities\nMessageState");
+                    .IsUnicode(false);
 
                 entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
@@ -150,7 +140,7 @@ namespace _3TeamProject.Models
             {
                 entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
-                entity.Property(e => e.AdministratorId).HasColumnName("Administrator\nID");
+                entity.Property(e => e.AdministratorId).HasColumnName("AdministratorID");
 
                 entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
@@ -172,8 +162,7 @@ namespace _3TeamProject.Models
 
                 entity.Property(e => e.ShipPostalCode)
                     .HasMaxLength(20)
-                    .IsUnicode(false)
-                    .HasColumnName("ShipPostal code");
+                    .IsUnicode(false);
 
                 entity.HasOne(d => d.Administrator)
                     .WithMany(p => p.Orders)
@@ -234,11 +223,9 @@ namespace _3TeamProject.Models
 
                 entity.ToTable("OrderStatus\nCategories");
 
-                entity.Property(e => e.OrderCategoryId).HasColumnName("Order\nCategoryID");
+                entity.Property(e => e.OrderCategoryId).HasColumnName("OrderCategoryID");
 
-                entity.Property(e => e.OrderCategoryName)
-                    .HasMaxLength(50)
-                    .HasColumnName("Order\nCategoryName");
+                entity.Property(e => e.OrderCategoryName).HasMaxLength(50);
             });
 
             modelBuilder.Entity<PaymentStatusCategory>(entity =>
@@ -247,11 +234,9 @@ namespace _3TeamProject.Models
 
                 entity.ToTable("PaymentStatus\nCategories");
 
-                entity.Property(e => e.PaymentCategoryId).HasColumnName("Payment\nCategoryID");
+                entity.Property(e => e.PaymentCategoryId).HasColumnName("PaymentCategoryID");
 
-                entity.Property(e => e.PaymentCategoryName)
-                    .HasMaxLength(50)
-                    .HasColumnName("Payment\nCategoryName");
+                entity.Property(e => e.PaymentCategoryName).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Product>(entity =>
@@ -303,7 +288,7 @@ namespace _3TeamProject.Models
 
                 entity.ToTable("Products\nMessageBoard");
 
-                entity.Property(e => e.MessageBoardId).HasColumnName("MessageBoard\nID");
+                entity.Property(e => e.MessageBoardId).HasColumnName("MessageBoardID");
 
                 entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
@@ -366,11 +351,9 @@ namespace _3TeamProject.Models
 
                 entity.ToTable("ShipStatus\nCategories");
 
-                entity.Property(e => e.ShipCategoryId).HasColumnName("Ship\nCategoryID");
+                entity.Property(e => e.ShipCategoryId).HasColumnName("ShipCategoryID");
 
-                entity.Property(e => e.ShipCategoryName)
-                    .HasMaxLength(50)
-                    .HasColumnName("Ship\nCategoryName");
+                entity.Property(e => e.ShipCategoryName).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Sightseeing>(entity =>
@@ -402,19 +385,13 @@ namespace _3TeamProject.Models
 
                 entity.ToTable("Sightseeing\nMessageBoard");
 
-                entity.Property(e => e.MessageBoardId).HasColumnName("MessageBoard\nID");
+                entity.Property(e => e.MessageBoardId).HasColumnName("MessageBoardID");
 
                 entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
-                entity.Property(e => e.MessageCreatedTime)
-                    .HasColumnType("datetime")
-                    .HasColumnName("Message\nCreatedTime");
+                entity.Property(e => e.MessageCreatedTime).HasColumnType("datetime");
 
-                entity.Property(e => e.SightseeingId).HasColumnName("Sightseeing\nID");
-
-                entity.Property(e => e.SightseeingMessageContent).HasColumnName("Sightseeing\nMessageContent");
-
-                entity.Property(e => e.SightseeingMessageState).HasColumnName("Sightseeing\nMessageState");
+                entity.Property(e => e.SightseeingId).HasColumnName("SightseeingID");
 
                 entity.HasOne(d => d.Sightseeing)
                     .WithMany(p => p.SightseeingMessageBoards)
@@ -428,17 +405,13 @@ namespace _3TeamProject.Models
 
                 entity.ToTable("SightseeingPictureInfo");
 
-                entity.Property(e => e.SightseeingPictureId).HasColumnName("Sightseeing\nPictureID");
+                entity.Property(e => e.SightseeingPictureId).HasColumnName("SightseeingPictureID");
 
-                entity.Property(e => e.SightseeingId).HasColumnName("Sightseeing\nID");
+                entity.Property(e => e.SightseeingId).HasColumnName("SightseeingID");
 
-                entity.Property(e => e.SightseeingPictureName)
-                    .HasMaxLength(50)
-                    .HasColumnName("Sightseeing\nPictureName");
+                entity.Property(e => e.SightseeingPictureName).HasMaxLength(50);
 
-                entity.Property(e => e.SightseeingPicturePath)
-                    .HasMaxLength(50)
-                    .HasColumnName("Sightseeing\nPicturePath");
+                entity.Property(e => e.SightseeingPicturePath).HasMaxLength(50);
 
                 entity.HasOne(d => d.Sightseeing)
                     .WithMany(p => p.SightseeingPictureInfos)
@@ -452,19 +425,11 @@ namespace _3TeamProject.Models
 
                 entity.Property(e => e.ActivitiesId).HasColumnName("ActivitiesID");
 
-                entity.Property(e => e.ActitiesFinishDate)
-                    .HasColumnType("datetime")
-                    .HasColumnName("Actities\nFinishDate");
+                entity.Property(e => e.ActitiesFinishDate).HasColumnType("datetime");
 
-                entity.Property(e => e.ActitiesStartDate)
-                    .HasColumnType("datetime")
-                    .HasColumnName("Actities\nStartDate");
+                entity.Property(e => e.ActitiesStartDate).HasColumnType("datetime");
 
-                entity.Property(e => e.ActivitiesAddress)
-                    .HasMaxLength(50)
-                    .HasColumnName("Activities\nAddress");
-
-                entity.Property(e => e.ActivitiesContent).HasColumnName("Activities\nContent");
+                entity.Property(e => e.ActivitiesAddress).HasMaxLength(50);
 
                 entity.Property(e => e.ActivitiesName).HasMaxLength(50);
 
@@ -485,17 +450,13 @@ namespace _3TeamProject.Models
             {
                 entity.HasKey(e => e.SuppliersId);
 
-                entity.Property(e => e.SuppliersId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("SuppliersID");
+                entity.Property(e => e.SuppliersId).HasColumnName("SuppliersID");
 
                 entity.Property(e => e.CellPhoneNumber)
                     .HasMaxLength(20)
                     .IsUnicode(false);
 
-                entity.Property(e => e.CompanyName)
-                    .HasMaxLength(50)
-                    .HasColumnName("Company\nName");
+                entity.Property(e => e.CompanyName).HasMaxLength(50);
 
                 entity.Property(e => e.ContactName).HasMaxLength(50);
 
@@ -537,18 +498,18 @@ namespace _3TeamProject.Models
                     .HasMaxLength(50)
                     .HasColumnName("EMAIL");
 
-                entity.Property(e => e.PasswordHash).HasMaxLength(1);
+                entity.Property(e => e.PasswordHash).HasMaxLength(128);
 
                 entity.Property(e => e.PasswordResetToken)
-                    .HasMaxLength(50)
+                    .HasMaxLength(128)
                     .IsUnicode(false);
 
-                entity.Property(e => e.PasswordSalt).HasMaxLength(1);
+                entity.Property(e => e.PasswordSalt).HasMaxLength(128);
 
                 entity.Property(e => e.ResetTokenExpires).HasColumnType("datetime");
 
                 entity.Property(e => e.VerficationToken)
-                    .HasMaxLength(50)
+                    .HasMaxLength(128)
                     .IsUnicode(false);
 
                 entity.Property(e => e.VerfiedAt).HasColumnType("datetime");
@@ -556,7 +517,6 @@ namespace _3TeamProject.Models
                 entity.HasOne(d => d.RolesNavigation)
                     .WithMany(p => p.Users)
                     .HasForeignKey(d => d.Roles)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Users_Roles1");
             });
 
