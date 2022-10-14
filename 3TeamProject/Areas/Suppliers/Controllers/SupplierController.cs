@@ -116,6 +116,11 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
         }
         public async Task<IActionResult> ResetPassword([FromBody]ResetPasswordRequest request)
         {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Select(x=>x.Value.Errors).Where(y=>y.Count>0).ToList();
+                return BadRequest(errors);
+            }
             var user = await _context.Users.FirstOrDefaultAsync(u => u.PasswordResetToken == request.Token);
             if (user == null || user.ResetTokenExpires < DateTime.Now) 
             {

@@ -20,8 +20,9 @@ namespace _3TeamProject.Areas.Administrators.Controllers
 
         public async Task<IActionResult> GetAllAdmin()
         {
+            
             //TODO get data by Admin
-            return Ok();
+            return Ok(_context.Administrators.ToList());
         }
         public async Task<IActionResult> Register([FromBody] AdminRegisterRequest request)
         {
@@ -105,15 +106,17 @@ namespace _3TeamProject.Areas.Administrators.Controllers
         }
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
         {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Select(x => x.Value.Errors).Where(y => y.Count>0).ToList();
+                return BadRequest(errors);
+            }
             var user = await _context.Users.FirstOrDefaultAsync(u => u.PasswordResetToken == request.Token);
             if (user == null || user.ResetTokenExpires < DateTime.Now)
             {
                 return BadRequest("驗證碼已過期，請重新申請!");
             }
-            if (request.Password != request.ComfirmPassword)
-            {
-                return BadRequest("密碼與確認密碼不一致");
-            }
+
             using (var hmac = new HMACSHA512())
             {
                 var passwordSalt = hmac.Key;
