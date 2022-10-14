@@ -16,6 +16,18 @@ namespace _3TeamProject.Models
         {
         }
 
+<<<<<<< HEAD
+        public virtual DbSet<Order> Orders { get; set; } = null!;
+        public virtual DbSet<Product> Products { get; set; } = null!;
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=3TeamProject;Integrated Security=true");
+            }
+=======
         public virtual DbSet<ActivitiesMessageBoard> ActivitiesMessageBoards { get; set; } = null!;
         public virtual DbSet<Administrator> Administrators { get; set; } = null!;
         public virtual DbSet<Member> Members { get; set; } = null!;
@@ -38,10 +50,13 @@ namespace _3TeamProject.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+>>>>>>> 7066e5cee75f6b89ea580f119c126ac3026b8f2f
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+<<<<<<< HEAD
+=======
             modelBuilder.Entity<ActivitiesMessageBoard>(entity =>
             {
                 entity.HasKey(e => e.ActivitiesMessageId);
@@ -136,11 +151,16 @@ namespace _3TeamProject.Models
                     .HasConstraintName("FK_Members_Users");
             });
 
+>>>>>>> 7066e5cee75f6b89ea580f119c126ac3026b8f2f
             modelBuilder.Entity<Order>(entity =>
             {
                 entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
+<<<<<<< HEAD
+                entity.Property(e => e.AdministratorId).HasColumnName("Administrator\r\nID");
+=======
                 entity.Property(e => e.AdministratorId).HasColumnName("AdministratorID");
+>>>>>>> 7066e5cee75f6b89ea580f119c126ac3026b8f2f
 
                 entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
@@ -162,6 +182,10 @@ namespace _3TeamProject.Models
 
                 entity.Property(e => e.ShipPostalCode)
                     .HasMaxLength(20)
+<<<<<<< HEAD
+                    .IsUnicode(false)
+                    .HasColumnName("ShipPostal code");
+=======
                     .IsUnicode(false);
 
                 entity.HasOne(d => d.Administrator)
@@ -237,6 +261,7 @@ namespace _3TeamProject.Models
                 entity.Property(e => e.PaymentCategoryId).HasColumnName("PaymentCategoryID");
 
                 entity.Property(e => e.PaymentCategoryName).HasMaxLength(50);
+>>>>>>> 7066e5cee75f6b89ea580f119c126ac3026b8f2f
             });
 
             modelBuilder.Entity<Product>(entity =>
@@ -260,6 +285,8 @@ namespace _3TeamProject.Models
                 entity.Property(e => e.RemovedTime).HasColumnType("datetime");
 
                 entity.Property(e => e.SupplierId).HasColumnName("SupplierID");
+<<<<<<< HEAD
+=======
 
                 entity.HasOne(d => d.ProductCategory)
                     .WithMany(p => p.Products)
@@ -518,6 +545,7 @@ namespace _3TeamProject.Models
                     .WithMany(p => p.Users)
                     .HasForeignKey(d => d.Roles)
                     .HasConstraintName("FK_Users_Roles1");
+>>>>>>> 7066e5cee75f6b89ea580f119c126ac3026b8f2f
             });
 
             OnModelCreatingPartial(modelBuilder);

@@ -2,11 +2,17 @@ using _3TeamProject.Models;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+<<<<<<< HEAD
+var TeamProjectconnectionString = builder.Configuration.GetConnectionString("3TeamProject");
+builder.Services.AddDbContext<_3TeamProjectContext>(options =>
+    options.UseSqlServer(TeamProjectconnectionString));
+=======
 
 
 //連線資料庫(測試期間請檢查appsettings.json裡的連線字串，與自己的資料庫連線是否一致。)
 builder.Services.AddDbContext<_3TeamProjectContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Team3Project")));
+>>>>>>> 7066e5cee75f6b89ea580f119c126ac3026b8f2f
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
