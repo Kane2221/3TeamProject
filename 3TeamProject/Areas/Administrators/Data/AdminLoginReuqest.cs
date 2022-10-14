@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace _3TeamProject.Areas.Sppliers.Data
+namespace _3TeamProject.Areas.Administrators.Data
 {
-    public class SupplierLoginReuqest
+    public class AdminLoginReuqest
     {
         [Required]
         public string Account { get; set; } = string.Empty;

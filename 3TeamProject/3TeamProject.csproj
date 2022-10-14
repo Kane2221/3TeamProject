@@ -17,9 +17,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\Administrators\Models\" />
+    <Folder Include="Areas\Administrators\Views\" />
     <Folder Include="Areas\Suppliers\Models\" />
     <Folder Include="Areas\Suppliers\Views\" />
-    <Folder Include="Data\" />
   </ItemGroup>
 
 </Project>

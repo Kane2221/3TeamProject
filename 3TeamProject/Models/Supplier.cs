@@ -16,7 +16,7 @@ namespace _3TeamProject.Models
         public int TaxId { get; set; }
         public string? Fax { get; set; }
         public string CellPhoneNumber { get; set; } = null!;
-        public string SupplierPhnoeNumber { get; set; } = null!;
+        public string SupplierPhoneNumber { get; set; } = null!;
         public string SupplierPostalCode { get; set; } = null!;
         public string SupplierCountry { get; set; } = null!;
         public string SupplierCity { get; set; } = null!;

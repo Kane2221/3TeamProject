@@ -472,7 +472,7 @@ namespace _3TeamProject.Models
 
                 entity.Property(e => e.SupplierCountry).HasMaxLength(20);
 
-                entity.Property(e => e.SupplierPhnoeNumber)
+                entity.Property(e => e.SupplierPhoneNumber)
                     .HasMaxLength(20)
                     .IsUnicode(false);
 
