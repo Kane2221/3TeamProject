@@ -1,5 +1,7 @@
 using _3TeamProject.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +11,14 @@ builder.Services.AddDbContext<_3TeamProjectContext>(options =>
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+//·s¼WCookieÅçÃÒ
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(opt => {
+        opt.AccessDeniedPath = "/home/Error";
+        opt.LoginPath = "/account/index";
+        opt.ExpireTimeSpan = TimeSpan.FromSeconds(600);
+    });
 
 var app = builder.Build();
 
