@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var TeamProjectconnectionString = builder.Configuration.GetConnectionString("3TeamProject");
+var TeamProjectconnectionString = builder.Configuration.GetConnectionString("Team3Project");
 builder.Services.AddDbContext<_3TeamProjectContext>(options =>
     options.UseSqlServer(TeamProjectconnectionString));
 

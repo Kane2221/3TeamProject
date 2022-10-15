@@ -5,12 +5,10 @@ namespace _3TeamProject.Models
 {
     public partial class Order
     {
-
         public Order()
         {
             OrderDetails = new HashSet<OrderDetail>();
         }
-
 
         public int OrderId { get; set; }
         public int MemberId { get; set; }
@@ -25,13 +23,11 @@ namespace _3TeamProject.Models
         public string ShipCity { get; set; } = null!;
         public string ShipAddress { get; set; } = null!;
 
-
         public virtual Administrator? Administrator { get; set; }
         public virtual Member Member { get; set; } = null!;
         public virtual OrderStatusCategory OrderStatusNavigation { get; set; } = null!;
         public virtual PaymentStatusCategory PaymentStatusNavigation { get; set; } = null!;
         public virtual ShipStatusCategory ShipStatusNavigation { get; set; } = null!;
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
-
     }
 }
