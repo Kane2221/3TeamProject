@@ -15,8 +15,8 @@ builder.Services.AddControllersWithViews();
 //新增Cookie驗證
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(opt => {
-        opt.AccessDeniedPath = "/home/Error";
-        opt.LoginPath = "/account/index";
+        opt.AccessDeniedPath = "/Home/Error"; //TODO Cookie AccessDeniedPath
+        opt.LoginPath = ""; //TODO LoginPath
         opt.ExpireTimeSpan = TimeSpan.FromSeconds(600);
     });
 
@@ -35,17 +35,19 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
+
 app.UseAuthorization();
 
 //新增Suppliers Area 的 Route
 app.MapControllerRoute(
     name: "Suppliers",
-    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+    pattern: "{area:exists}/{controller=Supplier}/{action=Index}/{id?}");
 
 //新增Administrators Area 的 Route
 app.MapControllerRoute(
     name: "Administrators",
-    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+    pattern: "{area:exists}/{controller=Administrator}/{action=Index}/{id?}");
 
 app.MapControllerRoute(
     name: "default",

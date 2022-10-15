@@ -6,21 +6,24 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using _3TeamProject.Models;
 using _3TeamProject.Data;
+using Microsoft.AspNetCore.Authorization;
+using System.Net.Mail;
 
 namespace _3TeamProject.Controllers
 {
     public class UserController : Controller
     {
         private readonly _3TeamProjectContext _context;
+        private readonly IConfiguration _env;
 
-        public UserController(_3TeamProjectContext context)
+        public UserController(_3TeamProjectContext context, IConfiguration env)
         {
             _context = context;
+            _env=env;
         }
         public async Task<IActionResult> Login([FromBody] LoginReuqest request)
         {
             var user = await _context.Users.Include(u => u.RolesNavigation).FirstOrDefaultAsync(u => u.Account == request.Account);
-            var UserRole = user.RolesNavigation.RoleName;
             if (user == null)
             {
                 return BadRequest("帳號不存在");
@@ -39,7 +42,7 @@ namespace _3TeamProject.Controllers
             {
                 new Claim(ClaimTypes.Name, user.Account),
                 new Claim(ClaimTypes.Sid, user.Id.ToString()),
-                new Claim(ClaimTypes.Role, UserRole)
+                new Claim(ClaimTypes.Role, user.RolesNavigation.RoleName)
             };
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var claimsPricipal = new ClaimsPrincipal(claimsIdentity);
@@ -71,8 +74,25 @@ namespace _3TeamProject.Controllers
             {
                 return BadRequest("帳號不存在");
             }
-            user.PasswordResetToken = Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
+            var verifyToken = Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
+            user.PasswordResetToken = verifyToken;
             user.ResetTokenExpires = DateTime.Now.AddMinutes(30);
+
+            using (MailMessage mail = new MailMessage())
+            {
+                mail.From = new MailAddress("dotnettgm102@gmail.com", "帳號驗證碼");
+                mail.To.Add("dotnettgm102@gmail.com");
+                mail.Priority = MailPriority.Normal;
+                mail.Subject = "帳號驗證碼";
+                mail.Body = $"<a href=\"https://localhost:7190/User/Verify\"  value=\"{verifyToken}\">帳號驗證碼</a>";
+                mail.IsBodyHtml = true;
+                SmtpClient MySmtp = new SmtpClient("smtp.gmail.com", 587);
+                MySmtp.Credentials = new System.Net.NetworkCredential(_env["mail:Account"], _env["mail:Password"]);
+                MySmtp.EnableSsl = true;
+                MySmtp.Send(mail);
+                MySmtp = null;
+            };
+
             await _context.SaveChangesAsync();
             return Ok("請等待驗證信件");
         }
@@ -96,6 +116,7 @@ namespace _3TeamProject.Controllers
             {
                 var passwordSalt = hmac.Key;
                 var passwordHsah = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(request.Password));
+                var verifyToken = Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
                 user.PasswordSalt = passwordSalt;
                 user.PasswordHash = passwordHsah;
                 user.PasswordResetToken = null;
@@ -104,6 +125,7 @@ namespace _3TeamProject.Controllers
                 return Ok("密碼重設成功");
             }
         }
+        [Authorize]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
