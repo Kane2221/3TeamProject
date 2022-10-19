@@ -1,7 +1,7 @@
 using _3TeamProject.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
-
+using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,10 +15,16 @@ builder.Services.AddControllersWithViews();
 //新增Cookie驗證
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(opt => {
-        opt.AccessDeniedPath = "/Home/Error"; //TODO Cookie AccessDeniedPath
-        opt.LoginPath = ""; //TODO LoginPath
+        opt.AccessDeniedPath = "/Home/Error";
+        opt.LoginPath = "/Home"; // TODO Login Path
         opt.ExpireTimeSpan = TimeSpan.FromSeconds(600);
     });
+
+//新增的服務，為了在串接兩張以上的表，不重覆讀取
+builder.Services.AddMvc()
+    .AddNewtonsoftJson(options => 
+    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+    );
 
 var app = builder.Build();
 

@@ -14,9 +14,9 @@ namespace _3TeamProject.Models
         public int AdministratorId { get; set; }
         public string AdministratorName { get; set; } = null!;
         public string PhoneNumber { get; set; } = null!;
-        public int Id { get; set; }
+        public int UserId { get; set; }
 
-        public virtual User IdNavigation { get; set; } = null!;
+        public virtual User User { get; set; } = null!;
         public virtual ICollection<Order> Orders { get; set; }
         public virtual ICollection<Sightseeing> Sightseeings { get; set; }
     }

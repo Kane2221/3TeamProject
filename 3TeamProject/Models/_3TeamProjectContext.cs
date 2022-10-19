@@ -52,17 +52,17 @@ namespace _3TeamProject.Models
 
                 entity.Property(e => e.ActivitiesCreatedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.ActivitiesId).HasColumnName("ActivitiesID");
-
                 entity.Property(e => e.ActivitiesMessageState)
                     .HasMaxLength(10)
                     .IsUnicode(false);
 
+                entity.Property(e => e.ActivityId).HasColumnName("ActivityID");
+
                 entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
-                entity.HasOne(d => d.Activities)
+                entity.HasOne(d => d.Activity)
                     .WithMany(p => p.ActivitiesMessageBoards)
-                    .HasForeignKey(d => d.ActivitiesId)
+                    .HasForeignKey(d => d.ActivityId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Activities\nMessageBoard_SocialActivities");
 
@@ -75,27 +75,22 @@ namespace _3TeamProject.Models
 
             modelBuilder.Entity<Administrator>(entity =>
             {
-                entity.HasKey(e => e.AdministratorId)
-                    .HasName("PK_Adminstrators");
-
                 entity.Property(e => e.AdministratorId).HasColumnName("AdministratorID");
 
                 entity.Property(e => e.AdministratorName).HasMaxLength(50);
 
-                entity.Property(e => e.Id).HasColumnName("ID");
-
                 entity.Property(e => e.PhoneNumber).HasMaxLength(50);
 
-                entity.HasOne(d => d.IdNavigation)
+                entity.Property(e => e.UserId).HasColumnName("UserID");
+
+                entity.HasOne(d => d.User)
                     .WithMany(p => p.Administrators)
-                    .HasForeignKey(d => d.Id)
+                    .HasForeignKey(d => d.UserId)
                     .HasConstraintName("FK_Adminstrators_Users");
             });
 
             modelBuilder.Entity<Member>(entity =>
             {
-                entity.HasKey(e => e.MemberId);
-
                 entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
                 entity.Property(e => e.Address).HasMaxLength(50);
@@ -114,8 +109,6 @@ namespace _3TeamProject.Models
 
                 entity.Property(e => e.Country).HasMaxLength(50);
 
-                entity.Property(e => e.Id).HasColumnName("ID");
-
                 entity.Property(e => e.IdentityNumber).HasMaxLength(50);
 
                 entity.Property(e => e.MemberName).HasMaxLength(50);
@@ -130,9 +123,11 @@ namespace _3TeamProject.Models
                     .HasMaxLength(20)
                     .IsUnicode(false);
 
-                entity.HasOne(d => d.IdNavigation)
+                entity.Property(e => e.UserId).HasColumnName("UserID");
+
+                entity.HasOne(d => d.User)
                     .WithMany(p => p.Members)
-                    .HasForeignKey(d => d.Id)
+                    .HasForeignKey(d => d.UserId)
                     .HasConstraintName("FK_Members_Users");
             });
 
@@ -421,9 +416,9 @@ namespace _3TeamProject.Models
 
             modelBuilder.Entity<SocialActivity>(entity =>
             {
-                entity.HasKey(e => e.ActivitiesId);
+                entity.HasKey(e => e.ActivityId);
 
-                entity.Property(e => e.ActivitiesId).HasColumnName("ActivitiesID");
+                entity.Property(e => e.ActivityId).HasColumnName("ActivityID");
 
                 entity.Property(e => e.ActitiesFinishDate).HasColumnType("datetime");
 
@@ -464,8 +459,6 @@ namespace _3TeamProject.Models
                     .HasMaxLength(20)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Id).HasColumnName("ID");
-
                 entity.Property(e => e.SupplierAddress).HasMaxLength(50);
 
                 entity.Property(e => e.SupplierCity).HasMaxLength(20);
@@ -482,15 +475,17 @@ namespace _3TeamProject.Models
 
                 entity.Property(e => e.TaxId).HasColumnName("TaxID");
 
-                entity.HasOne(d => d.IdNavigation)
+                entity.Property(e => e.UserId).HasColumnName("UserID");
+
+                entity.HasOne(d => d.User)
                     .WithMany(p => p.Suppliers)
-                    .HasForeignKey(d => d.Id)
+                    .HasForeignKey(d => d.UserId)
                     .HasConstraintName("FK_Suppliers_Users");
             });
 
             modelBuilder.Entity<User>(entity =>
             {
-                entity.Property(e => e.Id).HasColumnName("ID");
+                entity.Property(e => e.UserId).HasColumnName("UserID");
 
                 entity.Property(e => e.Account).HasMaxLength(50);
 

@@ -25,9 +25,9 @@ namespace _3TeamProject.Models
         public string City { get; set; } = null!;
         public string Address { get; set; } = null!;
         public int? Age { get; set; }
-        public int Id { get; set; }
+        public int UserId { get; set; }
 
-        public virtual User IdNavigation { get; set; } = null!;
+        public virtual User User { get; set; } = null!;
         public virtual ICollection<ActivitiesMessageBoard> ActivitiesMessageBoards { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
         public virtual ICollection<ProductsMessageBoard> ProductsMessageBoards { get; set; }

@@ -21,9 +21,9 @@ namespace _3TeamProject.Models
         public string SupplierCountry { get; set; } = null!;
         public string SupplierCity { get; set; } = null!;
         public string SupplierAddress { get; set; } = null!;
-        public int Id { get; set; }
+        public int UserId { get; set; }
 
-        public virtual User IdNavigation { get; set; } = null!;
+        public virtual User User { get; set; } = null!;
         public virtual ICollection<Product> Products { get; set; }
     }
 }

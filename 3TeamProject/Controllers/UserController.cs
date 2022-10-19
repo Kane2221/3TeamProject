@@ -8,6 +8,7 @@ using _3TeamProject.Models;
 using _3TeamProject.Data;
 using Microsoft.AspNetCore.Authorization;
 using System.Net.Mail;
+using _3TeamProject.Services;
 
 namespace _3TeamProject.Controllers
 {
@@ -41,7 +42,7 @@ namespace _3TeamProject.Controllers
             var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.Name, user.Account),
-                new Claim(ClaimTypes.Sid, user.Id.ToString()),
+                new Claim(ClaimTypes.Sid, user.UserId.ToString()),
                 new Claim(ClaimTypes.Role, user.RolesNavigation.RoleName)
             };
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -50,7 +51,7 @@ namespace _3TeamProject.Controllers
             return Ok("登入成功");
             //return RedirectToAction("index", "home");
         }
-        //TODO 新增寄送Token給使用者作驗證
+        
         public async Task<IActionResult> Verify([FromBody] string token)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.VerficationToken == token);
@@ -66,7 +67,7 @@ namespace _3TeamProject.Controllers
             await _context.SaveChangesAsync();
             return Ok("驗證成功");
         }
-        //TODO 新增重設密碼寄送Token給使用者作驗證
+
         public async Task<IActionResult> ForgotPassword([FromBody] string email)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
