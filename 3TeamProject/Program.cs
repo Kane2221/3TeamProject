@@ -1,21 +1,30 @@
 using _3TeamProject.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+
 
 var builder = WebApplication.CreateBuilder(args);
-<<<<<<< HEAD
-var TeamProjectconnectionString = builder.Configuration.GetConnectionString("3TeamProject");
+
+var TeamProjectconnectionString = builder.Configuration.GetConnectionString("Team3Project");
 builder.Services.AddDbContext<_3TeamProjectContext>(options =>
     options.UseSqlServer(TeamProjectconnectionString));
-=======
-
-
-//連線資料庫(測試期間請檢查appsettings.json裡的連線字串，與自己的資料庫連線是否一致。)
-builder.Services.AddDbContext<_3TeamProjectContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("Team3Project")));
->>>>>>> 7066e5cee75f6b89ea580f119c126ac3026b8f2f
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddMvc()
+    .AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+    );
+
+//新增Cookie驗證
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(opt => {
+        opt.AccessDeniedPath = "/Home/Error"; //TODO Cookie AccessDeniedPath
+        opt.LoginPath = ""; //TODO LoginPath
+        opt.ExpireTimeSpan = TimeSpan.FromSeconds(600);
+    });
 
 var app = builder.Build();
 
@@ -32,17 +41,19 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
+
 app.UseAuthorization();
 
 //新增Suppliers Area 的 Route
 app.MapControllerRoute(
     name: "Suppliers",
-    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+    pattern: "{area:exists}/{controller=Supplier}/{action=Index}/{id?}");
 
 //新增Administrators Area 的 Route
 app.MapControllerRoute(
     name: "Administrators",
-    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+    pattern: "{area:exists}/{controller=Administrator}/{action=Index}/{id?}");
 
 app.MapControllerRoute(
     name: "default",

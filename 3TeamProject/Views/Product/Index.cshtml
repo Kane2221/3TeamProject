@@ -1,7 +1,16 @@
-﻿
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-2">
+﻿<style>
+    .card-img-top {
+        width: 100%;
+        height: 300px;
+        
+    }
+    .card {
+        background-color: wheat
+    }
+</style>
+<div class="container-fluid" id="productPanel">
+    <div class="row" >
+        @*<div class="col-2">
             <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark">
                 <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                     <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
@@ -55,8 +64,8 @@
                     </ul>
                 </div>
             </div>
-        </div>
-        <div class="col-3">
+        </div>*@
+        @*<div class="col-3">
             <div class="card">
                 <!-- <img src="https://picsum.photos/id/684/600/400" class="card-img-top" alt="..."> -->
                 <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
@@ -153,24 +162,25 @@
                 </div>
             </div>
         </div>
+*@
 
-        <div class="col-9">
-            <div class="row">
-                <div class="col-3" v-for="item in products">
-                    <div class="card">
-                        <img :src="item.imagePath" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">{{item.name}}</h5>
-                            <h4 class="card-title">售價:{{item.price}}</h4>
-                            <p class="card-text">{{item.description}}</p>
-                            <vue-number-input v-model="item.qty" :min="1" :max="10" inline controls></vue-number-input>
-                            <button @@click="addToCart(item)" class="btn btn-primary">加入Go物車</button>
-                        </div>
-                    </div>
+        <div class="col-3" v-for="item in products ">
+            <div class="card">
+                @*v-for="it in productpic"*@
+                <a class="ProductDetail" style="margin:0" asp-area="" asp-controller="Product" asp-action="Detail">
+                <img :src="item.productPicturePath" class="card-img-top" alt="..." >
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title">{{item.productName}}</h5>
+                    <h4 class="card-title">售價:{{item.productUnitPrice}}</h4>
+                    @*<p class="card-text">{{item.description}}</p>
+                    <vue-number-input v-model="item.qty" :min="1" :max="10" inline controls></vue-number-input>
+                    <button @@click="addToCart(item)" class="btn btn-primary">加入Go物車</button>*@
                 </div>
-
             </div>
         </div>
+
+         
 
         <!-- <div class="col-3">
             <div class="card">
@@ -193,12 +203,13 @@
 
 <script src="~/js/vue-number-input.js"></script>
 <script>
-    Vue.use(VueNumberInput);
-    Vue.component('vue-number-input', VueNumberInput);
+    //Vue.use(VueNumberInput);
+    //Vue.component('vue-number-input', VueNumberInput);
     let app = new Vue({
         el: "#productPanel",
         data: {
-            products: []
+            products: [],
+            productpic:[]
         },
         methods: {
             addToCart: function (product) {
@@ -240,7 +251,17 @@
                 .then(function (response) { return response.json() })
                 .then(function (result) {
                     self.products = result.map(function (x) {
-                        x.qty = 0;
+                        //x.qty = 0;
+
+                        return x
+                    })
+                }),
+                fetch("/api/ProductsPictureInfos")
+                .then(function (response) { return response.json() })
+                .then(function (result) {
+                    self.productpic = result.map(function (x) {
+                        //x.qty = 0;
+
                         return x
                     })
                 })

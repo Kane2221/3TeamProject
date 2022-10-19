@@ -1,0 +1,54 @@
+﻿
+
+<div id="appVueNew" class="container" />
+<div class="container">
+    <form>
+        <div class="form-group">
+            <label for="description">商品:</label>
+            <input type="text" class="form-control" v-model="Description" id="description">
+        </div>
+        <div class="form-group">
+            <label for="quantity">數量:</label>
+            <input type="text" class="form-control" v-model="Quantity" id="quantity">
+        </div>
+        <div class="form-group">
+            <label for="unitprice">價格:</label>
+            <input type="text" class="form-control" v-model="UnitPrice" id="unitprice">
+        </div>
+        <div class="checkbox">
+            <label><input type="checkbox" v-model="Active"> 銷售中</label>
+        </div>
+        <button type="button" class="btn btn-success" @@click="insertProducts">新增商品</button>
+    </form>
+</div>
+
+@section scripts
+    {
+    <script>
+        var appVueNuevo = new Vue({
+            el: "#appVueNew",
+            name: "appVueNew",
+            data: {
+                Description: null,
+                Quantity: null,
+                UnitPrice: null,
+                Active: false,
+            },
+            methods: {
+                insertProducts: function () {
+                    let _this = this;
+                    var request = {};
+                    request.Description = _this.Description;
+                    request.Quantity = parseInt(_this.Quantity);
+                    request.UnitPrice = parseFloat(_this.UnitPrice);
+                    request.Active = _this.Active;
+                    axios.post(window.location.origin + "/Products/Create", request).then(response => {
+                        alert(response.data);
+                        window.location = '/Products/Index'
+                    });
+                },
+
+            },
+        });
+    </script>
+    }
