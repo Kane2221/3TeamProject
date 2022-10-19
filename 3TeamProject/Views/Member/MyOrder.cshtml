@@ -1,0 +1,197 @@
+﻿<!-- MATERIAL DESIGN ICONIC FONT -->
+<link rel="stylesheet" href="~/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
+
+
+<div class="container-fluid page-header">
+    <div class="container">
+        <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 250px">
+            <h3 class="display-4 text-white text-uppercase">我的訂單</h3>
+            <div class="d-inline-flex text-white">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid booking mt-5 pb-5">
+    <div class="container pb-5">
+        <div class="bg-light shadow" style="padding: 30px;">
+            <div class="row align-items-center" style="min-height: 500px;">
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="card mb-4">
+                            <div class="card-body text-center">
+                                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+                                     class="rounded-circle img-fluid" style="width: 150px;">
+                                <h5 class="my-3">暱稱</h5>
+                            </div>
+                        </div>
+
+                        <div class="mb-lg-0">
+                            <div class="card-body p-0 ">
+                                <ul class="list-group list-group-flush rounded-3 ">
+                                    <li class="list-group-item justify-content-between align-items-center p-3">
+                                        <div class="d-flex justify-content-center mb-2">
+                                            <button type="button" class="form-control btn btn-outline-primary ms-1">
+                                                <a data-toggle="click" href="/Member/MemberProfile"><i class="zmdi zmdi-account-circle">會員資料</i></a>
+                                            </button>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item justify-content-between align-items-center p-3">
+                                        <div class="d-flex justify-content-center mb-2">
+                                            <button type="button" class="form-control btn btn-outline-primary ms-1">
+                                                <a data-toggle="click" href="/Member/OrderRecord"><i class="zmdi zmdi-chart"> 訂購紀錄</i></a>
+                                            </button>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item justify-content-between align-items-center p-3">
+                                        <div class="d-flex justify-content-center mb-2">
+                                            <button type="button" class="form-control btn btn-outline-primary ms-1">
+                                                <a data-toggle="click" href="/Member/ActRecord"><i class="zmdi zmdi-group"> 活動紀錄</i></a>
+                                            </button>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item justify-content-between align-items-center p-3">
+                                        <div class="d-flex justify-content-center mb-2">
+                                            <button type="button" class="form-control btn btn-outline-primary ms-1">
+                                                登出
+                                                <i class="zmdi zmdi-arrow-right"></i>
+                                            </button>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-8">
+                        <div class="card mb-4">
+                                
+                                 <div class="row d-flex justify-content-center align-items-center h-100">
+                                     <div class="card card-stepper" style="border-radius: 10px;">
+                                         <div class="card-body p-4">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="d-flex flex-column">
+                                                    <span class="lead fw-normal">訂單編號：</span>
+                                                    <span class="lead fw-normal">訂購日期：</span>
+												    <span class="lead fw-normal">總價：</span>
+                                                    <span class="lead fw-normal">付款狀態：</span>
+											</div>
+                                         </div>
+                                        <div>
+                                             <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                                    訂單詳情
+                                               <i class="zmdi zmdi-chevron-down"></i>
+                                             </button>
+                                                <div class="collapse" id="collapseExample">
+                                                    <div class="card card-body">
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <div class="d-flex flex-column">
+                                                                <span class="lead fw-normal">商品名稱：</span>
+                                                                <span class="lead fw-normal">單位：</span>
+                                                                <span class="lead fw-normal">單價：</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex flex-row justify-content-between align-items-center align-content-center">
+                                                            <span class="dot"></span>
+                                                            <hr class="flex-fill track-line"><span class="dot"></span>
+                                                            <hr class="flex-fill track-line"><span class="dot"></span>
+                                                            <hr class="flex-fill track-line"><span class="dot"></span>
+                                                            <hr class="flex-fill track-line"><span class="d-flex justify-content-center align-items-center big-dot dot">
+                                                                <i class="zmdi zmdi-check-circle"></i>
+                                                            </span>
+                                                        </div>
+                                                        <div class="d-flex flex-row justify-content-between align-items-center">
+                                                            <div class="d-flex flex-column align-items-start">
+                                                                <span>10/18</span>
+                                                                <span>訂單成立</span>
+                                                            </div>
+                                                            <div class="d-flex flex-column justify-content-center align-items-center">
+                                                                <span>10/19</span>
+                                                                <span>訂單出貨</span>
+                                                            </div>
+                                                            <div class="d-flex flex-column align-items-center">
+                                                                <span>10/20</span>
+                                                                <span>運送中</span>
+                                                            </div>
+                                                            <div class="d-flex flex-column align-items-end">
+                                                                <span>10/21</span>
+                                                                <span>已送達</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                                            <button type="button" class="btn btn-primary ms-1">我要退/換貨</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                        </div>
+									</div>
+								</div>
+							</div>
+                                 <div class="row d-flex justify-content-center align-items-center h-100">
+                                <div class="card card-stepper" style="border-radius: 10px;">
+                                    <div class="card-body p-4">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="d-flex flex-column">
+                                                <span class="lead fw-normal">訂單編號：</span>
+                                                <span class="lead fw-normal">訂購日期：</span>
+                                                <span class="lead fw-normal">總價：</span>
+                                                <span class="lead fw-normal">付款狀態：</span>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample2">
+                                                訂單詳情
+                                                <i class="zmdi zmdi-chevron-down"></i>
+                                            </button>
+                                            <div class="collapse" id="collapseExample2">
+                                                <div class="card card-body">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div class="d-flex flex-column">
+                                                            <span class="lead fw-normal">商品名稱：</span>
+                                                            <span class="lead fw-normal">單位：</span>
+                                                            <span class="lead fw-normal">單價：</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex flex-row justify-content-between align-items-center align-content-center">
+                                                        <span class="dot"></span>
+                                                        <hr class="flex-fill track-line"><span class="dot"></span>
+                                                        <hr class="flex-fill track-line"><span class="dot"></span>
+                                                        <hr class="flex-fill track-line"><span class="dot"></span>
+                                                        <hr class="flex-fill track-line"><span class="d-flex justify-content-center align-items-center big-dot dot">
+                                                            <i class="zmdi zmdi-check-circle"></i>
+                                                        </span>
+                                                    </div>
+                                                    <div class="d-flex flex-row justify-content-between align-items-center">
+                                                        <div class="d-flex flex-column align-items-start">
+                                                            <span>10/18</span>
+                                                            <span>訂單成立</span>
+                                                        </div>
+                                                        <div class="d-flex flex-column justify-content-center align-items-center">
+                                                            <span>10/19</span>
+                                                            <span>訂單出貨</span>
+                                                        </div>
+                                                        <div class="d-flex flex-column align-items-center">
+                                                            <span>10/20</span>
+                                                            <span>運送中</span>
+                                                        </div>
+                                                        <div class="d-flex flex-column align-items-end">
+                                                            <span>10/21</span>
+                                                            <span>已送達</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                                        <button type="button" class="btn btn-primary ms-1">我要退/換貨</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
