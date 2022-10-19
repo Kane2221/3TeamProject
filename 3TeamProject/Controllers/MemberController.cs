@@ -25,7 +25,7 @@ namespace _3TeamProject.Controllers
             return View();
         }
 
-        public IActionResult Login1()
+        public IActionResult Login()
         {
             return View();
         }
