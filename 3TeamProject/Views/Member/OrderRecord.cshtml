@@ -1,0 +1,174 @@
+﻿<!-- MATERIAL DESIGN ICONIC FONT -->
+<link rel="stylesheet" href="~/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
+
+
+<div class="container-fluid page-header">
+    <div class="container">
+        <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 250px">
+            <h3 class="display-4 text-white text-uppercase">訂購紀錄</h3>
+            <div class="d-inline-flex text-white">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid booking mt-5 pb-5">
+    <div class="container pb-5">
+        <div class="bg-light shadow" style="padding: 30px;">
+            <div class="row align-items-center" style="min-height: 500px;">
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="card mb-4">
+                            <div class="card-body text-center">
+                                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+                                     class="rounded-circle img-fluid" style="width: 150px;">
+                                <h5 class="my-3">暱稱</h5>
+                            </div>
+                        </div>
+
+                        <div class="mb-lg-0">
+                            <div class="card-body p-0 ">
+                                <ul class="list-group list-group-flush rounded-3 ">
+                                    <li class="list-group-item justify-content-between align-items-center p-3">
+                                        <div class="d-flex justify-content-center mb-2">
+                                            <button type="button" class="form-control btn btn-outline-primary ms-1">
+                                                <a data-toggle="click" href="/Member/MemberProfile"><i class="zmdi zmdi-account-circle"> 會員資料</i></a>
+                                            </button>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item justify-content-between align-items-center p-3">
+                                        <div class="d-flex justify-content-center mb-2">
+                                            <button type="button" class="form-control btn btn-outline-primary ms-1">
+												<a data-toggle="click" href="/Member/MyOrder"><i class="zmdi zmdi-chart"> 我的訂單</i> </a>
+                                            </button>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item justify-content-between align-items-center p-3">
+                                        <div class="d-flex justify-content-center mb-2">
+                                            <button type="button" class="form-control btn btn-outline-primary ms-1">
+                                                <a data-toggle="click" href="/Member/ActRecord"><i class="zmdi zmdi-group"> 活動紀錄</i></a>
+                                            </button>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item justify-content-between align-items-center p-3">
+                                        <div class="d-flex justify-content-center mb-2">
+                                            <button type="button" class="form-control btn btn-outline-primary ms-1">
+                                                登出
+                                                <i class="zmdi zmdi-arrow-right"></i>
+                                            </button>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-8">
+                        <div class="card mb-4">
+
+                                <div class="d-flex justify-content-center">
+                                    <div class="col-md-12">
+                                            <div class="table-responsive">
+                                                <table class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="text-center">
+                                                                <div class="toggle-btn">
+                                                                    <div class="inner-circle"></div>
+                                                                </div>
+                                                            </th>
+                                                            <th>訂單編號</th>
+                                                            <th>訂購日期</th>
+                                                            <th>訂單狀態</th>
+                                                            <th>總價</th>
+                                                            <th>付款</th>
+                                                            <th>出貨狀態</th>
+                                                            <th>給予評價</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="table-body">
+                                                        <tr class="cell-1">
+                                                            <td class="text-center">
+                                                                <div class="toggle-btn">
+                                                                    <div class="inner-circle"></div>
+                                                                </div>
+                                                            </td>
+                                                            <td>#1591234</td>
+                                                            <td>2022/10/18</td>
+                                                            <td><span class="badge badge-success">已完成</span></td>
+                                                            <td>$2674</td>
+                                                            <td>10/18已付款</td>
+                                                            <td>10/18送達</td>
+                                                            <td>
+                                                                <button type="button" class="form-control btn btn-outline-primary ms-1">
+                                                                    GO
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="cell-1">
+                                                            <td class="text-center">
+                                                                <div class="toggle-btn">
+                                                                    <div class="inner-circle"></div>
+                                                                </div>
+                                                            </td>
+                                                            <td>#1591234</td>
+                                                            <td>2022/10/18</td>
+                                                            <td><span class="badge badge-info">確認中</span></td>
+                                                            <td>$3454</td>
+                                                            <td>10/18已付款</td>
+                                                            <td>尚未出貨</td>
+                                                            <td>
+@*                                                                <button type="button" class="form-control btn btn-outline-primary ms-1">
+                                                                    GO
+                                                                </button>*@
+
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="cell-1">
+                                                            <td class="text-center">
+                                                                <div class="toggle-btn">
+                                                                    <div class="inner-circle"></div>
+                                                                </div>
+                                                            </td>
+                                                            <td>#1593498</td>
+                                                            <td>2020/10/17</td>
+                                                            <td><span class="badge badge-danger">尚未完成</span></td>
+                                                            <td>$6274</td>
+                                                            <td>未付款</td>
+                                                            <td>尚未出貨</td>
+                                                            <td>
+@*                                                                <button type="button" class="form-control btn btn-outline-primary ms-1">
+                                                                    GO
+                                                                </button>*@
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="cell-1">
+                                                            <td class="text-center">
+                                                                <div class="toggle-btn">
+                                                                    <div class="inner-circle"></div>
+                                                                </div>
+                                                            </td>
+                                                            <td>#1649549</td>
+                                                            <td>2022/10/15</td>
+                                                            <td><span class="badge badge-success">已完成</span></td>
+                                                            <td>$637500</td>
+                                                            <td>10/16已付款</td>
+                                                            <td>10/17已送達</td>
+                                                            <td>
+                                                                <button type="button" class="form-control btn btn-outline-primary ms-1">
+                                                                    GO
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
