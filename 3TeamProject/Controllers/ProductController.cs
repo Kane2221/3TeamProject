@@ -15,8 +15,8 @@ namespace _3TeamProject.Controllers
         {
             return View();
         }
-        [HttpGet("Detail/{id}")]
-        public IActionResult Detail()
+        //[HttpGet("Detail/{id}")]
+        public async Task<IActionResult> Detail(int id)
         {
             //var productFound = _context.Products.Join
             //(_context.ProductsPictureInfos,
@@ -32,7 +32,31 @@ namespace _3TeamProject.Controllers
             //       //p.ProductCategoryId
 
             //   }).Where(pi => pi.ProductId == id);
-            return View();
+            var productFound = from product in _context.Products
+                               join Info in _context.ProductsPictureInfos
+                               on product.ProductId equals Info.ProductId
+                               join Board in _context.ProductsMessageBoards
+                               on product.ProductId equals Board.ProductId
+                               where product.ProductId == id
+                               select new
+                               {
+                                   ProductId = product.ProductId,
+                                   ProductCategoryId = product.ProductCategoryId,
+                                   ProductName = product.ProductName,
+                                   ProductUnitPrice = product.ProductUnitPrice,
+                                   SupplierId = product.SupplierId,
+                                   QuantityPerUnit = product.QuantityPerUnit,
+                                   UnitStock = product.UnitStock,
+                                   ProductRecommendation = product.ProductRecommendation,
+                                   ProductStatus = product.ProductStatus,
+                                   ProductPicturePath = Info.ProductPicturePath,
+                                   ProductMessageContent = Board.ProductMessageContent,
+                                   ProductIntroduce = product.ProductIntroduce
+                                   //p.ProductName,
+                                   //p.ProductCategoryId
+
+                               };
+            return Ok(productFound);
         }
         //[HttpGet("Create")]
         public IActionResult Create()

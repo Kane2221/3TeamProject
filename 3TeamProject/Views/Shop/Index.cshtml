@@ -360,3 +360,69 @@
 
 </body>
 </html>
+<script>
+    //Vue.use(VueNumberInput);
+    //Vue.component('vue-number-input', VueNumberInput);
+    let app = new Vue({
+        el: "#productPanel",
+        data: {
+            products: [],
+            productpic: []
+        },
+        methods: {
+            addToCart: function (product) {
+                console.log(product);
+                let data = {
+                    productId: product.id,
+                    amount: product.qty
+                }
+                fetch("/api/Cart/", {
+                    body: JSON.stringify(data),
+                    headers: {
+                        'content-type': 'application/json'
+                    },
+                    method: 'POST',
+                }).then(function (response) { return response.text() })
+                    .then(function (result) {
+                        if (result) {
+                            master.getData();
+                            Swal.fire({
+                                icon: 'success',
+                                title: '加入成功',
+                                text: '您已成功加入商品!'
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Something went wrong!',
+                                footer: '<a href="">Why do I have this issue?</a>'
+                            })
+                        }
+
+                    })
+            }
+        },
+        mounted: function () {
+            let self = this;
+            fetch("/api/Product")
+                .then(function (response) { return response.json() })
+                .then(function (result) {
+                    self.products = result.map(function (x) {
+                        //x.qty = 0;
+
+                        return x
+                    })
+                }),
+                fetch("/api/ProductsPictureInfos")
+                    .then(function (response) { return response.json() })
+                    .then(function (result) {
+                        self.productpic = result.map(function (x) {
+                            //x.qty = 0;
+
+                            return x
+                        })
+                    })
+        }
+    })
+</script>

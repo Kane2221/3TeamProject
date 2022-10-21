@@ -52,8 +52,9 @@
         background-color: wheat
     }
 </style>
-<div class="container-fluid" id="productPanel" v-for="item in products">
-    <div class="row">
+<div class="container-fluid" id="productPanel" >
+    <div v-for="item in products">
+    <div class="row" >
 
         <div class="col-4">
             <div class="card">
@@ -167,10 +168,9 @@
             </div>
         </div> -->
     </div>
+    </div>
 </div>
-    </div>
-    </div>
-    </div>
+
 <script>
     //Vue.use(VueNumberInput);
     //Vue.component('vue-number-input', VueNumberInput);
@@ -181,7 +181,7 @@
         },
         mounted: function () {
             let self = this;
-            fetch("/api/Product/{id}")
+            fetch("/Product/Detail/id")
                 .then(function (response) { return response.json() })
                 .then(function (result) {
                     self.products = result.map(function (x) {
