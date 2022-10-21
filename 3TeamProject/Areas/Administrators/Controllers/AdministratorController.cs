@@ -1,20 +1,13 @@
 ﻿using _3TeamProject.Areas.Administrators.Data;
-<<<<<<< HEAD
-=======
-using _3TeamProject.Areas.Suppliers.Data;
->>>>>>> e1af6f3e8a20b9717349e0b46dfb6f09d329bbe6
 using _3TeamProject.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-<<<<<<< HEAD
 using System.Net.Mail;
-=======
 using System.Collections.Generic;
 using System.Data;
 using System.Net.Mail;
 using System.Security.Claims;
->>>>>>> e1af6f3e8a20b9717349e0b46dfb6f09d329bbe6
 using System.Security.Cryptography;
 using System.Security.Principal;
 
@@ -25,21 +18,14 @@ namespace _3TeamProject.Areas.Administrators.Controllers
     public class AdministratorController : Controller
     {
         private readonly _3TeamProjectContext _context;
-<<<<<<< HEAD
-        private readonly IConfiguration _env;
 
-        public AdministratorController(_3TeamProjectContext Context, IConfiguration env)
-        {
-            _context = Context;
-            _env=env;
-=======
         private readonly IConfiguration _config;
 
         public AdministratorController(_3TeamProjectContext Context, IConfiguration config)
         {
             _context = Context;
             _config = config;
->>>>>>> e1af6f3e8a20b9717349e0b46dfb6f09d329bbe6
+
         }
 
         [Authorize(Roles = ("Administrator, ChiefAdministrator, SuperAdministrator"))]
