@@ -18,6 +18,7 @@ namespace _3TeamProject.Models
         public string? SightseeingAddress { get; set; }
         public double? SightseeingScore { get; set; }
         public int AdministratorId { get; set; }
+        public string? SightseeingIntroduce { get; set; }
 
         public virtual Administrator Administrator { get; set; } = null!;
         public virtual ICollection<SightseeingMessageBoard> SightseeingMessageBoards { get; set; }

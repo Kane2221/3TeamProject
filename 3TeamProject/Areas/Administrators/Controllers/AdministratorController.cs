@@ -1,4 +1,5 @@
 ﻿using _3TeamProject.Areas.Administrators.Data;
+using _3TeamProject.Areas.Suppliers.Data;
 using _3TeamProject.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +14,6 @@ using System.Security.Principal;
 namespace _3TeamProject.Areas.Administrators.Controllers
 {
     [Area("Administrators")]
-    
     public class AdministratorController : Controller
     {
         private readonly _3TeamProjectContext _context;
@@ -25,66 +25,55 @@ namespace _3TeamProject.Areas.Administrators.Controllers
             _config = config;
         }
 
-        [Authorize(Roles =("Administrator, ChiefAdministrator, SuperAdministrator"))]
+        [Authorize(Roles = ("Administrator, ChiefAdministrator, SuperAdministrator"))]
         public IActionResult GetAllAdmins() //權限Administrator只能看見同權限的清單，更高權限可以看見所有人清單
         {
-            //var UserId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value;
             var UserRole = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role).Value;
-            //if (UserId == null)
-            //{
-            //    return BadRequest("未登入");
-            //}
-
             if (UserRole == "Administrator")
             {
-                //var admin = _context.Administrators
-                //     .Include(x => x.IdNavigation)
-                //     .Include(x => x.IdNavigation.RolesNavigation)
-                //     .Where(x => x.Id == x.IdNavigation.Id && x.IdNavigation.Roles == 5)
-                //     .Select(a => new AdminGetViewModel
-                //     {
-                //         Account = a.IdNavigation.Account,
-                //         Email = a.IdNavigation.Email,
-                //         Roles = a.IdNavigation.RolesNavigation.RoleName,
-                //         AdministratorName = a.AdministratorName,
-                //         PhoneNumber = a.PhoneNumber,
-                //     });
-                var admin = from u in _context.Users
-                            join a in _context.Administrators
-                            on u.UserId equals a.UserId
-                            where u.Roles == 5
-                            select new AdminGetViewModel
-                            {
-                                Account = u.Account,
-                                Email = u.Email,
-                                Roles = u.RolesNavigation.RoleName,
-                                AdministratorName = a.AdministratorName,
-                                PhoneNumber = a.PhoneNumber
-                            };
+                var admin = _context.Administrators.Include(u => u.User)
+                        .Where(u => u.User.Roles == 5).Select(u => new AdminGetViewModel
+                        {
+                            Account = u.User.Account,
+                            Email = u.User.Email,
+                            Roles = u.User.RolesNavigation.RoleName,
+                            AdministratorName = u.AdministratorName,
+                            PhoneNumber = u.PhoneNumber
+                        });
                 return Ok(admin);
             }
-            var adminAuth = from u in _context.Users
-                            join a in _context.Administrators
-                            on u.UserId equals a.UserId
-                            select new AdminGetViewModel
-                            {
-                                Account = u.Account,
-                                Email = u.Email,
-                                Roles = u.RolesNavigation.RoleName,
-                                AdministratorName = a.AdministratorName,
-                                PhoneNumber = a.PhoneNumber
-                            };
+            else if (UserRole == "ChiefAdministrator")
+            {
+                var adminChief = _context.Administrators.Include(u => u.User)
+                    .Where(u => u.User.Roles != 3).Select(u => new AdminGetViewModel
+                    {
+                        Account = u.User.Account,
+                        Email = u.User.Email,
+                        Roles = u.User.RolesNavigation.RoleName,
+                        AdministratorName = u.AdministratorName,
+                        PhoneNumber = u.PhoneNumber
+                    });
+                return Ok(adminChief);
+            }
+            var adminSuper = _context.Administrators.Include(u => u.User)
+                    .Select(u => new AdminGetViewModel
+                    {
+                        Account = u.User.Account,
+                        Email = u.User.Email,
+                        Roles = u.User.RolesNavigation.RoleName,
+                        AdministratorName = u.AdministratorName,
+                        PhoneNumber = u.PhoneNumber
+                    });
+            return Ok(adminSuper);            
+        }
 
-            //if (user == null)
-            //{
-            //    return BadRequest("沒有此帳號");
-            //}
-            return Ok(adminAuth);
-            //return Ok(_context.Users.Include(a => a.Administrators).ToList());
-        } 
-        
         public async Task<IActionResult> Register([FromBody] AdminRequstViewModel request)
         {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Select(x => x.Value.Errors).Where(y => y.Count > 0).ToList();
+                return BadRequest(errors);
+            }
             if (await _context.Users.AnyAsync(u => u.Account == request.Account))
             {
                 return BadRequest("帳號已經存在");
@@ -131,6 +120,43 @@ namespace _3TeamProject.Areas.Administrators.Controllers
                 await _context.SaveChangesAsync();
                 return Ok("註冊成功，請等待驗證信件");
             }
+        }
+        [Authorize(Roles = ("Administrator, ChiefAdministrator, SuperAdministrator"))]
+        public async Task<IActionResult> Update(int? id, [FromBody] AdminUpdateViewModel request)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Select(x => x.Value.Errors).Where(y => y.Count > 0).ToList();
+                return BadRequest(errors);
+            }
+
+            var admin = _context.Administrators.Include(a => a.User)
+                    .Where(a => a.UserId == id).Select(a => a).SingleOrDefault();
+            if (admin == null)
+            {
+                return BadRequest("此帳號不存在");
+            }
+            using (var hmac = new HMACSHA512())
+            {
+                var passwordSalt = hmac.Key;
+                var passwordHsah = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(request.Password));
+                admin.User.Email = request.Email;
+                admin.AdministratorName = request.AdministratorName;
+                admin.PhoneNumber = request.PhoneNumber;
+                admin.User.PasswordSalt = passwordSalt;
+                admin.User.PasswordHash = passwordHsah;
+                _context.Administrators.Update(admin);
+                await _context.SaveChangesAsync();
+            }
+            return Ok("修改成功!");
+        }
+        [Authorize(Roles ="SuperAdminstrator")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var user = _context.Users.Include(u => u.Administrators).FirstOrDefault(x => x.UserId == id);
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+            return Ok("此帳號已刪除");
         }
     }
 }

@@ -24,6 +24,7 @@ namespace _3TeamProject.Models
         public DateTime? AddedTime { get; set; }
         public DateTime? RemovedTime { get; set; }
         public string ProductStatus { get; set; } = null!;
+        public string ProductIntroduce { get; set; } = null!;
 
         public virtual ProductCategory ProductCategory { get; set; } = null!;
         public virtual Supplier Supplier { get; set; } = null!;

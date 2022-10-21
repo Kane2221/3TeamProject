@@ -8,7 +8,7 @@ using _3TeamProject.Models;
 using _3TeamProject.Data;
 using Microsoft.AspNetCore.Authorization;
 using System.Net.Mail;
-using _3TeamProject.Services;
+
 
 namespace _3TeamProject.Controllers
 {
@@ -123,8 +123,8 @@ namespace _3TeamProject.Controllers
                 user.PasswordResetToken = null;
                 user.ResetTokenExpires = null;
                 await _context.SaveChangesAsync();
-                return Ok("密碼重設成功");
             }
+            return Ok("密碼重設成功");
         }
         [Authorize]
         public async Task<IActionResult> Logout()

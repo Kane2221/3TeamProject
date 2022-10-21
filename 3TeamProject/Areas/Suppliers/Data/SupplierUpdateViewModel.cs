@@ -4,8 +4,6 @@ namespace _3TeamProject.Areas.Suppliers.Data
 {
     public class SupplierUpdateViewModel
     {
-        [Required]
-        public int UserId { get; set; }
         [Required, EmailAddress]
         public string Email { get; set; }
 

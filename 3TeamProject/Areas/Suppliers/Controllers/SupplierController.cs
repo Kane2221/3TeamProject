@@ -87,6 +87,11 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
 
         public async Task<IActionResult> Register([FromBody]SupplierRequestViewModel request)
         {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Select(x => x.Value.Errors).Where(y => y.Count > 0).ToList();
+                return BadRequest(errors);
+            }
             if (await _context.Users.AnyAsync(u => u.Account == request.Account))
             {
                 return BadRequest("帳號已經存在");
@@ -156,33 +161,25 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
                 return Ok("註冊成功，請等待驗證信件");
             }
         }
-        
-        public IActionResult UpdateSupplier([FromBody]SupplierUpdateViewModel request)
+        [Authorize(Roles = ("Suppliers, Administrator, ChiefAdministrator, SuperAdministrator"))]
+        public async Task<IActionResult> Update(int? id, [FromBody]SupplierUpdateViewModel request)
         {
-            var UserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
-
-            //if (await _context.Users.AnyAsync(u => u.Account == request.Account))
-            //{
-            //    return BadRequest("帳號已經存在");
-            //}
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Select(x => x.Value.Errors).Where(y => y.Count > 0).ToList();
+                return BadRequest(errors);
+            }
+            var supplier = _context.Suppliers.Include(s => s.User).Where(s => s.UserId == id)
+                .Select(s => s).SingleOrDefault();
+            if (supplier == null)
+            {
+                return BadRequest("此帳號不存在");
+            }
+            //var UserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
             using (var hmac = new HMACSHA512())
             {
                 var passwordSalt = hmac.Key;
                 var passwordHsah = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(request.Password));
-
-                var supplier = (from u in _context.Suppliers
-                                join s in _context.Users
-                                on u.UserId equals s.UserId
-                                select u).SingleOrDefault();
-
-                //supplier = new Supplier
-                //{
-                //var user = new User
-                //{
-                //    Email = request.Email,
-                //    PasswordHash = passwordHsah,
-                //    PasswordSalt = passwordSalt,
-                //};
                 supplier.ContactName = request.ContactName;
                 supplier.CompanyName = request.CompanyName;
                 supplier.TaxId = request.TaxId;
@@ -193,13 +190,20 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
                 supplier.SupplierCountry = request.SupplierCountry;
                 supplier.SupplierCity = request.SupplierCity;
                 supplier.SupplierAddress = request.SupplierAddress;
-                //supplier.User = ;
-
-                
+                supplier.User.PasswordHash = passwordHsah;
+                supplier.User.PasswordSalt = passwordSalt;
+                supplier.User.Email = request.Email;
                 _context.Suppliers.Update(supplier);
-                _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
             return Ok("修改成功!");
+        }
+        public async Task<IActionResult> Delete(int id)
+        {
+            var user = _context.Users.Include(u => u.Suppliers).FirstOrDefault(x => x.UserId == id);
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+            return Ok("此帳號已刪除");
         }
     }
 }
