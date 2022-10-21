@@ -144,7 +144,9 @@
                     </div>
                     <div>
                         <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
-                        <a href="./product_main.html" class="btn btn-primary" a href="./shop_main.html">加入購物車</a>
+                        @*<a href="./product_main.html" class="btn btn-primary" a href="./shop_main.html">加入購物車</a>*@
+                        <vue-number-input v-model="item.qty" :min="1" :max="10" inline controls></vue-number-input>
+                        <button @@click="addToCart(item)" class="btn btn-primary">加入Go物車</button>
                     </div>
 
                 </div>
@@ -179,7 +181,7 @@
         },
         mounted: function () {
             let self = this;
-            fetch("/api/Product/1")
+            fetch("/api/Product/{id}")
                 .then(function (response) { return response.json() })
                 .then(function (result) {
                     self.products = result.map(function (x) {

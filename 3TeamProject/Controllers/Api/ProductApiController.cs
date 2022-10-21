@@ -170,6 +170,7 @@ namespace _3TeamProject.Controllers.Api
                                on product.ProductId equals Info.ProductId
                                join Board in _context.ProductsMessageBoards                             
                                on product.ProductId equals Board.ProductId
+                               where product.ProductId == id
                                select new
                                {
                                    ProductId = product.ProductId,

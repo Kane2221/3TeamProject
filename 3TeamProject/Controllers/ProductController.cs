@@ -15,7 +15,7 @@ namespace _3TeamProject.Controllers
         {
             return View();
         }
-        //[HttpGet("Detail/{id}")]
+        [HttpGet("Detail/{id}")]
         public IActionResult Detail()
         {
             //var productFound = _context.Products.Join

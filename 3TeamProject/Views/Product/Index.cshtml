@@ -167,7 +167,8 @@
         <div class="col-3" v-for="item in products ">
             <div class="card">
                 @*v-for="it in productpic"*@
-                <a class="ProductDetail" style="margin:0" asp-area="" asp-controller="Product" asp-action="Detail">
+                var = {{item.productId}}
+                <a class="ProductDetail" style="margin:0" asp-area="" asp-controller="Product" asp-action="Detail" asp-route-id="1">
                 <img :src="item.productPicturePath" class="card-img-top" alt="..." >
                 </a>
                 <div class="card-body">
