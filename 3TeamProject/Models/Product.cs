@@ -24,11 +24,7 @@ namespace _3TeamProject.Models
         public DateTime? AddedTime { get; set; }
         public DateTime? RemovedTime { get; set; }
         public string ProductStatus { get; set; } = null!;
-<<<<<<< HEAD
         public string? ProductIntroduce { get; set; }
-=======
-        public string ProductIntroduce { get; set; } = null!;
->>>>>>> e1af6f3e8a20b9717349e0b46dfb6f09d329bbe6
 
         public virtual ProductCategory ProductCategory { get; set; } = null!;
         public virtual Supplier Supplier { get; set; } = null!;

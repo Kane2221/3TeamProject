@@ -6,10 +6,6 @@ using System.Data;
 using System.Diagnostics;
 using System.Text;
 using System.Security.Cryptography;
-<<<<<<< HEAD
-//using static _3TeamProject.Models.MemberModel;
-=======
->>>>>>> e1af6f3e8a20b9717349e0b46dfb6f09d329bbe6
 using System.Configuration;
 
 

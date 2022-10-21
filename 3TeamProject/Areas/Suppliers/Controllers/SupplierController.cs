@@ -1,24 +1,14 @@
-<<<<<<< HEAD
+
 ﻿using _3TeamProject.Areas.Sppliers.Data;
 using _3TeamProject.Models;
-=======
-﻿using _3TeamProject.Areas.Administrators.Data;
-using _3TeamProject.Areas.Sppliers.Data;
 using _3TeamProject.Areas.Suppliers.Data;
-using _3TeamProject.Models;
 using Microsoft.AspNetCore.Authorization;
->>>>>>> e1af6f3e8a20b9717349e0b46dfb6f09d329bbe6
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Microsoft.EntityFrameworkCore;
-<<<<<<< HEAD
-using System.Net.Mail;
-=======
 using System.Data;
 using System.Linq;
 using System.Net.Mail;
 using System.Security.Claims;
->>>>>>> e1af6f3e8a20b9717349e0b46dfb6f09d329bbe6
 using System.Security.Cryptography;
 
 
@@ -29,21 +19,12 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
     {
         private readonly _3TeamProjectContext _context;
 
-<<<<<<< HEAD
-        private readonly IConfiguration _env;
-
-        public SupplierController(_3TeamProjectContext Context, IConfiguration env)
-        {
-            _context = Context;
-            _env=env;
-=======
         private readonly IConfiguration _config;
 
         public SupplierController(_3TeamProjectContext Context, IConfiguration config)
         {
             _context = Context;
             _config = config;
->>>>>>> e1af6f3e8a20b9717349e0b46dfb6f09d329bbe6
         }
 
         [Authorize(Roles = ("Suppliers"))]
@@ -119,8 +100,6 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
                 var passwordSalt = hmac.Key;
                 var passwordHsah = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(request.Password));
                 var verifyToken = Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
-<<<<<<< HEAD
-=======
 
                 //Supplier supplier = new Supplier
                 //{
@@ -144,7 +123,6 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
                 //        Roles = request.Roles
                 //    }
                 //};
->>>>>>> e1af6f3e8a20b9717349e0b46dfb6f09d329bbe6
                 Supplier supplier = new Supplier
                 {
                     User = new User
@@ -158,25 +136,6 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
                     }
                 };
 
-<<<<<<< HEAD
-
-                using (MailMessage mail = new MailMessage())
-                {
-                    mail.From = new MailAddress("dotnettgm102@gmail.com", "帳號驗證碼");
-                    mail.To.Add("dotnettgm102@gmail.com");
-                    mail.Priority = MailPriority.Normal;
-                    mail.Subject = "帳號驗證碼";
-                    mail.Body = $"<a href=\"https://localhost:7190/User/Verify\"  value=\"{verifyToken}\">帳號驗證碼</a>";
-                    mail.IsBodyHtml = true;
-                    SmtpClient MySmtp = new SmtpClient("smtp.gmail.com", 587);
-                    MySmtp.Credentials = new System.Net.NetworkCredential(_env["mail:Account"], _env["mail:Password"]);
-                    MySmtp.EnableSsl = true;
-                    MySmtp.Send(mail);
-                    MySmtp = null;
-                } ;
-
-                _context.Suppliers.Add(supplier);
-=======
                 #region Send Email with verify code (正式再解開註解)
                 //using (MailMessage mail = new MailMessage())
                 //{
@@ -197,13 +156,11 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
 
                 //_context.Suppliers.Add(supplier);
                 _context.Suppliers.Add(supplier).CurrentValues.SetValues(request);
->>>>>>> e1af6f3e8a20b9717349e0b46dfb6f09d329bbe6
                 await _context.SaveChangesAsync();
                 return Ok("註冊成功，請等待驗證信件");
             }
         }
-<<<<<<< HEAD
-=======
+
         [Authorize(Roles = ("Suppliers, Administrator, ChiefAdministrator, SuperAdministrator"))]
         public async Task<IActionResult> Update(int? id, [FromBody]SupplierUpdateViewModel request)
         {
@@ -248,6 +205,5 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
             await _context.SaveChangesAsync();
             return Ok("此帳號已刪除");
         }
->>>>>>> e1af6f3e8a20b9717349e0b46dfb6f09d329bbe6
     }
 }
