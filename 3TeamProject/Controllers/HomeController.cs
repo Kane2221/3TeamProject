@@ -1,6 +1,9 @@
 ﻿using _3TeamProject.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace _3TeamProject.Controllers
 {
@@ -15,6 +18,15 @@ namespace _3TeamProject.Controllers
 
         public IActionResult Index()
         {
+            var claims = new List<Claim>()
+            {
+                new Claim(ClaimTypes.Name, ""),
+                new Claim(ClaimTypes.Sid, ""),
+                new Claim(ClaimTypes.Role, "")
+            };
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var claimsPricipal = new ClaimsPrincipal(claimsIdentity);
+            HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPricipal);
             return View();
         }
 

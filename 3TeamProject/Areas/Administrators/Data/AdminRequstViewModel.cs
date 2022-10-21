@@ -2,7 +2,7 @@
 
 namespace _3TeamProject.Areas.Administrators.Data
 {
-    public class AdminRegisterRequest
+    public class AdminRequstViewModel
     {
         [Required]
         public string Account { get; set; } = string.Empty;

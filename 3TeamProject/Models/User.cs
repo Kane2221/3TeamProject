@@ -12,7 +12,7 @@ namespace _3TeamProject.Models
             Suppliers = new HashSet<Supplier>();
         }
 
-        public int Id { get; set; }
+        public int UserId { get; set; }
         public string Account { get; set; } = null!;
         public string Email { get; set; } = null!;
         public byte[] PasswordHash { get; set; } = null!;

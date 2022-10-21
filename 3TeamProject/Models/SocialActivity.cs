@@ -10,7 +10,7 @@ namespace _3TeamProject.Models
             ActivitiesMessageBoards = new HashSet<ActivitiesMessageBoard>();
         }
 
-        public int ActivitiesId { get; set; }
+        public int ActivityId { get; set; }
         public int MemberId { get; set; }
         public string ActivitiesName { get; set; } = null!;
         public string? ActivitiesContent { get; set; }

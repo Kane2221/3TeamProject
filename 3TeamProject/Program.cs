@@ -2,7 +2,10 @@ using _3TeamProject.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+<<<<<<< HEAD
 
+=======
+>>>>>>> e1af6f3e8a20b9717349e0b46dfb6f09d329bbe6
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +16,7 @@ builder.Services.AddDbContext<_3TeamProjectContext>(options =>
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+<<<<<<< HEAD
 builder.Services.AddMvc()
     .AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore
@@ -26,6 +30,22 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         opt.ExpireTimeSpan = TimeSpan.FromSeconds(600);
     });
 
+=======
+//新增Cookie驗證
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(opt => {
+        opt.AccessDeniedPath = "/Home/Error";
+        opt.LoginPath = "/Home"; // TODO Login Path
+        opt.ExpireTimeSpan = TimeSpan.FromSeconds(600);
+    });
+
+//新增的服務，為了在串接兩張以上的表，不重覆讀取
+builder.Services.AddMvc()
+    .AddNewtonsoftJson(options => 
+    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+    );
+
+>>>>>>> e1af6f3e8a20b9717349e0b46dfb6f09d329bbe6
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

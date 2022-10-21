@@ -9,6 +9,10 @@ using _3TeamProject.Data;
 using Microsoft.AspNetCore.Authorization;
 using System.Net.Mail;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> e1af6f3e8a20b9717349e0b46dfb6f09d329bbe6
 namespace _3TeamProject.Controllers
 {
     public class UserController : Controller
@@ -41,7 +45,11 @@ namespace _3TeamProject.Controllers
             var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.Name, user.Account),
+<<<<<<< HEAD
                 new Claim(ClaimTypes.Sid, user.Id.ToString()),
+=======
+                new Claim(ClaimTypes.Sid, user.UserId.ToString()),
+>>>>>>> e1af6f3e8a20b9717349e0b46dfb6f09d329bbe6
                 new Claim(ClaimTypes.Role, user.RolesNavigation.RoleName)
             };
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -50,7 +58,11 @@ namespace _3TeamProject.Controllers
             return Ok("登入成功");
             //return RedirectToAction("index", "home");
         }
+<<<<<<< HEAD
         //TODO 新增寄送Token給使用者作驗證
+=======
+        
+>>>>>>> e1af6f3e8a20b9717349e0b46dfb6f09d329bbe6
         public async Task<IActionResult> Verify([FromBody] string token)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.VerficationToken == token);
@@ -66,7 +78,11 @@ namespace _3TeamProject.Controllers
             await _context.SaveChangesAsync();
             return Ok("驗證成功");
         }
+<<<<<<< HEAD
         //TODO 新增重設密碼寄送Token給使用者作驗證
+=======
+
+>>>>>>> e1af6f3e8a20b9717349e0b46dfb6f09d329bbe6
         public async Task<IActionResult> ForgotPassword([FromBody] string email)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
@@ -122,8 +138,13 @@ namespace _3TeamProject.Controllers
                 user.PasswordResetToken = null;
                 user.ResetTokenExpires = null;
                 await _context.SaveChangesAsync();
+<<<<<<< HEAD
                 return Ok("密碼重設成功");
             }
+=======
+            }
+            return Ok("密碼重設成功");
+>>>>>>> e1af6f3e8a20b9717349e0b46dfb6f09d329bbe6
         }
         [Authorize]
         public async Task<IActionResult> Logout()
