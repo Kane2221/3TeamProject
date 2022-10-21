@@ -4,6 +4,7 @@ using _3TeamProject.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Net.Http.Headers;
 using System.Collections.Generic;
 using System.Data;
 using System.Net.Mail;
@@ -44,7 +45,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
             }
             else if (UserRole == "ChiefAdministrator")
             {
-                var adminChief = _context.Administrators.Include(u => u.User)
+                var admin = _context.Administrators.Include(u => u.User)
                     .Where(u => u.User.Roles != 3).Select(u => new AdminGetViewModel
                     {
                         Account = u.User.Account,
@@ -53,7 +54,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
                         AdministratorName = u.AdministratorName,
                         PhoneNumber = u.PhoneNumber
                     });
-                return Ok(adminChief);
+                return Ok(admin);
             }
             var adminSuper = _context.Administrators.Include(u => u.User)
                     .Select(u => new AdminGetViewModel
