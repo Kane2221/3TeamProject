@@ -5,15 +5,15 @@ namespace _3TeamProject.Areas.Administrators.Data
     public class AdminGetViewModel
     {
         
-        public string Account { get; set; }
+        public string Account { get; set; } = string.Empty;
 
-        
-        public string Email { get; set; }
 
-        public string Roles { get; set; }
-        
-        public string AdministratorName { get; set; }
-        
-        public string PhoneNumber { get; set; } 
+        public string Email { get; set; } = string.Empty;
+
+        public string Roles { get; set; } = string.Empty;
+
+        public string AdministratorName { get; set; } = string.Empty;
+
+        public string PhoneNumber { get; set; } = string.Empty;
     }
 }

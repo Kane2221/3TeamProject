@@ -1,5 +1,4 @@
-﻿
-using _3TeamProject.Areas.Members.Data;
+﻿using _3TeamProject.Areas.Members.Data;
 using _3TeamProject.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +12,9 @@ using System.Security.Cryptography;
 
 namespace _3TeamProject.Areas.Members.Controllers
 {
-    [Area("Members")]
+    [Authorize("Members")]
+    [Route("Members/[controller]")]
+    [ApiController]
     public class MemberController : Controller
     {
 
@@ -25,57 +26,39 @@ namespace _3TeamProject.Areas.Members.Controllers
             _context = Context;
             _config = config;
         }
-
-        public IActionResult GetSupplier()
+        [HttpGet("{id}")]
+        public IActionResult GetMember(int id)
         {
-            var UserId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value;
-            var user = _context.Users.Include(u => u.Suppliers).FirstOrDefault(x => x.UserId == int.Parse(UserId));
-            if (user == null)
+            var UserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
+            if (id != UserId)
             {
-                return BadRequest("沒有此帳號");
+                return BadRequest("與登入帳號不符");
             }
+            var user = _context.Users.Include(u => u.Members).FirstOrDefault(x => x.UserId == UserId);
             var member = (from u in _context.Users
-                            where u.UserId == user.UserId
-                            join m in _context.Members
-                            on u.UserId equals m.UserId
-                            select new MemberGetViewModel
-                            {
-                                Account = u.Account,
-                                Email = u.Email,
-                                RoleName = u.RolesNavigation.RoleName,
-                                MemberName = m.MemberName,
-                                NickName = m.NickName,
-                                Birthday = m.Birthday,
-                                IdentityNumber = m.IdentityNumber,
-                                CellPhoneNumber = m.CellPhoneNumber,
-                                PhoneNumber = m.PhoneNumber,
-                                PostalCode = m.PostalCode,
-                                Country = m.Country,
-                                City = m.City,
-                                Address = m.Address
-                            }).SingleOrDefault();
+                          where u.UserId == user.UserId
+                          join m in _context.Members
+                          on u.UserId equals m.UserId
+                          select new MemberGetViewModel
+                          {
+                              Account = u.Account,
+                              Email = u.Email,
+                              RoleName = u.RolesNavigation.RoleName,
+                              MemberName = m.MemberName,
+                              NickName = m.NickName,
+                              Birthday = m.Birthday,
+                              IdentityNumber = m.IdentityNumber,
+                              CellPhoneNumber = m.CellPhoneNumber,
+                              PhoneNumber = m.PhoneNumber,
+                              PostalCode = m.PostalCode,
+                              Country = m.Country,
+                              City = m.City,
+                              Address = m.Address
+                          }).SingleOrDefault();
             return Ok(member);
         }
-        //[Authorize(Roles = ("Administrator, ChiefAdministrator, SuperAdministrator"))]
-        //public IActionResult GetAllAdmins() //權限Administrator只能看見同權限的清單，更高權限可以看見所有人清單
-        //{
-        //    var UserRole = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role).Value;
-
-        //        var membr = _context.Members.Include(u => u.User)
-        //                .Select(u => new AdminGetViewModel
-        //                {
-        //                    Account = u.User.Account,
-        //                    Email = u.User.Email,
-        //                    Roles = u.User.RolesNavigation.RoleName,
-        //                    AdministratorName = u.AdministratorName,
-        //                    PhoneNumber = u.PhoneNumber
-        //                });
-        //        return Ok(admin);
-        //    }
-
-        //}
-
-        public async Task<IActionResult> Register([FromBody] MemberRequestViewModel request)
+        [HttpPost]
+        public async Task<IActionResult> Register([FromBody] MemberRegisterViewModel request)
         {
             if (!ModelState.IsValid)
             {
@@ -137,42 +120,74 @@ namespace _3TeamProject.Areas.Members.Controllers
                 return Ok("註冊成功，請等待驗證信件");
             }
         }
-        //[Authorize(Roles = ("Administrator, ChiefAdministrator, SuperAdministrator"))]
-        //public async Task<IActionResult> Update(int? id, [FromBody] AdminUpdateViewModel request)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        var errors = ModelState.Select(x => x.Value.Errors).Where(y => y.Count > 0).ToList();
-        //        return BadRequest(errors);
-        //    }
 
-        //    var admin = _context.Administrators.Include(a => a.User)
-        //            .Where(a => a.UserId == id).Select(a => a).SingleOrDefault();
-        //    if (admin == null)
-        //    {
-        //        return BadRequest("此帳號不存在");
-        //    }
-        //    using (var hmac = new HMACSHA512())
-        //    {
-        //        var passwordSalt = hmac.Key;
-        //        var passwordHsah = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(request.Password));
-        //        admin.User.Email = request.Email;
-        //        admin.AdministratorName = request.AdministratorName;
-        //        admin.PhoneNumber = request.PhoneNumber;
-        //        admin.User.PasswordSalt = passwordSalt;
-        //        admin.User.PasswordHash = passwordHsah;
-        //        _context.Administrators.Update(admin);
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    return Ok("修改成功!");
-        //}
-        //[Authorize(Roles = "SuperAdminstrator")]
-        //public async Task<IActionResult> Delete(int id)
-        //{
-        //    var user = _context.Users.Include(u => u.Administrators).FirstOrDefault(x => x.UserId == id);
-        //    _context.Users.Remove(user);
-        //    await _context.SaveChangesAsync();
-        //    return Ok("此帳號已刪除");
-        //}
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] MemberUpdateViewModel request)
+        {
+            var UserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
+            if (id != UserId)
+            {
+                return BadRequest("與登入帳號不符");
+            }
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Select(x => x.Value.Errors).Where(y => y.Count > 0).ToList();
+                return BadRequest(errors);
+            }
+
+            var member = _context.Members.Include(a => a.User)
+                    .Where(a => a.UserId == id).Select(a => a).SingleOrDefault();
+
+            using (var hmac = new HMACSHA512())
+            {
+                var passwordSalt = hmac.Key;
+                var passwordHsah = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(request.Password));
+                member.MemberName = request.MemberName;
+                member.NickName = request.NickName;
+                member.Birthday = request.Birthday;
+                member.IdentityNumber = request.IdentityNumber;
+                member.CellPhoneNumber = request.CellPhoneNumber;
+                member.PhoneNumber = request.PhoneNumber;
+                member.PostalCode = request.PostalCode;
+                member.Country = request.Country;
+                member.City = request.City;
+                member.Address = request.Address;
+                member.User.Email = request.Email;
+                member.User.PasswordHash = passwordHsah;
+                member.User.PasswordSalt = passwordSalt;
+                _context.Members.Update(member);
+                await _context.SaveChangesAsync();
+            }
+            return Ok("修改成功!");
+        }
+        [HttpDelete]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var UserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
+            if (id != UserId)
+            {
+                return BadRequest("與登入帳號不符");
+            }
+            var user = _context.Users.Include(u => u.Members).FirstOrDefault(x => x.UserId == id);
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+            return Ok("此帳號已刪除");
+        }
+        [HttpGet("{id}")]
+        public IActionResult GetOrder() //TODO 我的訂單
+        {
+
+            return Ok();
+        }
+        [HttpGet("{id}")]
+        public IActionResult GetOrderRecord()//TODO 訂購記錄
+        {
+            return Ok();
+        }
+        [HttpGet("{id}")]
+        public IActionResult ParticipatedRecord()//TODO 活動參與記錄
+        {
+            return Ok();
+        }
     }
 }

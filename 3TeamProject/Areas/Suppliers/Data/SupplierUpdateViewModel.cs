@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace _3TeamProject.Areas.Suppliers.Data
 {
@@ -7,10 +8,10 @@ namespace _3TeamProject.Areas.Suppliers.Data
         [Required, EmailAddress]
         public string Email { get; set; }
 
-        [Required, MinLength(8)]
+        [Required, MinLength(8), PasswordPropertyText]
         public string Password { get; set; }
 
-        [Required, Compare("Password")]
+        [Required, Compare("Password"), PasswordPropertyText]
         public string ComfirmPassword { get; set; }
 
         [Required]
