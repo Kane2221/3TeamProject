@@ -1,5 +1,6 @@
 ﻿using _3TeamProject.Models;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace _3TeamProject.Controllers
 {
@@ -32,6 +33,7 @@ namespace _3TeamProject.Controllers
             //       //p.ProductCategoryId
 
             //   }).Where(pi => pi.ProductId == id);
+            id = 1;
             var productFound = from product in _context.Products
                                join Info in _context.ProductsPictureInfos
                                on product.ProductId equals Info.ProductId
@@ -49,14 +51,15 @@ namespace _3TeamProject.Controllers
                                    UnitStock = product.UnitStock,
                                    ProductRecommendation = product.ProductRecommendation,
                                    ProductStatus = product.ProductStatus,
-                                   ProductPicturePath = Info.ProductPicturePath,
+                                   ProductPicturePath = Info.ProductPicturePath,    
                                    ProductMessageContent = Board.ProductMessageContent,
                                    ProductIntroduce = product.ProductIntroduce
                                    //p.ProductName,
                                    //p.ProductCategoryId
 
                                };
-            return Ok(productFound);
+            
+            return View(productFound);
         }
         //[HttpGet("Create")]
         public IActionResult Create()

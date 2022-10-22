@@ -2,6 +2,7 @@ using _3TeamProject.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,16 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         opt.AccessDeniedPath = "/Home/Error";
         opt.LoginPath = "/Home"; // TODO Login Path
         opt.ExpireTimeSpan = TimeSpan.FromSeconds(600);
+       
+    }).AddGoogle( opt =>
+    {
+        opt.ClientId= builder.Configuration.GetSection("GoogleOAuth:ID").Value;
+        opt.ClientSecret = builder.Configuration.GetSection("GoogleOAuth:Password").Value;
+        opt.Events.OnCreatingTicket = ctx =>
+        {
+            ctx.Identity.AddClaim(new System.Security.Claims.Claim(ClaimTypes.Role, "Admin")); // Role 增加 Admin
+            return Task.CompletedTask;
+        };
     });
 
 //新增的服務，為了在串接兩張以上的表，不重覆讀取
