@@ -7,16 +7,22 @@
     .card {
         background-color: wheat
     }
+    .none{
+        display:none;
+    }
 </style>
 <div class="container-fluid" id="productPanel">
     <div class="row" >
 
 
-        <div class="col-3" v-for="item in products ">
+        <div class="col-3" v-for="(item,index) in products ">
             <div class="card">
                 @*v-for="it in productpic"*@
                 var = {{item.productId}}
-                <a class="ProductDetail" style="margin:0" asp-area="" asp-controller="Product" asp-action="Detail" asp-route-id={{item.productId}}>
+                <a class="ProductDetail" style="margin:0" @@click.preventDefault="submit(index)">
+                    <form  class="none" action="/Product/Detail">
+                        <input :value="item.productId" type="number" name="id" /><button type="submit" ref ="form"></button>
+                        </form>
                 <img :src="item.productPicturePath" class="card-img-top" alt="..." >
                 </a>
                 <div class="card-body">
@@ -91,6 +97,11 @@
                         }
 
                     })
+            },
+            submit:function(index){
+                console.log(this.$refs.form[index]);
+                this.$refs.form[index].click();
+
             }
         },
         mounted: function () {

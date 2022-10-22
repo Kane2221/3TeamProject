@@ -17,8 +17,12 @@ namespace _3TeamProject.Controllers
             return View();
         }
         //[HttpGet("Detail/{id}")]
-        public async Task<IActionResult> Detail(int id)
+        public async Task<IActionResult> Detail([FromForm] int post)
         {
+            var id = post;
+            //var id = Int32.Parse(post["id"].ToString());
+
+            var arf = 456;
             //var productFound = _context.Products.Join
             //(_context.ProductsPictureInfos,
             //   p => p.ProductId,
@@ -33,7 +37,6 @@ namespace _3TeamProject.Controllers
             //       //p.ProductCategoryId
 
             //   }).Where(pi => pi.ProductId == id);
-            id = 1;
             var productFound = from product in _context.Products
                                join Info in _context.ProductsPictureInfos
                                on product.ProductId equals Info.ProductId
