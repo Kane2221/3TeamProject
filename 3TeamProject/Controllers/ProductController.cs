@@ -64,7 +64,7 @@ namespace _3TeamProject.Controllers
                                    //p.ProductCategoryId
 
                                }).SingleOrDefault();
-            
+            ViewBag.ProductId = pid;
             return Ok(productFound);
         }
         //[HttpGet("Create")]
