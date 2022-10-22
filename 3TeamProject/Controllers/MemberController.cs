@@ -6,7 +6,6 @@ using System.Data;
 using System.Diagnostics;
 using System.Text;
 using System.Security.Cryptography;
-using static _3TeamProject.Models.MemberModel;
 using System.Configuration;
 
 

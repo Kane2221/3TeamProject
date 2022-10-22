@@ -1,0 +1,243 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>ShopIndex</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free HTML Templates" name="keywords">
+    <meta content="Free HTML Templates" name="description">
+    <link href=https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.41/vue.cjs.js>
+    <link rel="stylesheet" href="~/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
+
+</head>
+
+<body>
+    <!-- Search Bar Start -->
+    <div class="container-fluid" style="background-color:#2f4f4f;">
+        <div class="row align-items-center justify-content-center py-3 px-xl-5">
+            <div class="col-lg-6 col-6 text-left ">
+                <form action="">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="搜尋景點">
+                        <div class="input-group-append">
+                            <span class="btn input-group-text bg-transparent text-primary">
+                                <i class="fa fa-search"></i>
+                            </span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Search Bar End -->
+    <!-- Theme Start -->
+    <div class="container-fluid pt-5">
+            <div class="text-center mb-3 pb-3">
+                <h1>主題景點</h1>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="destination-item position-relative overflow-hidden mb-2">
+                    <img class="img-fluid" src="img/destination-1.jpg" alt="">
+                        <a class="destination-overlay text-white text-decoration-none" href="">
+                            <h5 class="text-white">景點名稱</h5>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="destination-item position-relative overflow-hidden mb-2">
+                        <img class="img-fluid" src="img/destination-2.jpg" alt="">
+                        <a class="destination-overlay text-white text-decoration-none" href="">
+                            <h5 class="text-white">景點名稱</h5>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="destination-item position-relative overflow-hidden mb-2">
+                        <img class="img-fluid" src="img/destination-3.jpg" alt="">
+                        <a class="destination-overlay text-white text-decoration-none" href="">
+                        <h5 class="text-white">景點名稱</h5>
+                        </a>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <!-- Theme End -->
+    <br />
+    <br />
+    <br />
+
+    <!-- Detail Start -->
+    <div class="d-flex justify-content-center">
+        <div class="col-md-2">
+            <div class="accordion" id="accordionPanelsStayOpenExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                        <button class="accordion-button btn-primary collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                            景點分類
+                        </button>
+                    </h2>
+                    <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+                        <div class="accordion-body">
+                            <button class="btn btn-secondary">
+                                登山
+                            </button>
+                            <br />
+                            <button class="btn btn-secondary">
+                                淺水
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+                        <button class="accordion-button btn-primary collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                            景點分區
+                        </button>
+                    </h2>
+                    <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
+                        <div class="accordion-body">
+                            <button class="btn btn-secondary">
+                                台北市
+                            </button>
+                            <br />
+                            <button class="btn btn-secondary">
+                                新北市
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+            <div class="col-md-10">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="text-center">
+                                <div class="toggle-btn">
+                                    <div class="inner-circle"></div>
+                                </div>
+                            </th>
+                            <th>景點編號</th>
+                            <th>景點名稱</th>
+                            <th>景點國家</th>
+                            <th>景點城市</th>
+                            <th>景點地址</th>
+                            <th>景點推薦度</th>
+                            <th>備註</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-body">
+                        <tr class="cell-1">
+                            <td class="text-center">
+                                <div class="toggle-btn">
+                                    <div class="inner-circle"></div>
+                                </div>
+                            </td>
+                            <td>#1591234</td>
+                            <td>屏東墾丁後壁湖潛水</td>
+                            <td>台灣</td>
+                            <td>屏東</td>
+                            <td>屏東墾丁後壁湖</td>
+                            <td>
+                                <div>
+                                    推薦星星
+@*									<b-form-rating v-model="value" readonly></b-form-rating>
+									<p class="mt-2">Value: {{ value }}</p>
+*@                              </div>
+                            </td>
+                            <td>123</td>
+                        </tr>
+                        <tr class="cell-1">
+                            <td class="text-center">
+                                <div class="toggle-btn">
+                                    <div class="inner-circle"></div>
+                                </div>
+                            </td>
+                            <td>#1591234</td>
+                            <td>屏東墾丁後壁湖潛水</td>
+                            <td>台灣</td>
+                            <td>屏東</td>
+                            <td>屏東墾丁後壁湖</td>
+                            <td>
+                                <div>
+                                    推薦星星
+                                    @*									<b-form-rating v-model="value" readonly></b-form-rating>
+                                    <p class="mt-2">Value: {{ value }}</p>
+                                    *@
+                                </div>
+                            </td>
+                            <td>123</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detail End -->
+    <!-- Footer Start -->
+    <div class="container-fluid bg-dark text-white-50 py-5 px-sm-3 px-lg-5" style="margin-top: 90px;">
+        <div class="row pt-5">
+            <div class="col-lg-3 col-md-6 mb-5">
+                <a href="" class="navbar-brand">
+                    <h1 class="text-primary"><span class="text-white">TRAVEL</span>ER</h1>
+                </a>
+                <p>Sed ipsum clita tempor ipsum ipsum amet sit ipsum lorem amet labore rebum lorem ipsum dolor. No sed vero lorem dolor dolor</p>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-5">
+                <h5 class="text-white text-uppercase mb-4" style="letter-spacing: 5px;">我們提供的服務</h5>
+                <div class="d-flex flex-column justify-content-start">
+                    <a class="text-white-50 mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>購物商城</a>
+                    <a class="text-white-50 mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>社群揪團</a>
+                    <a class="text-white-50 mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>景點介紹</a>
+                    <a class="text-white-50 mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>會員中心</a>
+                    <a class="text-white-50 mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>廠商專區</a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-5">
+                <h5 class="text-white text-uppercase mb-4" style="letter-spacing: 5px;">Contact Us</h5>
+                <p><i class="fa fa-map-marker-alt mr-2"></i>台北市中山區南京東路三段219號5樓</p>
+                <p><i class="fa fa-phone-alt mr-2"></i>0987-654-321</p>
+                <p><i class="fa fa-envelope mr-2"></i>group3@gmail.com</p>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-5">
+                <h5 class="text-white text-uppercase mb-4" style="letter-spacing: 5px;">Follow Us</h5>
+                <div class="d-flex justify-content-start">
+                    <a class="btn btn-outline-primary btn-square mr-2" href="#"><i class="fab fa-twitter"></i></a>
+                    <a class="btn btn-outline-primary btn-square mr-2" href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a class="btn btn-outline-primary btn-square mr-2" href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a class="btn btn-outline-primary btn-square" href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid bg-dark text-white border-top py-4 px-sm-3 px-md-5" style="border-color: rgba(256, 256, 256, .1) !important;">
+        <div class="row">
+            <div class="col-lg-6 text-center text-md-left mb-3 mb-md-0">
+                <p class="m-0 text-white-50">
+                    Copyright &copy; <a href="#">Domain</a>. All Rights Reserved.</a>
+                </p>
+            </div>
+        </div>
+    </div>
+    <!-- Footer End -->
+
+</body>
+
+</html>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.7.13/dist/vue.js"></script>
+<script>
+    export default {
+        data() {
+            return {
+                value: 2.567
+            }
+        }
+    }
+</script>
