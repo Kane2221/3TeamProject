@@ -17,12 +17,15 @@ namespace _3TeamProject.Controllers
             return View();
         }
         //[HttpGet("Detail/{id}")]
-        public async Task<IActionResult> Detail([FromForm] int post)
-        {
-            var id = post;
-            //var id = Int32.Parse(post["id"].ToString());
 
-            var arf = 456;
+        public IActionResult Detail(int id)
+        {
+            
+            var pid = id;
+            //public async Task<IActionResult> Detail(IFormCollection post)
+            //{
+            //    var id = Int32.Parse(post["id"].ToString());
+
             //var productFound = _context.Products.Join
             //(_context.ProductsPictureInfos,
             //   p => p.ProductId,
@@ -37,12 +40,12 @@ namespace _3TeamProject.Controllers
             //       //p.ProductCategoryId
 
             //   }).Where(pi => pi.ProductId == id);
-            var productFound = from product in _context.Products
+            var productFound = (from product in _context.Products
                                join Info in _context.ProductsPictureInfos
                                on product.ProductId equals Info.ProductId
                                join Board in _context.ProductsMessageBoards
                                on product.ProductId equals Board.ProductId
-                               where product.ProductId == id
+                               where product.ProductId == pid
                                select new
                                {
                                    ProductId = product.ProductId,
@@ -60,9 +63,9 @@ namespace _3TeamProject.Controllers
                                    //p.ProductName,
                                    //p.ProductCategoryId
 
-                               };
+                               }).SingleOrDefault();
             
-            return View(productFound);
+            return Ok(productFound);
         }
         //[HttpGet("Create")]
         public IActionResult Create()
