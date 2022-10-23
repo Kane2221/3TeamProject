@@ -25,8 +25,8 @@ namespace _3TeamProject.Areas.Administrators.Controllers
             _config = config;
         }
 
-        [HttpGet]//權限Administrator只能看見同權限以下的清單，更高權限可以看見所有人清單
-        public IActionResult GetAllAdmins() 
+        [HttpGet("GetAllAdmins")]//權限Administrator只能看見同權限以下的清單，更高權限可以看見所有人清單
+        public IActionResult GetAllAdmins()
         {
             var UserRole = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role).Value;
             if (UserRole == "Administrator")
@@ -64,7 +64,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
                         AdministratorName = u.AdministratorName,
                         PhoneNumber = u.PhoneNumber
                     });
-            return Ok(adminSuper);            
+            return Ok(adminSuper);
         }
         [HttpPost]
         public async Task<IActionResult> Register([FromBody] AdminRegisterViewModel request)
@@ -135,7 +135,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
             return Ok("修改成功!");
         }
         [HttpDelete]
-        [Authorize(Roles ="SuperAdministrator")]
+        [Authorize(Roles = "SuperAdministrator")]
         public async Task<IActionResult> Delete(int id)
         {
             User user = _context.Users.Include(u => u.Administrators).FirstOrDefault(x => x.UserId == id);
@@ -143,7 +143,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
             await _context.SaveChangesAsync();
             return Ok("此帳號已刪除");
         }
-        [HttpGet]
+        [HttpGet("GetAllSuppliers")]
         public IActionResult GetAllSuppliers()
         {
             var supplier = from u in _context.Users

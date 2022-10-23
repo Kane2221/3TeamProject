@@ -11,7 +11,10 @@ namespace _3TeamProject.Models
         public string? SightseeingMessageContent { get; set; }
         public DateTime MessageCreatedTime { get; set; }
         public int SightseeingMessageState { get; set; }
+        public int? SightseeingStatusId { get; set; }
 
+        public virtual Member Member { get; set; } = null!;
         public virtual Sightseeing Sightseeing { get; set; } = null!;
+        public virtual SightseeingStatusCategory? SightseeingStatus { get; set; }
     }
 }

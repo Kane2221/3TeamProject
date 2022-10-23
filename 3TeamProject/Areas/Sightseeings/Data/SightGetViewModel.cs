@@ -1,4 +1,6 @@
-﻿namespace _3TeamProject.Areas.Sightseeings.Models
+﻿using _3TeamProject.Models;
+
+namespace _3TeamProject.Areas.Sightseeings.Data
 {
     public class SightGetViewModel
     {
@@ -8,8 +10,9 @@
         public string? SightseeingCity { get; set; }
         public string? SightseeingAddress { get; set; }
         public double? SightseeingScore { get; set; }
-        public int SightseeingPictureId { get; set; }
-        public string SightseeingPicturePath { get; set; } = null!;
-        public string SightseeingPictureName { get; set; } = null!;
+        public string? CategoryName { get; set; }
+        public int? SightseeingHomePage { get; set; }
+        public virtual IEnumerable<SightPicInfoViewModel> SightseeingPictureInfos { get; set; }
+        
     }
 }

@@ -25,8 +25,10 @@ namespace _3TeamProject.Models
         public DateTime? RemovedTime { get; set; }
         public string ProductStatus { get; set; } = null!;
         public string ProductIntroduce { get; set; } = null!;
+        public int? ProductStatusId { get; set; }
 
         public virtual ProductCategory ProductCategory { get; set; } = null!;
+        public virtual ProductStatusCategoy? ProductStatusNavigation { get; set; }
         public virtual Supplier Supplier { get; set; } = null!;
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
         public virtual ICollection<ProductsMessageBoard> ProductsMessageBoards { get; set; }

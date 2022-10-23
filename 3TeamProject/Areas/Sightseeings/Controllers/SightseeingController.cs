@@ -1,9 +1,9 @@
-﻿using _3TeamProject.Areas.Sightseeings.Models;
+﻿using _3TeamProject.Areas.Sightseeings.Data;
 using _3TeamProject.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace _3TeamProject.Areas.Sightseeings.Controllers
 {
@@ -21,49 +21,57 @@ namespace _3TeamProject.Areas.Sightseeings.Controllers
         [HttpGet]
         public IActionResult GetAllSightseeings()
         {
-            var Sight = from s in _context.Sightseeings
-                        join p in _context.SightseeingPictureInfos
-                        on s.SightseeingId equals p.SightseeingId
-                        select new SightGetViewModel
-                        {
-                            SightseeingId = s.SightseeingId,
-                            SightseeingName = s.SightseeingName,
-                            SightseeingCountry = s.SightseeingCountry,
-                            SightseeingCity = s.SightseeingCity,
-                            SightseeingAddress = s.SightseeingAddress,
-                            SightseeingScore = s.SightseeingScore,
-                            SightseeingPictureId = p.SightseeingPictureId,
-                            SightseeingPictureName = p.SightseeingPictureName,
-                            SightseeingPicturePath = p.SightseeingPicturePath,
-                        };
+            var Sight = _context.Sightseeings.Include(s => s.SightseeingPictureInfos)
+                .Include(s => s.SightseeingCategory).Select(s => new SightGetViewModel
+                {
+                    SightseeingId = s.SightseeingId,
+                    SightseeingName = s.SightseeingName,
+                    SightseeingCountry = s.SightseeingCountry,
+                    SightseeingCity = s.SightseeingCity,
+                    SightseeingAddress = s.SightseeingAddress,
+                    SightseeingScore = s.SightseeingScore,
+                    CategoryName = s.SightseeingCategory.CategoryName,
+                    SightseeingHomePage = s.SightseeingHomePage,
+                    SightseeingPictureInfos = s.SightseeingPictureInfos.Select(p => new SightPicInfoViewModel
+                    {
+                        SightseeingPictureId = p.SightseeingPictureId,
+                        SightseeingPictureName = p.SightseeingPictureName,
+                        SightseeingPicturePath = p.SightseeingPicturePath
+                    })
+                });
+
             return Ok(Sight);
         }
         [HttpGet("{id}")]
         public IActionResult GetSightseeingsDetail(int id) //TODO 景點詳細頁
         {
-            var Sight = (from s in _context.Sightseeings
-                        join p in _context.SightseeingPictureInfos
-                        on s.SightseeingId equals p.SightseeingId
-                        join b in _context.SightseeingMessageBoards
-                        on s.SightseeingId equals b.SightseeingId
-                        where s.SightseeingId == id
-                        select new SightGetDetailViewModel
-                        {
-                            SightseeingId = s.SightseeingId,
-                            SightseeingName = s.SightseeingName,
-                            SightseeingCountry = s.SightseeingCountry,
-                            SightseeingCity = s.SightseeingCity,
-                            SightseeingAddress = s.SightseeingAddress,
-                            SightseeingScore = s.SightseeingScore,
-                            SightseeingPictureId = p.SightseeingPictureId,
-                            SightseeingPictureName = p.SightseeingPictureName,
-                            SightseeingPicturePath = p.SightseeingPicturePath,
-                            SightseeingIntroduce = s.SightseeingIntroduce,
-                            MessageBoardId = b.MessageBoardId,
-                            SightseeingMessageContent = b.SightseeingMessageContent,
-                            MessageCreatedTime = b.MessageCreatedTime,
-                        }).SingleOrDefault();
-
+            var Sight = _context.Sightseeings.Include(p=> p.SightseeingPictureInfos)
+                .Include(m => m.SightseeingMessageBoards).Include(c => c.SightseeingCategory)
+                .Include(e=>e.SightseeingMessageBoards)
+                .Where(s => s.SightseeingId == id).Select(s=>new SightGetDetailViewModel
+                {
+                    SightseeingId = s.SightseeingId,
+                    SightseeingName = s.SightseeingName,
+                    SightseeingCountry = s.SightseeingCountry,
+                    SightseeingCity = s.SightseeingCity,
+                    SightseeingAddress = s.SightseeingAddress,
+                    SightseeingScore = s.SightseeingScore,
+                    CategoryName = s.SightseeingCategory.CategoryName,
+                    SightseeingPictureInfos = s.SightseeingPictureInfos.Select(p => new SightPicInfoViewModel
+                    {
+                        SightseeingPictureId = p.SightseeingPictureId,
+                        SightseeingPictureName = p.SightseeingPictureName,
+                        SightseeingPicturePath = p.SightseeingPicturePath
+                    }),
+                    SightseeingMessageBoards = s.SightseeingMessageBoards.Select(m => new SightMessageViewModel
+                    {
+                        MessageBoardId = m.MessageBoardId,
+                        MemberName = m.Member.MemberName,
+                        SightseeingMessageContent = m.SightseeingMessageContent,
+                        MessageCreatedTime = m.MessageCreatedTime
+                    })
+                }).FirstOrDefault();
+            
             return Ok(Sight);
         }
     }

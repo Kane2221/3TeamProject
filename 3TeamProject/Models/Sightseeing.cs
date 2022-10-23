@@ -19,8 +19,11 @@ namespace _3TeamProject.Models
         public double? SightseeingScore { get; set; }
         public int AdministratorId { get; set; }
         public string? SightseeingIntroduce { get; set; }
+        public int? SightseeingHomePage { get; set; }
+        public int? SightseeingCategoryId { get; set; }
 
         public virtual Administrator Administrator { get; set; } = null!;
+        public virtual SightseeingCategory? SightseeingCategory { get; set; }
         public virtual ICollection<SightseeingMessageBoard> SightseeingMessageBoards { get; set; }
         public virtual ICollection<SightseeingPictureInfo> SightseeingPictureInfos { get; set; }
     }
