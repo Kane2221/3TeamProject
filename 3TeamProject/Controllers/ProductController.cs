@@ -16,7 +16,7 @@ namespace _3TeamProject.Controllers
         {
             return View();
         }
-        //[HttpGet("Detail/{id}")]
+        //[HttpPost("Detail/{id}")]
 
         public IActionResult Detail(int id)
         {
@@ -40,35 +40,46 @@ namespace _3TeamProject.Controllers
             //       //p.ProductCategoryId
 
             //   }).Where(pi => pi.ProductId == id);
-            var productFound = (from product in _context.Products
-                               join Info in _context.ProductsPictureInfos
-                               on product.ProductId equals Info.ProductId
-                               join Board in _context.ProductsMessageBoards
-                               on product.ProductId equals Board.ProductId
-                               where product.ProductId == pid
-                               select new
-                               {
-                                   ProductId = product.ProductId,
-                                   ProductCategoryId = product.ProductCategoryId,
-                                   ProductName = product.ProductName,
-                                   ProductUnitPrice = product.ProductUnitPrice,
-                                   SupplierId = product.SupplierId,
-                                   QuantityPerUnit = product.QuantityPerUnit,
-                                   UnitStock = product.UnitStock,
-                                   ProductRecommendation = product.ProductRecommendation,
-                                   ProductStatus = product.ProductStatus,
-                                   ProductPicturePath = Info.ProductPicturePath,    
-                                   ProductMessageContent = Board.ProductMessageContent,
-                                   ProductIntroduce = product.ProductIntroduce
-                                   //p.ProductName,
-                                   //p.ProductCategoryId
 
-                               }).SingleOrDefault();
+            //var productFound = (from product in _context.Products
+            //                   join Info in _context.ProductsPictureInfos
+            //                   on product.ProductId equals Info.ProductId
+            //                   join Board in _context.ProductsMessageBoards
+            //                   on product.ProductId equals Board.ProductId
+            //                   where product.ProductId == pid
+            //                   select new
+            //                   {
+            //                       ProductId = product.ProductId,
+            //                       ProductCategoryId = product.ProductCategoryId,
+            //                       ProductName = product.ProductName,
+            //                       ProductUnitPrice = product.ProductUnitPrice,
+            //                       SupplierId = product.SupplierId,
+            //                       QuantityPerUnit = product.QuantityPerUnit,
+            //                       UnitStock = product.UnitStock,
+            //                       ProductRecommendation = product.ProductRecommendation,
+            //                       ProductStatus = product.ProductStatus,
+            //                       ProductPicturePath = Info.ProductPicturePath,    
+            //                       ProductMessageContent = Board.ProductMessageContent,
+            //                       ProductIntroduce = product.ProductIntroduce
+            //                       //p.ProductName,
+            //                       //p.ProductCategoryId
+            //                   }).SingleOrDefault();
             ViewBag.ProductId = pid;
-            return Ok(productFound);
+            return View();
         }
         //[HttpGet("Create")]
         public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost("Create")]
+        public async Task<JsonResult> Create([FromBody] Product product)
+        {
+            _context.Add(product);
+            await _context.SaveChangesAsync();
+            return Json("新增成功!");
+        }
+        public IActionResult Rating()
         {
             return View();
         }
