@@ -1,4 +1,5 @@
-﻿using _3TeamProject.Areas.Members.Data;
+﻿using _3TeamProject.Areas.Administrators.Data;
+using _3TeamProject.Areas.Members.Data;
 using _3TeamProject.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +13,7 @@ using System.Security.Cryptography;
 
 namespace _3TeamProject.Areas.Members.Controllers
 {
-    [Authorize("Members")]
+    [Authorize(Roles ="Members")]
     [Route("Members/[controller]")]
     [ApiController]
     public class MemberController : Controller
@@ -26,7 +27,7 @@ namespace _3TeamProject.Areas.Members.Controllers
             _context = Context;
             _config = config;
         }
-        [HttpGet("{id}")]
+        [HttpGet("GetMember/{id}")]
         public IActionResult GetMember(int id)
         {
             var UserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
@@ -53,7 +54,8 @@ namespace _3TeamProject.Areas.Members.Controllers
                               PostalCode = m.PostalCode,
                               Country = m.Country,
                               City = m.City,
-                              Address = m.Address
+                              Address = m.Address,
+                              Age = m.Age
                           }).SingleOrDefault();
             return Ok(member);
         }
@@ -173,13 +175,31 @@ namespace _3TeamProject.Areas.Members.Controllers
             await _context.SaveChangesAsync();
             return Ok("此帳號已刪除");
         }
-        [HttpGet("{id}")]
-        public IActionResult GetOrder() //TODO 我的訂單
+        [HttpGet("GetOrder")]
+        public IActionResult GetOrder() //TODO 我的訂單, 待有資料再測
         {
-
-            return Ok();
+            var UserID = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
+            var myOrder = _context.Orders.Include(o => o.Member).Include(o => o.OrderDetails).Include(o => o.OrderStatusNavigation)
+                                .Include(o => o.PaymentStatusNavigation).Include(o => o.ShipStatusNavigation).Where(o => o.Member.UserId == UserID)
+                                .Select(o => new GetAllOrdersViewModel
+                                {
+                                    OrderId = o.OrderId,
+                                    OrderDate = o.OrderDate,
+                                    ShipDate = o.ShipDate,
+                                    OrderCategoryName = o.OrderStatusNavigation.OrderCategoryName,
+                                    PaymentCategoryName = o.PaymentStatusNavigation.PaymentCategoryName,
+                                    ShipCategoryName = o.ShipStatusNavigation.ShipCategoryName,
+                                    OrderDetails = o.OrderDetails.Select(od => new OrderDetailViewModel
+                                    {
+                                        ProductId = od.ProductId,
+                                        UnitPrice = od.UnitPrice,
+                                        Discount = od.Discount,
+                                        Quantity = od.Quantity,
+                                    })
+                                });
+            return Ok(myOrder);
         }
-        [HttpGet("{id}")]
+        //[HttpGet("{id}")]
         public IActionResult GetOrderRecord()//TODO 訂購記錄
         {
             return Ok();

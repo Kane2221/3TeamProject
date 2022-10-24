@@ -18,16 +18,17 @@ namespace _3TeamProject.Models
         public string ProductName { get; set; } = null!;
         public string? QuantityPerUnit { get; set; }
         public decimal ProductUnitPrice { get; set; }
-        public int UnitStock { get; set; }
+        public int? UnitStock { get; set; }
         public int? UniOnOrder { get; set; }
         public int? ProductRecommendation { get; set; }
         public DateTime? AddedTime { get; set; }
         public DateTime? RemovedTime { get; set; }
-        public string ProductStatus { get; set; } = null!;
-        public string ProductIntroduce { get; set; } = null!;
+        public string? ProductIntroduce { get; set; }
         public int? ProductStatusId { get; set; }
+        public int? ProductHomePage { get; set; }
+
         public virtual ProductCategory ProductCategory { get; set; } = null!;
-        public virtual ProductStatusCategoy? ProductStatusNavigation { get; set; }
+        public virtual ProductStatusCategoy? ProductStatus { get; set; }
         public virtual Supplier Supplier { get; set; } = null!;
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
         public virtual ICollection<ProductsMessageBoard> ProductsMessageBoards { get; set; }

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace _3TeamProject.Areas.Administrators.Data
 {
-    public class AdminRegisterViewModel
+    public class AddNewAdminViewModel
     {
         [Required]
         public string Account { get; set; } = string.Empty;
@@ -23,6 +23,8 @@ namespace _3TeamProject.Areas.Administrators.Data
         public string AdministratorName { get; set; } = string.Empty;
         [Required]
         public string PhoneNumber { get; set; } = string.Empty;
+        [Required]
+        public int AdministratorStatusId { get; set; }
 
     }
 }

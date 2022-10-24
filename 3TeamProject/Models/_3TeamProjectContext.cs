@@ -287,10 +287,6 @@ namespace _3TeamProject.Models
 
                 entity.Property(e => e.ProductName).HasMaxLength(50);
 
-                entity.Property(e => e.ProductStatus)
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.ProductStatusId).HasColumnName("ProductStatusID");
 
                 entity.Property(e => e.ProductUnitPrice).HasColumnType("money");
@@ -307,7 +303,7 @@ namespace _3TeamProject.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Products_ProductCategories");
 
-                entity.HasOne(d => d.ProductStatusNavigation)
+                entity.HasOne(d => d.ProductStatus)
                     .WithMany(p => p.Products)
                     .HasForeignKey(d => d.ProductStatusId)
                     .HasConstraintName("FK_Products_ProductStatusCategoy");

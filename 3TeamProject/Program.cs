@@ -18,7 +18,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     .AddCookie(opt => {
         opt.AccessDeniedPath = "/Home/Error";
         opt.LoginPath = "/Home"; // TODO Login Path
-        opt.ExpireTimeSpan = TimeSpan.FromSeconds(600);
+        opt.ExpireTimeSpan = TimeSpan.FromMinutes(30);
        
     }).AddGoogle( opt =>
     {

@@ -1,12 +1,17 @@
 ﻿using _3TeamProject.Areas.Administrators.Data;
+using _3TeamProject.Areas.Sightseeings.Data;
 using _3TeamProject.Areas.Suppliers.Data;
 using _3TeamProject.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
+using System.Net;
+using System.Net.NetworkInformation;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using SightGetViewModel = _3TeamProject.Areas.Administrators.Data.SightGetViewModel;
 
 namespace _3TeamProject.Areas.Administrators.Controllers
 {
@@ -14,7 +19,6 @@ namespace _3TeamProject.Areas.Administrators.Controllers
     [Authorize(Roles = ("Administrator, ChiefAdministrator, SuperAdministrator"))]
     [Route("Administrators/[controller]")]
     [ApiController]
-
     public class AdministratorController : Controller
     {
         private readonly _3TeamProjectContext _context;
@@ -27,7 +31,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
             _config = config;
 
         }
-
+        [Authorize(Roles = ("Administrator, ChiefAdministrator, SuperAdministrator"))]
         [HttpGet("GetAllAdmins")]//權限Administrator只能看見同權限以下的清單，更高權限可以看見所有人清單
         public IActionResult GetAllAdmins()
         {
@@ -69,10 +73,10 @@ namespace _3TeamProject.Areas.Administrators.Controllers
                     });
             return Ok(adminSuper);
         }
-        //新增管理員
-        [Authorize(Roles ="SuperAdministrator")]
+        //新增管理員, 最高權限才能新增。
+        [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> AddNewAdmin([FromBody] AdminRegisterViewModel request)
+        public async Task<IActionResult> Register([FromBody] AddNewAdminViewModel request)
         {
             if (!ModelState.IsValid)
             {
@@ -92,6 +96,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
                 {
                     AdministratorName = request.AdministratorName,
                     PhoneNumber = request.PhoneNumber,
+                    AdministratorStatusId = 0,
                     User = new User
                     {
                         Account = request.Account,
@@ -107,13 +112,17 @@ namespace _3TeamProject.Areas.Administrators.Controllers
                 return Ok("註冊成功，請等待驗證信件");
             }
         }
+        //TODO 新增審核管理員註冊
         //修改管理員資料
+        [Authorize(Roles = ("Administrator, ChiefAdministrator, SuperAdministrator"))]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int? id, [FromBody] AdminUpdateViewModel request)
         {
             var UserRole = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role).Value;
             var UserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
-            //如果id不一樣或著不是主管以上管理員，無權限刪除此id資料。
+            var admin = await _context.Administrators.Include(a => a.User)
+                    .Where(a => a.UserId == id).Select(a => a).FirstOrDefaultAsync();
+            //如果id不一樣或著不是主管以上管理員，無權限修改此id資料。
             if (UserId != id && UserRole != "SuperAdministrator" && UserRole != "ChiefAdministrator")
             {
                 return BadRequest("與登入帳號不符");
@@ -123,9 +132,6 @@ namespace _3TeamProject.Areas.Administrators.Controllers
                 var errors = ModelState.Select(x => x.Value.Errors).Where(y => y.Count > 0).ToList();
                 return BadRequest(errors);
             }
-
-            var admin = _context.Administrators.Include(a => a.User)
-                    .Where(a => a.UserId == id).Select(a => a).FirstOrDefault();
             if (admin == null)
             {
                 return BadRequest("無此帳號");
@@ -153,6 +159,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
             await _context.SaveChangesAsync();
             return Ok("此帳號已刪除");
         }
+        [Authorize(Roles = ("Administrator, ChiefAdministrator, SuperAdministrator"))]
         [HttpGet("GetAllSuppliers")]
         public IActionResult GetAllSuppliers()
         {
@@ -177,26 +184,82 @@ namespace _3TeamProject.Areas.Administrators.Controllers
                            };
             return Ok(supplier);
         }
+        [Authorize(Roles = ("Administrator, ChiefAdministrator, SuperAdministrator"))]
         [HttpGet("GetAllProduct")]
-        public IActionResult GetAllProducts() // TODO 商品管理頁
+        public IActionResult GetAllProducts()
         {
-            return Ok();
+            var products = _context.Products.Include(p => p.ProductStatus).Include(p => p.ProductCategory).Select(p => new GetAllProductViewModel
+            {
+                ProductId = p.ProductId,
+                CategoryName = p.ProductCategory.CategoryName,
+                ProductName = p.ProductName,
+                QuantityPerUnit = p.QuantityPerUnit,
+                ProductUnitPrice = p.ProductUnitPrice,
+                UnitStock = p.UnitStock,
+                UniOnOrder = p.UniOnOrder,
+                ProductRecommendation = p.ProductRecommendation,
+                AddedTime = p.AddedTime,
+                RemovedTime = p.RemovedTime,
+                ProductIntroduce = p.ProductIntroduce,
+                StatusName = p.ProductStatus.StatusName,
+                ProductHomePage = p.ProductHomePage
+            });
+            return Ok(products);
         }
+        [Authorize(Roles = ("Administrator, ChiefAdministrator, SuperAdministrator"))]
         [HttpGet("GetAllOrders")]
-        public IActionResult GetAllOrders() // TODO 訂單管理頁
+        public IActionResult GetAllOrders() // TODO 訂單管理頁, 待有資料再測試
         {
-            return Ok();
+            var orderlist = _context.Orders.Include(o => o.Member).Include(o => o.OrderDetails).Include(o => o.OrderStatusNavigation)
+                                .Include(o => o.PaymentStatusNavigation).Include(o => o.ShipStatusNavigation).Select(o => new GetAllOrdersViewModel
+                                {
+                                    OrderId = o.OrderId,
+                                    MemberId = o.MemberId,
+                                    AdministratorId = o.AdministratorId,
+                                    OrderDate = o.OrderDate,
+                                    ShipDate = o.ShipDate,
+                                    OrderCategoryName = o.OrderStatusNavigation.OrderCategoryName,
+                                    PaymentCategoryName = o.PaymentStatusNavigation.PaymentCategoryName,
+                                    ShipCategoryName = o.ShipStatusNavigation.ShipCategoryName,
+                                    ShipPostalCode = o.ShipPostalCode,
+                                    ShipCountry = o.ShipCountry,
+                                    ShipCity = o.ShipCity,
+                                    ShipAddress = o.ShipAddress,
+                                    OrderDetails = o.OrderDetails.Select(od => new OrderDetailViewModel
+                                    {
+                                        ProductId = od.ProductId,
+                                        UnitPrice = od.UnitPrice,
+                                        Discount = od.Discount,
+                                        Quantity = od.Quantity,
+                                    })
+                                });
+            return Ok(orderlist);
         }
+        [Authorize(Roles = ("Administrator, ChiefAdministrator, SuperAdministrator"))]
         [HttpGet("GetAllSightseeing")]
-        public IActionResult GetAllSightseeing() // TODO 景點管理頁
+        public IActionResult GetAllSightseeings()
         {
-            return Ok();
+            var Sight = _context.Sightseeings.Include(s => s.SightseeingPictureInfos)
+                .Include(s => s.SightseeingCategory).Select(s => new SightGetViewModel
+                {
+                    SightseeingId = s.SightseeingId,
+                    SightseeingName = s.SightseeingName,
+                    SightseeingCountry = s.SightseeingCountry,
+                    SightseeingCity = s.SightseeingCity,
+                    SightseeingAddress = s.SightseeingAddress,
+                    SightseeingScore = s.SightseeingScore,
+                    CategoryName = s.SightseeingCategory.CategoryName,
+                    SightseeingHomePage = s.SightseeingHomePage,
+                });
+            return Ok(Sight);
         }
+        [Authorize(Roles = ("Administrator, ChiefAdministrator, SuperAdministrator"))]
         [HttpPost("UploadSightseeing")]
         public IActionResult UploadSightseeing() // TODO 景點上傳頁
         {
             return Ok();
         }
+        [Authorize(Roles = ("Administrator, ChiefAdministrator, SuperAdministrator"))]
         [HttpGet("GetAllActivities")]
         public IActionResult GetAllActivities() // TODO 社群活動管理頁
         {
