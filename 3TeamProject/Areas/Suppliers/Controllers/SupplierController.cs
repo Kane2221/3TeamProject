@@ -1,4 +1,4 @@
-﻿using _3TeamProject.Areas.Sppliers.Data;
+using _3TeamProject.Areas.Sppliers.Data;
 using _3TeamProject.Areas.Suppliers.Data;
 using _3TeamProject.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -123,6 +123,7 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
                 return Ok("註冊成功，請等待驗證信件");
             }
         }
+
         [Authorize("Suppliers")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] SupplierUpdateViewModel request)

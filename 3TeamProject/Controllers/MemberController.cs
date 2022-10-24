@@ -7,7 +7,9 @@ using System.Diagnostics;
 using System.Text;
 using System.Security.Cryptography;
 using System.Configuration;
-
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace _3TeamProject.Controllers
 {
@@ -26,7 +28,32 @@ namespace _3TeamProject.Controllers
 
         public IActionResult Login()
         {
+
             return View();
+            
+        }
+        public IActionResult GoogleLogin()
+        {
+            AuthenticationProperties authentication = new AuthenticationProperties()
+            {
+                RedirectUri = Url.Action("LoginResult")
+
+            };
+            return Challenge(authentication, GoogleDefaults.AuthenticationScheme);
+        }
+        public async Task<IActionResult> LoginResult()
+        {
+            var token = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            var result = token.Principal.Claims.Select(value => new
+            {
+                value.Value,
+                value.Type,
+                value.Issuer,
+                value.Properties
+
+            });
+            return Json(result);
+            //return Redirect("/Home/Index");
         }
         public IActionResult ForgetPwd()
         {

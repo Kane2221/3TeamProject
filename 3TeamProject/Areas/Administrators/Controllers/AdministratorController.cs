@@ -5,24 +5,27 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
-using System.Net.Mail;
 using System.Security.Claims;
 using System.Security.Cryptography;
 
 namespace _3TeamProject.Areas.Administrators.Controllers
 {
+
     [Authorize(Roles = ("Administrator, ChiefAdministrator, SuperAdministrator"))]
     [Route("Administrators/[controller]")]
     [ApiController]
+
     public class AdministratorController : Controller
     {
         private readonly _3TeamProjectContext _context;
+
         private readonly IConfiguration _config;
 
         public AdministratorController(_3TeamProjectContext Context, IConfiguration config)
         {
             _context = Context;
             _config = config;
+
         }
 
         [HttpGet("GetAllAdmins")]//權限Administrator只能看見同權限以下的清單，更高權限可以看見所有人清單

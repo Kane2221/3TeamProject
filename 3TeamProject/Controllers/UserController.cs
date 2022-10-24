@@ -9,7 +9,6 @@ using _3TeamProject.Data;
 using Microsoft.AspNetCore.Authorization;
 using System.Net.Mail;
 
-
 namespace _3TeamProject.Controllers
 {
     public class UserController : Controller
@@ -51,7 +50,6 @@ namespace _3TeamProject.Controllers
             return Ok("登入成功");
             //return RedirectToAction("index", "home");
         }
-        
         public async Task<IActionResult> Verify([FromBody] string token)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.VerficationToken == token);
@@ -67,7 +65,6 @@ namespace _3TeamProject.Controllers
             await _context.SaveChangesAsync();
             return Ok("驗證成功");
         }
-
         public async Task<IActionResult> ForgotPassword([FromBody] string email)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
@@ -123,6 +120,7 @@ namespace _3TeamProject.Controllers
                 user.PasswordResetToken = null;
                 user.ResetTokenExpires = null;
                 await _context.SaveChangesAsync();
+
             }
             return Ok("密碼重設成功");
         }
