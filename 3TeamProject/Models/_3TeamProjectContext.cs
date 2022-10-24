@@ -18,6 +18,7 @@ namespace _3TeamProject.Models
 
         public virtual DbSet<ActivitiesMessageBoard> ActivitiesMessageBoards { get; set; } = null!;
         public virtual DbSet<Administrator> Administrators { get; set; } = null!;
+        public virtual DbSet<AdministratorStatusCategory> AdministratorStatusCategories { get; set; } = null!;
         public virtual DbSet<Member> Members { get; set; } = null!;
         public virtual DbSet<MemberStatusCategory> MemberStatusCategories { get; set; } = null!;
         public virtual DbSet<Order> Orders { get; set; } = null!;
@@ -85,14 +86,34 @@ namespace _3TeamProject.Models
 
                 entity.Property(e => e.AdministratorName).HasMaxLength(50);
 
+                entity.Property(e => e.AdministratorStatusId).HasColumnName("AdministratorStatusID");
+
                 entity.Property(e => e.PhoneNumber).HasMaxLength(50);
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
+
+                entity.HasOne(d => d.AdministratorStatus)
+                    .WithMany(p => p.Administrators)
+                    .HasForeignKey(d => d.AdministratorStatusId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Administrators_AdministratorStatusCategory");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Administrators)
                     .HasForeignKey(d => d.UserId)
                     .HasConstraintName("FK_Adminstrators_Users");
+            });
+
+            modelBuilder.Entity<AdministratorStatusCategory>(entity =>
+            {
+                entity.HasKey(e => e.AdministratorStatusId)
+                    .HasName("PK__Administ__7EDF6BB32262A51C");
+
+                entity.ToTable("AdministratorStatusCategory");
+
+                entity.Property(e => e.AdministratorStatusId).HasColumnName("AdministratorStatusID");
+
+                entity.Property(e => e.StatusName).HasMaxLength(10);
             });
 
             modelBuilder.Entity<Member>(entity =>

@@ -66,8 +66,10 @@ namespace _3TeamProject.Areas.Administrators.Controllers
                     });
             return Ok(adminSuper);
         }
+        //新增管理員
+        [Authorize(Roles ="SuperAdministrator")]
         [HttpPost]
-        public async Task<IActionResult> Register([FromBody] AdminRegisterViewModel request)
+        public async Task<IActionResult> AddNewAdmin([FromBody] AdminRegisterViewModel request)
         {
             if (!ModelState.IsValid)
             {
@@ -78,7 +80,6 @@ namespace _3TeamProject.Areas.Administrators.Controllers
             {
                 return BadRequest("帳號已經存在");
             }
-
             using (var hmac = new HMACSHA512())
             {
                 var passwordSalt = hmac.Key;
@@ -98,17 +99,19 @@ namespace _3TeamProject.Areas.Administrators.Controllers
                         Roles = request.Roles
                     }
                 };
-
                 _context.Administrators.Add(admin);
                 await _context.SaveChangesAsync();
                 return Ok("註冊成功，請等待驗證信件");
             }
         }
-        [HttpPut]
+        //修改管理員資料
+        [HttpPut("{id}")]
         public async Task<IActionResult> Update(int? id, [FromBody] AdminUpdateViewModel request)
         {
+            var UserRole = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role).Value;
             var UserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
-            if (id != UserId)
+            //如果id不一樣或著不是主管以上管理員，無權限刪除此id資料。
+            if (UserId != id && UserRole != "SuperAdministrator" && UserRole != "ChiefAdministrator")
             {
                 return BadRequest("與登入帳號不符");
             }
@@ -119,7 +122,11 @@ namespace _3TeamProject.Areas.Administrators.Controllers
             }
 
             var admin = _context.Administrators.Include(a => a.User)
-                    .Where(a => a.UserId == id).Select(a => a).SingleOrDefault();
+                    .Where(a => a.UserId == id).Select(a => a).FirstOrDefault();
+            if (admin == null)
+            {
+                return BadRequest("無此帳號");
+            }
             using (var hmac = new HMACSHA512())
             {
                 var passwordSalt = hmac.Key;
@@ -134,7 +141,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
             }
             return Ok("修改成功!");
         }
-        [HttpDelete]
+        [HttpDelete("{id}")]
         [Authorize(Roles = "SuperAdministrator")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -167,26 +174,27 @@ namespace _3TeamProject.Areas.Administrators.Controllers
                            };
             return Ok(supplier);
         }
-        [HttpGet]
+        [HttpGet("GetAllProduct")]
         public IActionResult GetAllProducts() // TODO 商品管理頁
         {
             return Ok();
         }
-        [HttpGet]
+        [HttpGet("GetAllOrders")]
         public IActionResult GetAllOrders() // TODO 訂單管理頁
         {
             return Ok();
         }
-        [HttpGet]
+        [HttpGet("GetAllSightseeing")]
         public IActionResult GetAllSightseeing() // TODO 景點管理頁
         {
             return Ok();
         }
-        [HttpPost]
+        [HttpPost("UploadSightseeing")]
         public IActionResult UploadSightseeing() // TODO 景點上傳頁
         {
             return Ok();
         }
+        [HttpGet("GetAllActivities")]
         public IActionResult GetAllActivities() // TODO 社群活動管理頁
         {
             return Ok();

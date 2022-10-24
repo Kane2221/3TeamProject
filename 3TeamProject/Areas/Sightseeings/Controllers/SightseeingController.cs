@@ -43,7 +43,7 @@ namespace _3TeamProject.Areas.Sightseeings.Controllers
             return Ok(Sight);
         }
         [HttpGet("{id}")]
-        public IActionResult GetSightseeingsDetail(int id) //TODO 景點詳細頁
+        public IActionResult GetSightseeingsDetail(int id)
         {
             var Sight = _context.Sightseeings.Include(p=> p.SightseeingPictureInfos)
                 .Include(m => m.SightseeingMessageBoards).Include(c => c.SightseeingCategory)

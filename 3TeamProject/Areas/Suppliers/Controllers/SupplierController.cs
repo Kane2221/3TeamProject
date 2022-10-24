@@ -12,21 +12,22 @@ using System.Security.Cryptography;
 
 namespace _3TeamProject.Areas.Sppliers.Controllers
 {
-    [Authorize("Suppliers")]
+    
     [Route("Suppliers/[controller]")]
     [ApiController]
     public class SupplierController : Controller
     {
         private readonly _3TeamProjectContext _context;
-
         private readonly IConfiguration _config;
+        private readonly IHostEnvironment _env;
 
-        public SupplierController(_3TeamProjectContext Context, IConfiguration config)
+        public SupplierController(_3TeamProjectContext Context, IConfiguration config, IHostEnvironment env)
         {
             _context = Context;
             _config = config;
+            _env=env;
         }
-
+        [Authorize("Suppliers")]
         [HttpGet("{id}")]
         public IActionResult GetSupplier(int id)
         {
@@ -62,6 +63,9 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
                             }).SingleOrDefault();
             return Ok(supplier);
         }
+
+        [AllowAnonymous]
+        [Route("Register")]
         [HttpPost]
         public async Task<IActionResult> Register([FromBody] SupplierRegisterViewModel request)
         {
@@ -94,21 +98,23 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
                 };
 
                 #region Send Email with verify code (正式再解開註解)
-                using (MailMessage mail = new MailMessage())
-                {
-                    mail.From = new MailAddress("dotnettgm102@gmail.com", "帳號驗證碼");
-                    mail.To.Add("dotnettgm102@gmail.com");
-                    mail.Priority = MailPriority.Normal;
-                    mail.Subject = "帳號驗證碼";
-                    mail.Body = $"<a href=\"https://localhost:7190/User/Verify\"  value=\"{verifyToken}\">帳號驗證碼</a>";
-                    mail.IsBodyHtml = true;
-                    SmtpClient MySmtp = new SmtpClient("smtp.gmail.com", 587);
-                    MySmtp.UseDefaultCredentials = false;
-                    MySmtp.Credentials = new System.Net.NetworkCredential(_config["mail:Account"], _config["mail:Password"]);
-                    MySmtp.EnableSsl = true;
-                    MySmtp.Send(mail);
-                    MySmtp = null;
-                };
+                //TODO 修改寄信的超連結
+                //var root = $@"{Request.}User\Verify";
+                //using (MailMessage mail = new MailMessage())
+                //{
+                //    mail.From = new MailAddress("dotnettgm102@gmail.com", "帳號驗證碼");
+                //    mail.To.Add("dotnettgm102@gmail.com");
+                //    mail.Priority = MailPriority.Normal;
+                //    mail.Subject = "帳號驗證碼";
+                //    mail.Body = $"<a href=\"{root}\"  value=\"{verifyToken}\">帳號驗證碼</a>"; 
+                //    mail.IsBodyHtml = true;
+                //    SmtpClient MySmtp = new SmtpClient("smtp.gmail.com", 587);
+                //    MySmtp.UseDefaultCredentials = false;
+                //    MySmtp.Credentials = new System.Net.NetworkCredential(_config["mail:Account"], _config["mail:Password"]);
+                //    MySmtp.EnableSsl = true;
+                //    MySmtp.Send(mail);
+                //    MySmtp = null;
+                //};
                 #endregion
 
                 //_context.Suppliers.Add(supplier);
@@ -117,18 +123,19 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
                 return Ok("註冊成功，請等待驗證信件");
             }
         }
+        [Authorize("Suppliers")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] SupplierUpdateViewModel request)
         {
-            var UserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
-            if (id != UserId)
-            {
-                return BadRequest("與登入帳號不符");
-            }
             if (!ModelState.IsValid)
             {
                 var errors = ModelState.Select(x => x.Value.Errors).Where(y => y.Count > 0).ToList();
                 return BadRequest(errors);
+            }
+            var UserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
+            if (id != UserId)
+            {
+                return BadRequest("與登入帳號不符");
             }
             var supplier = _context.Suppliers.Include(s => s.User).Where(s => s.UserId == id)
                 .Select(s => s).SingleOrDefault();
@@ -155,6 +162,7 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
             }
             return Ok("修改成功!");
         }
+        [Authorize("Suppliers")]
         [HttpDelete]
         public IActionResult Delete(int id)
         {
@@ -168,12 +176,14 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
             _context.SaveChanges();
             return Ok("此帳號已刪除");
         }
+        [Authorize("Suppliers")]
         [HttpGet("{id}")]
         public IActionResult GetProduct(int id) //TODO 廠商管理商品
         {
             return Ok();
         }
-        [HttpPost]
+        [Authorize("Suppliers")]
+        [HttpPost("Upload")]
         public IActionResult UploadProduct() //TODO 商品上架
         {
             return Ok();
