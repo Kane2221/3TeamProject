@@ -1,3 +1,4 @@
+using _3TeamProject.Areas.Administrators.Data;
 using _3TeamProject.Areas.Sppliers.Data;
 using _3TeamProject.Areas.Suppliers.Data;
 using _3TeamProject.Models;
@@ -12,7 +13,7 @@ using System.Security.Cryptography;
 
 namespace _3TeamProject.Areas.Sppliers.Controllers
 {
-    
+
     [Route("Suppliers/[controller]")]
     [ApiController]
     public class SupplierController : Controller
@@ -179,9 +180,23 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
         }
         [Authorize("Suppliers")]
         [HttpGet("{id}")]
-        public IActionResult GetProduct(int id) //TODO 廠商管理商品
+        public IActionResult GetProduct(int id) //TODO 待測_廠商管理商品
         {
-            return Ok();
+            var UserID = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
+            var products = _context.Products.Include(p => p.ProductStatus).Include(p => p.ProductCategory).Include(p => p.ProductsPictureInfos)
+                .Where(p=>p.Supplier.UserId == UserID).Select(p => new GetProductViewModel
+                {
+                    ProductId = p.ProductId,
+                    CategoryName = p.ProductCategory.CategoryName,
+                    ProductName = p.ProductName,
+                    QuantityPerUnit = p.QuantityPerUnit,
+                    ProductUnitPrice = p.ProductUnitPrice,
+                    UnitStock = p.UnitStock,
+                    UniOnOrder = p.UniOnOrder,
+                    ProductRecommendation = p.ProductRecommendation,
+                    StatusName = p.ProductStatus.StatusName,
+                });
+            return Ok(products);
         }
         [Authorize("Suppliers")]
         [HttpPost("Upload")]

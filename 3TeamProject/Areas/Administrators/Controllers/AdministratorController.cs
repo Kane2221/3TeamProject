@@ -31,7 +31,6 @@ namespace _3TeamProject.Areas.Administrators.Controllers
             _config = config;
 
         }
-        [Authorize(Roles = ("Administrator, ChiefAdministrator, SuperAdministrator"))]
         [HttpGet("GetAllAdmins")]//權限Administrator只能看見同權限以下的清單，更高權限可以看見所有人清單
         public IActionResult GetAllAdmins()
         {
@@ -114,7 +113,6 @@ namespace _3TeamProject.Areas.Administrators.Controllers
         }
         //TODO 新增審核管理員註冊
         //修改管理員資料
-        [Authorize(Roles = ("Administrator, ChiefAdministrator, SuperAdministrator"))]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int? id, [FromBody] AdminUpdateViewModel request)
         {
@@ -159,7 +157,6 @@ namespace _3TeamProject.Areas.Administrators.Controllers
             await _context.SaveChangesAsync();
             return Ok("此帳號已刪除");
         }
-        [Authorize(Roles = ("Administrator, ChiefAdministrator, SuperAdministrator"))]
         [HttpGet("GetAllSuppliers")]
         public IActionResult GetAllSuppliers()
         {
@@ -184,7 +181,6 @@ namespace _3TeamProject.Areas.Administrators.Controllers
                            };
             return Ok(supplier);
         }
-        [Authorize(Roles = ("Administrator, ChiefAdministrator, SuperAdministrator"))]
         [HttpGet("GetAllProduct")]
         public IActionResult GetAllProducts()
         {
@@ -206,9 +202,8 @@ namespace _3TeamProject.Areas.Administrators.Controllers
             });
             return Ok(products);
         }
-        [Authorize(Roles = ("Administrator, ChiefAdministrator, SuperAdministrator"))]
         [HttpGet("GetAllOrders")]
-        public IActionResult GetAllOrders() // TODO 訂單管理頁, 待有資料再測試
+        public IActionResult GetAllOrders() // TODO 待測_訂單管理頁 
         {
             var orderlist = _context.Orders.Include(o => o.Member).Include(o => o.OrderDetails).Include(o => o.OrderStatusNavigation)
                                 .Include(o => o.PaymentStatusNavigation).Include(o => o.ShipStatusNavigation).Select(o => new GetAllOrdersViewModel
@@ -235,7 +230,6 @@ namespace _3TeamProject.Areas.Administrators.Controllers
                                 });
             return Ok(orderlist);
         }
-        [Authorize(Roles = ("Administrator, ChiefAdministrator, SuperAdministrator"))]
         [HttpGet("GetAllSightseeing")]
         public IActionResult GetAllSightseeings()
         {
@@ -253,13 +247,11 @@ namespace _3TeamProject.Areas.Administrators.Controllers
                 });
             return Ok(Sight);
         }
-        [Authorize(Roles = ("Administrator, ChiefAdministrator, SuperAdministrator"))]
         [HttpPost("UploadSightseeing")]
         public IActionResult UploadSightseeing() // TODO 景點上傳頁
         {
             return Ok();
         }
-        [Authorize(Roles = ("Administrator, ChiefAdministrator, SuperAdministrator"))]
         [HttpGet("GetAllActivities")]
         public IActionResult GetAllActivities() // TODO 社群活動管理頁
         {
