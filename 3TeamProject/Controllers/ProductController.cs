@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 
 namespace _3TeamProject.Controllers
 {
+    //[Route("/Product")]
     public class ProductController : Controller
     {
         private readonly IHostEnvironment environment;
@@ -12,6 +13,7 @@ namespace _3TeamProject.Controllers
         {
             this._context = context;
         }
+        //[HttpGet("Index")]
         public IActionResult Index()
         {
             return View();
@@ -67,7 +69,7 @@ namespace _3TeamProject.Controllers
             ViewBag.ProductId = pid;
             return View();
         }
-        //[HttpGet("Create")]
+        [HttpGet("Create")]
         public IActionResult Create()
         {
             return View();
@@ -79,6 +81,7 @@ namespace _3TeamProject.Controllers
             await _context.SaveChangesAsync();
             return Json("新增成功!");
         }
+        [HttpGet("Rating")]
         public IActionResult Rating()
         {
             return View();
