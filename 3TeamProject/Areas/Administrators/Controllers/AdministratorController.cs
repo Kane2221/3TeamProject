@@ -148,6 +148,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
             }
             return Ok("修改成功!");
         }
+        //刪除管理員
         [HttpDelete("{id}")]
         [Authorize(Roles = "SuperAdministrator")]
         public async Task<IActionResult> Delete(int id)
@@ -157,6 +158,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
             await _context.SaveChangesAsync();
             return Ok("此帳號已刪除");
         }
+        //取得所有廠商清單
         [HttpGet("GetAllSuppliers")]
         public IActionResult GetAllSuppliers()
         {
@@ -181,6 +183,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
                            };
             return Ok(supplier);
         }
+        //取得所有商品
         [HttpGet("GetAllProduct")]
         public IActionResult GetAllProducts()
         {
@@ -230,6 +233,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
                                 });
             return Ok(orderlist);
         }
+        //取得所有景點清單
         [HttpGet("GetAllSightseeing")]
         public IActionResult GetAllSightseeings()
         {
@@ -247,15 +251,22 @@ namespace _3TeamProject.Areas.Administrators.Controllers
                 });
             return Ok(Sight);
         }
-        [HttpPost("UploadSightseeing")]
-        public IActionResult UploadSightseeing() // TODO 景點上傳頁
-        {
-            return Ok();
-        }
+
         [HttpGet("GetAllActivities")]
         public IActionResult GetAllActivities() // TODO 社群活動管理頁
         {
             return Ok();
         }
+        //TODO 審核廠商
+        //TODO 廠商停權
+        //TODO 會員停權
+        //TODO 商品上下架
+        //TODO 審核商品
+        //TODO 審核訂單退訂
+        //TODO 修改景點訊息
+        //TODO 景點上傳
+        //TODO 景點刪除
+        //TODO 修改會員資料(最高權限管理員)
+        //TODO 後台首頁功能
     }
 }

@@ -27,6 +27,7 @@ namespace _3TeamProject.Areas.Members.Controllers
             _context = Context;
             _config = config;
         }
+        //取得會員資料
         [HttpGet("GetMember/{id}")]
         public IActionResult GetMember(int id)
         {
@@ -59,6 +60,7 @@ namespace _3TeamProject.Areas.Members.Controllers
                           }).SingleOrDefault();
             return Ok(member);
         }
+        //會員註冊
         [HttpPost]
         public async Task<IActionResult> Register([FromBody] MemberRegisterViewModel request)
         {
@@ -122,7 +124,7 @@ namespace _3TeamProject.Areas.Members.Controllers
                 return Ok("註冊成功，請等待驗證信件");
             }
         }
-
+        //會員資料修改
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] MemberUpdateViewModel request)
         {
@@ -162,6 +164,7 @@ namespace _3TeamProject.Areas.Members.Controllers
             }
             return Ok("修改成功!");
         }
+        //會員刪除
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
@@ -175,6 +178,7 @@ namespace _3TeamProject.Areas.Members.Controllers
             await _context.SaveChangesAsync();
             return Ok("此帳號已刪除");
         }
+        //會員我的訂單
         [HttpGet("GetOrder")]
         public IActionResult GetOrder() //TODO 待測_我的訂單，需加時間篩選條件
         {
@@ -199,8 +203,9 @@ namespace _3TeamProject.Areas.Members.Controllers
                                 });
             return Ok(myOrder);
         }
+        //會員訂購記錄
         [HttpGet("GetOrderRecord")]
-        public IActionResult GetOrderRecord()//TODO 訂購記錄，需加時間篩選條件
+        public IActionResult GetOrderRecord()//TODO 待測_訂購記錄，需加時間篩選條件
         {
             var UserID = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
             var OrderRecord = _context.Orders.Include(o => o.Member).Include(o => o.OrderDetails).Include(o => o.OrderStatusNavigation)
@@ -223,10 +228,12 @@ namespace _3TeamProject.Areas.Members.Controllers
                                 });
             return Ok(OrderRecord);
         }
+        //會員參與活動記錄
         [HttpGet("{id}")]
         public IActionResult ParticipatedRecord()//TODO 活動參與記錄
         {
             return Ok();
         }
+        //TODO 活動退出
     }
 }

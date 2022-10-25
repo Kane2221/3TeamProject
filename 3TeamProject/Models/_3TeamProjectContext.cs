@@ -35,8 +35,8 @@ namespace _3TeamProject.Models
         public virtual DbSet<Sightseeing> Sightseeings { get; set; } = null!;
         public virtual DbSet<SightseeingCategory> SightseeingCategories { get; set; } = null!;
         public virtual DbSet<SightseeingMessageBoard> SightseeingMessageBoards { get; set; } = null!;
+        public virtual DbSet<SightseeingMessageStatusCategory> SightseeingMessageStatusCategories { get; set; } = null!;
         public virtual DbSet<SightseeingPictureInfo> SightseeingPictureInfos { get; set; } = null!;
-        public virtual DbSet<SightseeingStatusCategory> SightseeingStatusCategories { get; set; } = null!;
         public virtual DbSet<SocialActivity> SocialActivities { get; set; } = null!;
         public virtual DbSet<Supplier> Suppliers { get; set; } = null!;
         public virtual DbSet<SupplierStatusCategoy> SupplierStatusCategoys { get; set; } = null!;
@@ -65,7 +65,7 @@ namespace _3TeamProject.Models
 
                 entity.Property(e => e.ActivityId).HasColumnName("ActivityID");
 
-                entity.Property(e => e.MemberId).HasColumnName("MemberID");
+                entity.Property(e => e.UserId).HasColumnName("UserID");
 
                 entity.HasOne(d => d.Activity)
                     .WithMany(p => p.ActivitiesMessageBoards)
@@ -73,11 +73,11 @@ namespace _3TeamProject.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Activities\nMessageBoard_SocialActivities");
 
-                entity.HasOne(d => d.Member)
+                entity.HasOne(d => d.User)
                     .WithMany(p => p.ActivitiesMessageBoards)
-                    .HasForeignKey(d => d.MemberId)
+                    .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Activities\nMessageBoard_Members");
+                    .HasConstraintName("FK_ActivitiesMessageBoard_Users");
             });
 
             modelBuilder.Entity<Administrator>(entity =>
@@ -454,19 +454,13 @@ namespace _3TeamProject.Models
 
                 entity.Property(e => e.MessageBoardId).HasColumnName("MessageBoardID");
 
-                entity.Property(e => e.MemberId).HasColumnName("MemberID");
-
                 entity.Property(e => e.MessageCreatedTime).HasColumnType("datetime");
 
                 entity.Property(e => e.SightseeingId).HasColumnName("SightseeingID");
 
                 entity.Property(e => e.SightseeingStatusId).HasColumnName("SightseeingStatusID");
 
-                entity.HasOne(d => d.Member)
-                    .WithMany(p => p.SightseeingMessageBoards)
-                    .HasForeignKey(d => d.MemberId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Sightseeing\nMessageBoard_Members");
+                entity.Property(e => e.UserId).HasColumnName("UserID");
 
                 entity.HasOne(d => d.Sightseeing)
                     .WithMany(p => p.SightseeingMessageBoards)
@@ -477,6 +471,24 @@ namespace _3TeamProject.Models
                     .WithMany(p => p.SightseeingMessageBoards)
                     .HasForeignKey(d => d.SightseeingStatusId)
                     .HasConstraintName("FK_Sightseeing\nMessageBoard_SightseeingStatusCategory");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.SightseeingMessageBoards)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SightseeingMessageBoard_Users");
+            });
+
+            modelBuilder.Entity<SightseeingMessageStatusCategory>(entity =>
+            {
+                entity.HasKey(e => e.SightseeingStatusId)
+                    .HasName("PK__Sightsee__A82B64CABB66CBB3");
+
+                entity.ToTable("SightseeingMessageStatusCategory");
+
+                entity.Property(e => e.SightseeingStatusId).HasColumnName("SightseeingStatusID");
+
+                entity.Property(e => e.StatusName).HasMaxLength(20);
             });
 
             modelBuilder.Entity<SightseeingPictureInfo>(entity =>
@@ -497,18 +509,6 @@ namespace _3TeamProject.Models
                     .WithMany(p => p.SightseeingPictureInfos)
                     .HasForeignKey(d => d.SightseeingId)
                     .HasConstraintName("FK_SightseeingPictureInfo_Sightseeing");
-            });
-
-            modelBuilder.Entity<SightseeingStatusCategory>(entity =>
-            {
-                entity.HasKey(e => e.SightseeingStatusId)
-                    .HasName("PK__Sightsee__A82B64CABB66CBB3");
-
-                entity.ToTable("SightseeingStatusCategory");
-
-                entity.Property(e => e.SightseeingStatusId).HasColumnName("SightseeingStatusID");
-
-                entity.Property(e => e.StatusName).HasMaxLength(20);
             });
 
             modelBuilder.Entity<SocialActivity>(entity =>

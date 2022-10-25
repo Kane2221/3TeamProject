@@ -9,10 +9,10 @@ namespace _3TeamProject.Models
         public int ActivityId { get; set; }
         public string? ActivitiesMessageContent { get; set; }
         public DateTime ActivitiesCreatedDate { get; set; }
-        public int MemberId { get; set; }
+        public int UserId { get; set; }
         public string ActivitiesMessageState { get; set; } = null!;
 
         public virtual SocialActivity Activity { get; set; } = null!;
-        public virtual Member Member { get; set; } = null!;
+        public virtual User User { get; set; } = null!;
     }
 }

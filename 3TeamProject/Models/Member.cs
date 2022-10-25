@@ -7,10 +7,8 @@ namespace _3TeamProject.Models
     {
         public Member()
         {
-            ActivitiesMessageBoards = new HashSet<ActivitiesMessageBoard>();
             Orders = new HashSet<Order>();
             ProductsMessageBoards = new HashSet<ProductsMessageBoard>();
-            SightseeingMessageBoards = new HashSet<SightseeingMessageBoard>();
             SocialActivities = new HashSet<SocialActivity>();
         }
 
@@ -31,10 +29,8 @@ namespace _3TeamProject.Models
 
         public virtual MemberStatusCategory? MemberStatus { get; set; }
         public virtual User User { get; set; } = null!;
-        public virtual ICollection<ActivitiesMessageBoard> ActivitiesMessageBoards { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
         public virtual ICollection<ProductsMessageBoard> ProductsMessageBoards { get; set; }
-        public virtual ICollection<SightseeingMessageBoard> SightseeingMessageBoards { get; set; }
         public virtual ICollection<SocialActivity> SocialActivities { get; set; }
     }
 }

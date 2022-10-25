@@ -1,6 +1,4 @@
-﻿using _3TeamProject.Models;
-
-namespace _3TeamProject.Areas.Sightseeings.Data
+﻿namespace _3TeamProject.Areas.Sightseeings.Data
 {
     public class SightPicInfoViewModel
     {

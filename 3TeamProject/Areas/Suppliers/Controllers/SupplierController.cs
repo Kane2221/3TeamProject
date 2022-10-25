@@ -29,7 +29,7 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
             _env=env;
         }
         [Authorize("Suppliers")]
-        [HttpGet("{id}")]
+        [HttpGet("GetSupplier/{id}")]
         public IActionResult GetSupplier(int id)
         {
             var UserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
@@ -66,8 +66,7 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
         }
 
         [AllowAnonymous]
-        [Route("Register")]
-        [HttpPost]
+        [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] SupplierRegisterViewModel request)
         {
             if (!ModelState.IsValid)
@@ -165,7 +164,7 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
             return Ok("修改成功!");
         }
         [Authorize("Suppliers")]
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
             var UserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
@@ -179,7 +178,7 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
             return Ok("此帳號已刪除");
         }
         [Authorize("Suppliers")]
-        [HttpGet("{id}")]
+        [HttpGet("GetProduct/{id}")]
         public IActionResult GetProduct(int id) //TODO 待測_廠商管理商品
         {
             var UserID = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
@@ -204,5 +203,7 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
         {
             return Ok();
         }
+        //TODO 商品修改
+        //TODO 商品下架(下架後隱藏)
     }
 }
