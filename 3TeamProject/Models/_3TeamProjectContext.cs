@@ -18,22 +18,28 @@ namespace _3TeamProject.Models
 
         public virtual DbSet<ActivitiesMessageBoard> ActivitiesMessageBoards { get; set; } = null!;
         public virtual DbSet<Administrator> Administrators { get; set; } = null!;
+        public virtual DbSet<AdministratorStatusCategory> AdministratorStatusCategories { get; set; } = null!;
         public virtual DbSet<Member> Members { get; set; } = null!;
+        public virtual DbSet<MemberStatusCategory> MemberStatusCategories { get; set; } = null!;
         public virtual DbSet<Order> Orders { get; set; } = null!;
         public virtual DbSet<OrderDetail> OrderDetails { get; set; } = null!;
         public virtual DbSet<OrderStatusCategory> OrderStatusCategories { get; set; } = null!;
         public virtual DbSet<PaymentStatusCategory> PaymentStatusCategories { get; set; } = null!;
         public virtual DbSet<Product> Products { get; set; } = null!;
         public virtual DbSet<ProductCategory> ProductCategories { get; set; } = null!;
+        public virtual DbSet<ProductStatusCategoy> ProductStatusCategoys { get; set; } = null!;
         public virtual DbSet<ProductsMessageBoard> ProductsMessageBoards { get; set; } = null!;
         public virtual DbSet<ProductsPictureInfo> ProductsPictureInfos { get; set; } = null!;
         public virtual DbSet<Role> Roles { get; set; } = null!;
         public virtual DbSet<ShipStatusCategory> ShipStatusCategories { get; set; } = null!;
         public virtual DbSet<Sightseeing> Sightseeings { get; set; } = null!;
+        public virtual DbSet<SightseeingCategory> SightseeingCategories { get; set; } = null!;
         public virtual DbSet<SightseeingMessageBoard> SightseeingMessageBoards { get; set; } = null!;
+        public virtual DbSet<SightseeingMessageStatusCategory> SightseeingMessageStatusCategories { get; set; } = null!;
         public virtual DbSet<SightseeingPictureInfo> SightseeingPictureInfos { get; set; } = null!;
         public virtual DbSet<SocialActivity> SocialActivities { get; set; } = null!;
         public virtual DbSet<Supplier> Suppliers { get; set; } = null!;
+        public virtual DbSet<SupplierStatusCategoy> SupplierStatusCategoys { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -44,9 +50,10 @@ namespace _3TeamProject.Models
         {
             modelBuilder.Entity<ActivitiesMessageBoard>(entity =>
             {
-                entity.HasKey(e => e.ActivitiesMessageId);
+                entity.HasKey(e => e.ActivitiesMessageId)
+                    .HasName("PK_Activities\nMessageBoard");
 
-                entity.ToTable("Activities\nMessageBoard");
+                entity.ToTable("ActivitiesMessageBoard");
 
                 entity.Property(e => e.ActivitiesMessageId).HasColumnName("ActivitiesMessageID");
 
@@ -58,7 +65,7 @@ namespace _3TeamProject.Models
 
                 entity.Property(e => e.ActivityId).HasColumnName("ActivityID");
 
-                entity.Property(e => e.MemberId).HasColumnName("MemberID");
+                entity.Property(e => e.UserId).HasColumnName("UserID");
 
                 entity.HasOne(d => d.Activity)
                     .WithMany(p => p.ActivitiesMessageBoards)
@@ -66,11 +73,11 @@ namespace _3TeamProject.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Activities\nMessageBoard_SocialActivities");
 
-                entity.HasOne(d => d.Member)
+                entity.HasOne(d => d.User)
                     .WithMany(p => p.ActivitiesMessageBoards)
-                    .HasForeignKey(d => d.MemberId)
+                    .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Activities\nMessageBoard_Members");
+                    .HasConstraintName("FK_ActivitiesMessageBoard_Users");
             });
 
             modelBuilder.Entity<Administrator>(entity =>
@@ -79,14 +86,34 @@ namespace _3TeamProject.Models
 
                 entity.Property(e => e.AdministratorName).HasMaxLength(50);
 
+                entity.Property(e => e.AdministratorStatusId).HasColumnName("AdministratorStatusID");
+
                 entity.Property(e => e.PhoneNumber).HasMaxLength(50);
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
+
+                entity.HasOne(d => d.AdministratorStatus)
+                    .WithMany(p => p.Administrators)
+                    .HasForeignKey(d => d.AdministratorStatusId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Administrators_AdministratorStatusCategory");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Administrators)
                     .HasForeignKey(d => d.UserId)
                     .HasConstraintName("FK_Adminstrators_Users");
+            });
+
+            modelBuilder.Entity<AdministratorStatusCategory>(entity =>
+            {
+                entity.HasKey(e => e.AdministratorStatusId)
+                    .HasName("PK__Administ__7EDF6BB32262A51C");
+
+                entity.ToTable("AdministratorStatusCategory");
+
+                entity.Property(e => e.AdministratorStatusId).HasColumnName("AdministratorStatusID");
+
+                entity.Property(e => e.StatusName).HasMaxLength(10);
             });
 
             modelBuilder.Entity<Member>(entity =>
@@ -95,9 +122,7 @@ namespace _3TeamProject.Models
 
                 entity.Property(e => e.Address).HasMaxLength(50);
 
-                entity.Property(e => e.Age)
-                    .HasColumnName("age")
-                    .HasComputedColumnSql("(datediff(year,[Birthday],getdate()))", false);
+                entity.Property(e => e.Age).HasComputedColumnSql("(datediff(year,[Birthday],getdate()))", false);
 
                 entity.Property(e => e.Birthday).HasColumnType("date");
 
@@ -113,6 +138,8 @@ namespace _3TeamProject.Models
 
                 entity.Property(e => e.MemberName).HasMaxLength(50);
 
+                entity.Property(e => e.MemberStatusId).HasColumnName("MemberStatusID");
+
                 entity.Property(e => e.NickName).HasMaxLength(50);
 
                 entity.Property(e => e.PhoneNumber)
@@ -125,10 +152,28 @@ namespace _3TeamProject.Models
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
 
+                entity.HasOne(d => d.MemberStatus)
+                    .WithMany(p => p.Members)
+                    .HasForeignKey(d => d.MemberStatusId)
+                    .HasConstraintName("FK_Members_MemberStatusCategory");
+
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Members)
                     .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Members_Users");
+            });
+
+            modelBuilder.Entity<MemberStatusCategory>(entity =>
+            {
+                entity.HasKey(e => e.MemberStatusId)
+                    .HasName("PK__MemberSt__53C4FDDCB6744793");
+
+                entity.ToTable("MemberStatusCategory");
+
+                entity.Property(e => e.MemberStatusId).HasColumnName("MemberStatusID");
+
+                entity.Property(e => e.StatusName).HasMaxLength(20);
             });
 
             modelBuilder.Entity<Order>(entity =>
@@ -214,9 +259,8 @@ namespace _3TeamProject.Models
 
             modelBuilder.Entity<OrderStatusCategory>(entity =>
             {
-                entity.HasKey(e => e.OrderCategoryId);
-
-                entity.ToTable("OrderStatus\nCategories");
+                entity.HasKey(e => e.OrderCategoryId)
+                    .HasName("PK_OrderStatus\nCategories");
 
                 entity.Property(e => e.OrderCategoryId).HasColumnName("OrderCategoryID");
 
@@ -225,9 +269,8 @@ namespace _3TeamProject.Models
 
             modelBuilder.Entity<PaymentStatusCategory>(entity =>
             {
-                entity.HasKey(e => e.PaymentCategoryId);
-
-                entity.ToTable("PaymentStatus\nCategories");
+                entity.HasKey(e => e.PaymentCategoryId)
+                    .HasName("PK_PaymentStatus\nCategories");
 
                 entity.Property(e => e.PaymentCategoryId).HasColumnName("PaymentCategoryID");
 
@@ -244,9 +287,7 @@ namespace _3TeamProject.Models
 
                 entity.Property(e => e.ProductName).HasMaxLength(50);
 
-                entity.Property(e => e.ProductStatus)
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
+                entity.Property(e => e.ProductStatusId).HasColumnName("ProductStatusID");
 
                 entity.Property(e => e.ProductUnitPrice).HasColumnType("money");
 
@@ -261,6 +302,11 @@ namespace _3TeamProject.Models
                     .HasForeignKey(d => d.ProductCategoryId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Products_ProductCategories");
+
+                entity.HasOne(d => d.ProductStatus)
+                    .WithMany(p => p.Products)
+                    .HasForeignKey(d => d.ProductStatusId)
+                    .HasConstraintName("FK_Products_ProductStatusCategoy");
 
                 entity.HasOne(d => d.Supplier)
                     .WithMany(p => p.Products)
@@ -277,11 +323,24 @@ namespace _3TeamProject.Models
                 entity.Property(e => e.CategoryName).HasMaxLength(50);
             });
 
+            modelBuilder.Entity<ProductStatusCategoy>(entity =>
+            {
+                entity.HasKey(e => e.ProductStatusId)
+                    .HasName("PK__ProductS__208205AB13BE0CE7");
+
+                entity.ToTable("ProductStatusCategoy");
+
+                entity.Property(e => e.ProductStatusId).HasColumnName("ProductStatusID");
+
+                entity.Property(e => e.StatusName).HasMaxLength(20);
+            });
+
             modelBuilder.Entity<ProductsMessageBoard>(entity =>
             {
-                entity.HasKey(e => e.MessageBoardId);
+                entity.HasKey(e => e.MessageBoardId)
+                    .HasName("PK_Products\nMessageBoard");
 
-                entity.ToTable("Products\nMessageBoard");
+                entity.ToTable("ProductsMessageBoard");
 
                 entity.Property(e => e.MessageBoardId).HasColumnName("MessageBoardID");
 
@@ -291,9 +350,7 @@ namespace _3TeamProject.Models
 
                 entity.Property(e => e.ProductId).HasColumnName("ProductID");
 
-                entity.Property(e => e.ProductMessageContent)
-                    .HasMaxLength(50)
-                    .HasColumnName("ProductMessage\nContent");
+                entity.Property(e => e.ProductMessageContent).HasMaxLength(50);
 
                 entity.Property(e => e.ProductMessageStatus)
                     .HasMaxLength(10)
@@ -314,9 +371,10 @@ namespace _3TeamProject.Models
 
             modelBuilder.Entity<ProductsPictureInfo>(entity =>
             {
-                entity.HasKey(e => e.ProductPictureId);
+                entity.HasKey(e => e.ProductPictureId)
+                    .HasName("PK_Products\nPictureInfo");
 
-                entity.ToTable("Products\nPictureInfo");
+                entity.ToTable("ProductsPictureInfo");
 
                 entity.Property(e => e.ProductPictureId).HasColumnName("ProductPictureID");
 
@@ -342,9 +400,8 @@ namespace _3TeamProject.Models
 
             modelBuilder.Entity<ShipStatusCategory>(entity =>
             {
-                entity.HasKey(e => e.ShipCategoryId);
-
-                entity.ToTable("ShipStatus\nCategories");
+                entity.HasKey(e => e.ShipCategoryId)
+                    .HasName("PK_ShipStatus\nCategories");
 
                 entity.Property(e => e.ShipCategoryId).HasColumnName("ShipCategoryID");
 
@@ -361,6 +418,8 @@ namespace _3TeamProject.Models
 
                 entity.Property(e => e.SightseeingAddress).HasMaxLength(50);
 
+                entity.Property(e => e.SightseeingCategoryId).HasColumnName("SightseeingCategoryID");
+
                 entity.Property(e => e.SightseeingCity).HasMaxLength(50);
 
                 entity.Property(e => e.SightseeingCountry).HasMaxLength(50);
@@ -372,26 +431,64 @@ namespace _3TeamProject.Models
                     .HasForeignKey(d => d.AdministratorId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Sightseeing_Administrators");
+
+                entity.HasOne(d => d.SightseeingCategory)
+                    .WithMany(p => p.Sightseeings)
+                    .HasForeignKey(d => d.SightseeingCategoryId)
+                    .HasConstraintName("FK_Sightseeing_SightseeingCategories");
+            });
+
+            modelBuilder.Entity<SightseeingCategory>(entity =>
+            {
+                entity.Property(e => e.SightseeingCategoryId).HasColumnName("SightseeingCategoryID");
+
+                entity.Property(e => e.CategoryName).HasMaxLength(20);
             });
 
             modelBuilder.Entity<SightseeingMessageBoard>(entity =>
             {
-                entity.HasKey(e => e.MessageBoardId);
+                entity.HasKey(e => e.MessageBoardId)
+                    .HasName("PK_Sightseeing\nMessageBoard");
 
-                entity.ToTable("Sightseeing\nMessageBoard");
+                entity.ToTable("SightseeingMessageBoard");
 
                 entity.Property(e => e.MessageBoardId).HasColumnName("MessageBoardID");
-
-                entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
                 entity.Property(e => e.MessageCreatedTime).HasColumnType("datetime");
 
                 entity.Property(e => e.SightseeingId).HasColumnName("SightseeingID");
 
+                entity.Property(e => e.SightseeingStatusId).HasColumnName("SightseeingStatusID");
+
+                entity.Property(e => e.UserId).HasColumnName("UserID");
+
                 entity.HasOne(d => d.Sightseeing)
                     .WithMany(p => p.SightseeingMessageBoards)
                     .HasForeignKey(d => d.SightseeingId)
                     .HasConstraintName("FK_Sightseeing\nMessageBoard_Sightseeing");
+
+                entity.HasOne(d => d.SightseeingStatus)
+                    .WithMany(p => p.SightseeingMessageBoards)
+                    .HasForeignKey(d => d.SightseeingStatusId)
+                    .HasConstraintName("FK_Sightseeing\nMessageBoard_SightseeingStatusCategory");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.SightseeingMessageBoards)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SightseeingMessageBoard_Users");
+            });
+
+            modelBuilder.Entity<SightseeingMessageStatusCategory>(entity =>
+            {
+                entity.HasKey(e => e.SightseeingStatusId)
+                    .HasName("PK__Sightsee__A82B64CABB66CBB3");
+
+                entity.ToTable("SightseeingMessageStatusCategory");
+
+                entity.Property(e => e.SightseeingStatusId).HasColumnName("SightseeingStatusID");
+
+                entity.Property(e => e.StatusName).HasMaxLength(20);
             });
 
             modelBuilder.Entity<SightseeingPictureInfo>(entity =>
@@ -473,14 +570,33 @@ namespace _3TeamProject.Models
                     .HasMaxLength(20)
                     .IsUnicode(false);
 
+                entity.Property(e => e.SupplierStatusId).HasColumnName("SupplierStatusID");
+
                 entity.Property(e => e.TaxId).HasColumnName("TaxID");
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
+
+                entity.HasOne(d => d.SupplierStatus)
+                    .WithMany(p => p.Suppliers)
+                    .HasForeignKey(d => d.SupplierStatusId)
+                    .HasConstraintName("FK_Suppliers_SupplierStatusCategoy");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Suppliers)
                     .HasForeignKey(d => d.UserId)
                     .HasConstraintName("FK_Suppliers_Users");
+            });
+
+            modelBuilder.Entity<SupplierStatusCategoy>(entity =>
+            {
+                entity.HasKey(e => e.SupplierStatusId)
+                    .HasName("PK__Supplier__6F9CA1BBBB698C79");
+
+                entity.ToTable("SupplierStatusCategoy");
+
+                entity.Property(e => e.SupplierStatusId).HasColumnName("SupplierStatusID");
+
+                entity.Property(e => e.StatusName).HasMaxLength(20);
             });
 
             modelBuilder.Entity<User>(entity =>

@@ -22,7 +22,9 @@ namespace _3TeamProject.Models
         public string SupplierCity { get; set; } = null!;
         public string SupplierAddress { get; set; } = null!;
         public int UserId { get; set; }
+        public int? SupplierStatusId { get; set; }
 
+        public virtual SupplierStatusCategoy? SupplierStatus { get; set; }
         public virtual User User { get; set; } = null!;
         public virtual ICollection<Product> Products { get; set; }
     }

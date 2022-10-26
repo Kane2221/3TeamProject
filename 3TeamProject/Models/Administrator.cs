@@ -15,7 +15,9 @@ namespace _3TeamProject.Models
         public string AdministratorName { get; set; } = null!;
         public string PhoneNumber { get; set; } = null!;
         public int UserId { get; set; }
+        public int AdministratorStatusId { get; set; }
 
+        public virtual AdministratorStatusCategory AdministratorStatus { get; set; } = null!;
         public virtual User User { get; set; } = null!;
         public virtual ICollection<Order> Orders { get; set; }
         public virtual ICollection<Sightseeing> Sightseeings { get; set; }

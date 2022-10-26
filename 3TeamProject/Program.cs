@@ -6,7 +6,7 @@ using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var TeamProjectconnectionString = builder.Configuration.GetConnectionString("Team3Project");
+var TeamProjectconnectionString = builder.Configuration.GetConnectionString("Team3ProjectOnline");
 builder.Services.AddDbContext<_3TeamProjectContext>(options =>
     options.UseSqlServer(TeamProjectconnectionString));
 
@@ -18,7 +18,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     .AddCookie(opt => {
         opt.AccessDeniedPath = "/Home/Error";
         opt.LoginPath = "/Home"; // TODO Login Path
-        opt.ExpireTimeSpan = TimeSpan.FromSeconds(600);
+        opt.ExpireTimeSpan = TimeSpan.FromMinutes(30);
        
     }).AddGoogle( opt =>
     {
@@ -63,14 +63,20 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 //新增Suppliers Area 的 Route
-app.MapControllerRoute(
-    name: "Suppliers",
-    pattern: "{area:exists}/{controller=Supplier}/{action=Index}/{id?}");
+//app.MapControllerRoute(
+//    name: "Members",
+//    pattern: "{area:exists}/{controller=Member}/{action=Index}/{id?}");
 
-//新增Administrators Area 的 Route
-app.MapControllerRoute(
-    name: "Administrators",
-    pattern: "{area:exists}/{controller=Administrator}/{action=Index}/{id?}");
+////新增Suppliers Area 的 Route
+//app.MapControllerRoute(
+//    name: "Suppliers",
+//    pattern: "{area:exists}/{controller=Supplier}/{action=Index}/{id?}");
+
+////新增Administrators Area 的 Route
+//app.MapControllerRoute(
+//    name: "Administrators",
+//    pattern: "{area:exists}/{controller=Administrator}/{action=Index}/{id?}");
+
 
 app.MapControllerRoute(
     name: "default",

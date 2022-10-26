@@ -1,0 +1,11 @@
+﻿namespace _3TeamProject.Areas.Sightseeings.Data
+{
+    public class SightMessageViewModel
+    {
+        public int MessageBoardId { get; set; }
+        public string Account { get; set; } = null!;
+        public string? SightseeingMessageContent { get; set; }
+        public DateTime MessageCreatedTime { get; set; }
+        public string RoleName { get; set; } = null!;
+    }
+}

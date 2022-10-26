@@ -7,8 +7,10 @@ namespace _3TeamProject.Models
     {
         public User()
         {
+            ActivitiesMessageBoards = new HashSet<ActivitiesMessageBoard>();
             Administrators = new HashSet<Administrator>();
             Members = new HashSet<Member>();
+            SightseeingMessageBoards = new HashSet<SightseeingMessageBoard>();
             Suppliers = new HashSet<Supplier>();
         }
 
@@ -24,8 +26,10 @@ namespace _3TeamProject.Models
         public DateTime? ResetTokenExpires { get; set; }
 
         public virtual Role? RolesNavigation { get; set; }
+        public virtual ICollection<ActivitiesMessageBoard> ActivitiesMessageBoards { get; set; }
         public virtual ICollection<Administrator> Administrators { get; set; }
         public virtual ICollection<Member> Members { get; set; }
+        public virtual ICollection<SightseeingMessageBoard> SightseeingMessageBoards { get; set; }
         public virtual ICollection<Supplier> Suppliers { get; set; }
     }
 }
