@@ -2,7 +2,7 @@
 
 namespace _3TeamProject.Areas.Administrators.Data
 {
-    public class UpdateSightViewModel
+    public class UpdateSightDto
     {
         [Required]
         public string SightseeingName { get; set; } = null!;

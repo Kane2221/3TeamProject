@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace _3TeamProject.Areas.Members.Data
 {
-    public class MemberUpdateViewModel
+    public class UpdateMemberDto
     {
         [Required, EmailAddress]
         public string Email { get; set; } = string.Empty;

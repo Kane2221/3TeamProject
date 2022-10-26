@@ -16,13 +16,13 @@ namespace _3TeamProject.Areas.Members.Controllers
     [Authorize(Roles = "Members")]
     [Route("Members/[controller]")]
     [ApiController]
-    public class MemberController : Controller
+    public class MemberApiController : ControllerBase
     {
 
         private readonly _3TeamProjectContext _context;
         private readonly IConfiguration _config;
 
-        public MemberController(_3TeamProjectContext Context, IConfiguration config)
+        public MemberApiController(_3TeamProjectContext Context, IConfiguration config)
         {
             _context = Context;
             _config = config;
@@ -41,7 +41,7 @@ namespace _3TeamProject.Areas.Members.Controllers
                           where u.UserId == user.UserId
                           join m in _context.Members
                           on u.UserId equals m.UserId
-                          select new MemberGetViewModel
+                          select new GetMemberDto
                           {
                               Account = u.Account,
                               Email = u.Email,
@@ -62,7 +62,7 @@ namespace _3TeamProject.Areas.Members.Controllers
         }
         //會員註冊
         [HttpPost]
-        public async Task<IActionResult> Register([FromBody] MemberRegisterViewModel request)
+        public async Task<IActionResult> Register([FromBody] RegisterMemberDto request)
         {
             if (!ModelState.IsValid)
             {
@@ -102,21 +102,23 @@ namespace _3TeamProject.Areas.Members.Controllers
                     }
                 };
                 #region Send Email with verify code (正式再解開註解)
-                //using (MailMessage mail = new MailMessage())
-                //{
-                //    mail.From = new MailAddress("dotnettgm102@gmail.com", "帳號驗證碼");
-                //    mail.To.Add("dotnettgm102@gmail.com");
-                //    mail.Priority = MailPriority.Normal;
-                //    mail.Subject = "帳號驗證碼";
-                //    mail.Body = $"<a href=\"https://localhost:7190/User/Verify\"  value=\"{verifyToken}\">帳號驗證碼</a>";
-                //    mail.IsBodyHtml = true;
-                //    SmtpClient MySmtp = new SmtpClient("smtp.gmail.com", 587);
-                //    MySmtp.UseDefaultCredentials = false;
-                //    MySmtp.Credentials = new System.Net.NetworkCredential(_config["mail:Account"], _config["mail:Password"]);
-                //    MySmtp.EnableSsl = true;
-                //    MySmtp.Send(mail);
-                //    MySmtp = null;
-                //}; 
+                var root = $@"{Request.Scheme}:/{Request.Host}/User/Verify";
+                //TODO 修改寄信的超連結
+                using (MailMessage mail = new MailMessage())
+                {
+                    mail.From = new MailAddress("dotnettgm102@gmail.com", "帳號驗證碼");
+                    mail.To.Add("dotnettgm102@gmail.com");
+                    mail.Priority = MailPriority.Normal;
+                    mail.Subject = "帳號驗證碼";
+                    mail.Body = $"<a href=\"{root}\" value=\"{verifyToken}\">帳號驗證碼</a>";
+                    mail.IsBodyHtml = true;
+                    SmtpClient MySmtp = new SmtpClient("smtp.gmail.com", 587);
+                    MySmtp.UseDefaultCredentials = false;
+                    MySmtp.Credentials = new System.Net.NetworkCredential(_config["mail:Account"], _config["mail:Password"]);
+                    MySmtp.EnableSsl = true;
+                    MySmtp.Send(mail);
+                    MySmtp = null;
+                };
                 #endregion
 
                 _context.Members.Add(member);
@@ -126,7 +128,7 @@ namespace _3TeamProject.Areas.Members.Controllers
         }
         //會員資料修改
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] MemberUpdateViewModel request)
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateMemberDto request)
         {
             var UserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
             if (id != UserId)
@@ -186,7 +188,7 @@ namespace _3TeamProject.Areas.Members.Controllers
             var myOrder = _context.Orders.Include(o => o.Member).Include(o => o.OrderDetails)
                 .Include(o => o.OrderStatusNavigation).Include(o => o.PaymentStatusNavigation)
                 .Include(o => o.ShipStatusNavigation).Where(o => o.Member.UserId == UserID && o.ShipStatus != 2)
-                .Select(o => new GetAllOrdersViewModel
+                .Select(o => new GetAllOrdersDto
                 {
                     OrderId = o.OrderId,
                     OrderDate = o.OrderDate,
@@ -194,7 +196,7 @@ namespace _3TeamProject.Areas.Members.Controllers
                     OrderCategoryName = o.OrderStatusNavigation.OrderCategoryName,
                     PaymentCategoryName = o.PaymentStatusNavigation.PaymentCategoryName,
                     ShipCategoryName = o.ShipStatusNavigation.ShipCategoryName,
-                    OrderDetails = o.OrderDetails.Select(od => new OrderDetailViewModel
+                    OrderDetails = o.OrderDetails.Select(od => new OrderDetailDto
                     {
                         ProductId = od.ProductId,
                         UnitPrice = od.UnitPrice,
@@ -212,7 +214,7 @@ namespace _3TeamProject.Areas.Members.Controllers
             var OrderRecord = _context.Orders.Include(o => o.Member).Include(o => o.OrderDetails)
                 .Include(o => o.OrderStatusNavigation).Include(o => o.PaymentStatusNavigation)
                 .Include(o => o.ShipStatusNavigation).Where(o => o.Member.UserId == UserID && o.ShipStatus == 2)
-                                .Select(o => new GetAllOrdersViewModel
+                                .Select(o => new GetAllOrdersDto
                                 {
                                     OrderId = o.OrderId,
                                     OrderDate = o.OrderDate,
@@ -220,7 +222,7 @@ namespace _3TeamProject.Areas.Members.Controllers
                                     OrderCategoryName = o.OrderStatusNavigation.OrderCategoryName,
                                     PaymentCategoryName = o.PaymentStatusNavigation.PaymentCategoryName,
                                     ShipCategoryName = o.ShipStatusNavigation.ShipCategoryName,
-                                    OrderDetails = o.OrderDetails.Select(od => new OrderDetailViewModel
+                                    OrderDetails = o.OrderDetails.Select(od => new OrderDetailDto
                                     {
                                         ProductId = od.ProductId,
                                         UnitPrice = od.UnitPrice,

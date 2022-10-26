@@ -1,20 +1,17 @@
 ﻿using _3TeamProject.Areas.Administrators.Data;
-using _3TeamProject.Areas.Sightseeings.Data;
+using _3TeamProject.Areas.Members.Data;
 using _3TeamProject.Areas.Suppliers.Data;
 using _3TeamProject.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.Internal;
-using System;
 using System.Data;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using SightGetViewModel = _3TeamProject.Areas.Administrators.Data.GetSightViewModel;
+using SightGetViewModel = _3TeamProject.Areas.Administrators.Data.GetSightDto;
 
 namespace _3TeamProject.Areas.Administrators.Controllers
 {
@@ -22,7 +19,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
     [Authorize(Roles = ("Administrator, ChiefAdministrator, SuperAdministrator"))]
     [Route("Administrators/[controller]")]
     [ApiController]
-    public class AdministratorController : Controller
+    public class AdministratorApiController : ControllerBase
     {
         private readonly _3TeamProjectContext _context;
 
@@ -30,7 +27,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
 
         public IHostEnvironment _env { get; }
 
-        public AdministratorController(_3TeamProjectContext Context, IConfiguration config, IHostEnvironment env)
+        public AdministratorApiController(_3TeamProjectContext Context, IConfiguration config, IHostEnvironment env)
         {
             _context = Context;
             _config = config;
@@ -43,7 +40,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
             if (UserRole == "Administrator")
             {
                 var admin = _context.Administrators.Include(u => u.User)
-                        .Where(u => u.User.Roles == 5).Select(u => new GetAdminViewModel
+                        .Where(u => u.User.Roles == 5).Select(u => new GetAdminDto
                         {
                             Account = u.User.Account,
                             Email = u.User.Email,
@@ -56,7 +53,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
             else if (UserRole == "ChiefAdministrator")
             {
                 var admin = _context.Administrators.Include(u => u.User)
-                    .Where(u => u.User.Roles != 3).Select(u => new GetAdminViewModel
+                    .Where(u => u.User.Roles != 3).Select(u => new GetAdminDto
                     {
                         Account = u.User.Account,
                         Email = u.User.Email,
@@ -67,7 +64,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
                 return Ok(admin);
             }
             var adminSuper = _context.Administrators.Include(u => u.User)
-                    .Select(u => new GetAdminViewModel
+                    .Select(u => new GetAdminDto
                     {
                         Account = u.User.Account,
                         Email = u.User.Email,
@@ -80,7 +77,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
         //新增管理員, 最高權限才能新增。
         [AllowAnonymous]
         [HttpPost("Register")]
-        public async Task<IActionResult> Register([FromBody] AddNewAdminViewModel request)
+        public async Task<IActionResult> Register([FromBody] AddNewAdminDto request)
         {
             if (!ModelState.IsValid)
             {
@@ -119,7 +116,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
         //TODO 新增審核管理員註冊
         //修改管理員資料
         [HttpPut("UpdateAdmin/{id}")]
-        public async Task<IActionResult> UpdateAdmin(int? id, [FromBody] UpdateAdminViewModel request)
+        public async Task<IActionResult> UpdateAdmin(int? id, [FromBody] UpdateAdminDto request)
         {
             var UserRole = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role).Value;
             var UserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
@@ -170,7 +167,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
             var supplier = from u in _context.Users
                            join s in _context.Suppliers
                            on u.UserId equals s.UserId
-                           select new SupplierGetViewModel
+                           select new GetSupplierDto
                            {
                                Account = u.Account,
                                Email = u.Email,
@@ -192,7 +189,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
         [HttpGet("GetAllProduct")]
         public IActionResult GetAllProducts()
         {
-            var products = _context.Products.Include(p => p.ProductStatus).Include(p => p.ProductCategory).Select(p => new GetAllProductViewModel
+            var products = _context.Products.Include(p => p.ProductStatus).Include(p => p.ProductCategory).Select(p => new GetAllProductDto
             {
                 ProductId = p.ProductId,
                 CategoryName = p.ProductCategory.CategoryName,
@@ -214,7 +211,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
         public IActionResult GetAllOrders() // TODO 待測_訂單管理頁 
         {
             var orderlist = _context.Orders.Include(o => o.Member).Include(o => o.OrderDetails).Include(o => o.OrderStatusNavigation)
-                                .Include(o => o.PaymentStatusNavigation).Include(o => o.ShipStatusNavigation).Select(o => new GetAllOrdersViewModel
+                                .Include(o => o.PaymentStatusNavigation).Include(o => o.ShipStatusNavigation).Select(o => new GetAllOrdersDto
                                 {
                                     OrderId = o.OrderId,
                                     MemberId = o.MemberId,
@@ -228,7 +225,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
                                     ShipCountry = o.ShipCountry,
                                     ShipCity = o.ShipCity,
                                     ShipAddress = o.ShipAddress,
-                                    OrderDetails = o.OrderDetails.Select(od => new OrderDetailViewModel
+                                    OrderDetails = o.OrderDetails.Select(od => new OrderDetailDto
                                     {
                                         ProductId = od.ProductId,
                                         UnitPrice = od.UnitPrice,
@@ -270,7 +267,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
         //TODO 審核訂單退訂
         //景點新增及上傳圖片
         [HttpPost("AddSight")]
-        public async Task<IActionResult> AddSight([FromForm]AddSightViewModel request)
+        public async Task<IActionResult> AddSight([FromForm] AddSightDto request)
         {
             var UserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
             var admin = _context.Sightseeings.FirstOrDefault(x => x.Administrator.UserId == UserId);
@@ -330,7 +327,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
         }
         //TODO 修改景點訊息OK, 缺圖片置換或新增功能
         [HttpPut("UpdateSight/{id}")]
-        public IActionResult UpdateSight(int id, UpdateSightViewModel request)
+        public IActionResult UpdateSight(int id, UpdateSightDto request)
         {
             var sid = _context.Sightseeings.FirstOrDefault(s => s.SightseeingId == id);
             if (sid == null)
@@ -371,6 +368,45 @@ namespace _3TeamProject.Areas.Administrators.Controllers
             return Ok("此景點已刪除");
         }
         //TODO 修改會員資料(最高權限管理員)
+        [Authorize(Roles ="SuperAdministrator")]
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateMemberDto request)
+        {
+            var UserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
+            if (id != UserId)
+            {
+                return BadRequest("與登入帳號不符");
+            }
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Select(x => x.Value.Errors).Where(y => y.Count > 0).ToList();
+                return BadRequest(errors);
+            }
+
+            var member = _context.Members.Include(a => a.User)
+                    .Where(a => a.UserId == id).Select(a => a).SingleOrDefault();
+
+            using (var hmac = new HMACSHA512())
+            {
+                var passwordSalt = hmac.Key;
+                var passwordHsah = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(request.Password));
+                member.MemberName = request.MemberName;
+                member.NickName = request.NickName;
+                member.Birthday = request.Birthday;
+                member.IdentityNumber = request.IdentityNumber;
+                member.CellPhoneNumber = request.CellPhoneNumber;
+                member.PhoneNumber = request.PhoneNumber;
+                member.PostalCode = request.PostalCode;
+                member.Country = request.Country;
+                member.City = request.City;
+                member.Address = request.Address;
+                member.User.Email = request.Email;
+                member.User.PasswordHash = passwordHsah;
+                member.User.PasswordSalt = passwordSalt;
+                _context.Members.Update(member);
+                await _context.SaveChangesAsync();
+            }
+            return Ok("修改成功!");
+        }
         //TODO 後台首頁功能
     }
 }

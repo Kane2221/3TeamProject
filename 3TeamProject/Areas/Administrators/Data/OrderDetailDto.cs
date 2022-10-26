@@ -1,6 +1,6 @@
-﻿namespace _3TeamProject.Areas.Members.Data
+﻿namespace _3TeamProject.Areas.Administrators.Data
 {
-    public class GetMyOrderDetailViewModel
+    public class OrderDetailDto
     {
         public int ProductId { get; set; }
         public decimal UnitPrice { get; set; }

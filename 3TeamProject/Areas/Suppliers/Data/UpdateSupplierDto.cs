@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace _3TeamProject.Areas.Suppliers.Data
 {
-    public class SupplierUpdateViewModel
+    public class UpdateSupplierDto
     {
         [Required, EmailAddress]
         public string Email { get; set; }

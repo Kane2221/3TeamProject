@@ -16,13 +16,13 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
     [Authorize(Roles ="Suppliers")]
     [Route("Suppliers/[controller]")]
     [ApiController]
-    public class SupplierController : Controller
+    public class SupplierApiController : ControllerBase
     {
         private readonly _3TeamProjectContext _context;
         private readonly IConfiguration _config;
         private readonly IHostEnvironment _env;
 
-        public SupplierController(_3TeamProjectContext Context, IConfiguration config, IHostEnvironment env)
+        public SupplierApiController(_3TeamProjectContext Context, IConfiguration config, IHostEnvironment env)
         {
             _context = Context;
             _config = config;
@@ -42,7 +42,7 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
                             where u.UserId == UserId
                             join s in _context.Suppliers
                             on u.UserId equals s.UserId
-                            select new SupplierGetViewModel
+                            select new GetSupplierDto
                             {
                                 Account = u.Account,
                                 Email = u.Email,
@@ -63,7 +63,7 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
         //廠商註冊
         [AllowAnonymous]
         [HttpPost("Register")]
-        public async Task<IActionResult> Register([FromBody] SupplierRegisterViewModel request)
+        public async Task<IActionResult> Register([FromBody] RegisterSupplierDto request)
         {
             if (!ModelState.IsValid)
             {
@@ -94,23 +94,23 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
                 };
 
                 #region Send Email with verify code (正式再解開註解)
+                var root = $@"{Request.Scheme}:/{Request.Host}/User/Verify";
                 //TODO 修改寄信的超連結
-                var root = $@"{HttpContext.Request.Path}User\Verify";
-                //using (MailMessage mail = new MailMessage())
-                //{
-                //    mail.From = new MailAddress("dotnettgm102@gmail.com", "帳號驗證碼");
-                //    mail.To.Add("dotnettgm102@gmail.com");
-                //    mail.Priority = MailPriority.Normal;
-                //    mail.Subject = "帳號驗證碼";
-                //    mail.Body = $"<a href=\"{root}\"  value=\"{verifyToken}\">帳號驗證碼</a>"; 
-                //    mail.IsBodyHtml = true;
-                //    SmtpClient MySmtp = new SmtpClient("smtp.gmail.com", 587);
-                //    MySmtp.UseDefaultCredentials = false;
-                //    MySmtp.Credentials = new System.Net.NetworkCredential(_config["mail:Account"], _config["mail:Password"]);
-                //    MySmtp.EnableSsl = true;
-                //    MySmtp.Send(mail);
-                //    MySmtp = null;
-                //};
+                using (MailMessage mail = new MailMessage())
+                {
+                    mail.From = new MailAddress("dotnettgm102@gmail.com", "帳號驗證碼");
+                    mail.To.Add("dotnettgm102@gmail.com");
+                    mail.Priority = MailPriority.Normal;
+                    mail.Subject = "帳號驗證碼";
+                    mail.Body = $"<a href=\"{root}\" value=\"{verifyToken}\">帳號驗證碼</a>";
+                    mail.IsBodyHtml = true;
+                    SmtpClient MySmtp = new SmtpClient("smtp.gmail.com", 587);
+                    MySmtp.UseDefaultCredentials = false;
+                    MySmtp.Credentials = new System.Net.NetworkCredential(_config["mail:Account"], _config["mail:Password"]);
+                    MySmtp.EnableSsl = true;
+                    MySmtp.Send(mail);
+                    MySmtp = null;
+                };
                 #endregion
 
                 //_context.Suppliers.Add(supplier);
@@ -121,7 +121,7 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
         }
         //廠商修改資料by登入帳號
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] SupplierUpdateViewModel request)
+        public async Task<IActionResult> Update([FromBody] UpdateSupplierDto request)
         {
             if (!ModelState.IsValid)
             {
@@ -172,7 +172,7 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
             var products = _context.Products.Include(p => p.ProductStatus).Include(p => p.ProductCategory)
                 .Include(p => p.ProductsPictureInfos)
                 .Where(p=>p.Supplier.UserId == UserID)
-                .Select(p => new GetProductViewModel
+                .Select(p => new GetProductDto
                 {
                     ProductId = p.ProductId,
                     CategoryName = p.ProductCategory.CategoryName,

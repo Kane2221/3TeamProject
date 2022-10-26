@@ -14,12 +14,12 @@ namespace _3TeamProject.Controllers
     public class UserController : Controller
     {
         private readonly _3TeamProjectContext _context;
-        private readonly IConfiguration _env;
+        private readonly IConfiguration _config;
 
-        public UserController(_3TeamProjectContext context, IConfiguration env)
+        public UserController(_3TeamProjectContext context, IConfiguration config)
         {
             _context = context;
-            _env=env;
+            _config=config;
         }
         public async Task<IActionResult> Login([FromBody] LoginReuqest request)
         {
@@ -76,16 +76,19 @@ namespace _3TeamProject.Controllers
             user.PasswordResetToken = verifyToken;
             user.ResetTokenExpires = DateTime.Now.AddMinutes(30);
 
+            var root = $@"{Request.Scheme}:/{Request.Host}/User/Verify";
+            //TODO 修改寄信的超連結
             using (MailMessage mail = new MailMessage())
             {
                 mail.From = new MailAddress("dotnettgm102@gmail.com", "帳號驗證碼");
                 mail.To.Add("dotnettgm102@gmail.com");
                 mail.Priority = MailPriority.Normal;
                 mail.Subject = "帳號驗證碼";
-                mail.Body = $"<a href=\"https://localhost:7190/User/Verify\"  value=\"{verifyToken}\">帳號驗證碼</a>";
+                mail.Body = $"<a href=\"{root}\" value=\"{verifyToken}\">帳號驗證碼</a>";
                 mail.IsBodyHtml = true;
                 SmtpClient MySmtp = new SmtpClient("smtp.gmail.com", 587);
-                MySmtp.Credentials = new System.Net.NetworkCredential(_env["mail:Account"], _env["mail:Password"]);
+                MySmtp.UseDefaultCredentials = false;
+                MySmtp.Credentials = new System.Net.NetworkCredential(_config["mail:Account"], _config["mail:Password"]);
                 MySmtp.EnableSsl = true;
                 MySmtp.Send(mail);
                 MySmtp = null;

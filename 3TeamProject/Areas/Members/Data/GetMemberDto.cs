@@ -1,6 +1,6 @@
 ﻿namespace _3TeamProject.Areas.Members.Data
 {
-    public class MemberGetViewModel
+    public class GetMemberDto
     {
         public string Account { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;

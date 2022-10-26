@@ -1,8 +1,7 @@
 ﻿namespace _3TeamProject.Areas.Sightseeings.Data
 {
-	public class SightMsgResViewModel
-	{
-        public int SightseeingId { get; set; }
+    public class SightMessageDto
+    {
         public int MessageBoardId { get; set; }
         public string Account { get; set; } = null!;
         public string? SightseeingMessageContent { get; set; }

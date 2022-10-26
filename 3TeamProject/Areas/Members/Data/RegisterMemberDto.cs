@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace _3TeamProject.Areas.Sppliers.Data
+namespace _3TeamProject.Areas.Members.Data
 {
-    public class SupplierRegisterViewModel
+    public class RegisterMemberDto
     {
         [Required]
         public string Account { get; set; } = string.Empty;
@@ -20,23 +20,24 @@ namespace _3TeamProject.Areas.Sppliers.Data
         [Required]
         public int Roles { get; set; }
         [Required]
-        public string ContactName { get; set; } = string.Empty;
+        public string MemberName { get; set; } = string.Empty;
+
+        public string NickName { get; set; } = string.Empty;
         [Required]
-        public string CompanyName { get; set; } = string.Empty;
+        public DateTime Birthday { get; set; }
+        public string? Fax { get; set; }
         [Required]
-        public int TaxId { get; set; }
-        public string? Fax { get; set; } = string.Empty;
+        public string IdentityNumber { get; set; } = string.Empty;
         [Required]
         public string CellPhoneNumber { get; set; } = string.Empty;
+        public string? PhoneNumber { get; set; }
         [Required]
-        public string SupplierPhoneNumber { get; set; } = string.Empty;
+        public string PostalCode { get; set; } = string.Empty;
         [Required]
-        public string SupplierPostalCode { get; set; } = string.Empty;
+        public string Country { get; set; } = string.Empty;
         [Required]
-        public string SupplierCountry { get; set; } = string.Empty;
+        public string City { get; set; } = string.Empty;
         [Required]
-        public string SupplierCity { get; set; } = string.Empty;
-        [Required]
-        public string SupplierAddress { get; set; } = string.Empty;
+        public string Address { get; set; } = string.Empty;
     }
 }

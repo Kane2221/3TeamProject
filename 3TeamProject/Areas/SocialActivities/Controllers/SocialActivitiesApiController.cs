@@ -7,7 +7,7 @@ namespace _3TeamProject.Areas.SocialActivities.Controllers
     [Authorize]
     [Route("SocialActivities/[controller]")]
     [ApiController]
-    public class SocialActivitiesController : ControllerBase
+    public class SocialActivitiesApiController : ControllerBase
     {
         [HttpGet]
         public IActionResult GetAllActivities() //TODO 社群揪團頁

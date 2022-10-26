@@ -2,7 +2,7 @@
 
 namespace _3TeamProject.Areas.Administrators.Data
 {
-    public class GetAdminViewModel
+    public class GetAdminDto
     {
         
         public string Account { get; set; } = string.Empty;

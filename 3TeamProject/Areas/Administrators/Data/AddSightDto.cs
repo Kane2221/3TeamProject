@@ -1,8 +1,8 @@
-﻿using Microsoft.Build.Framework;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace _3TeamProject.Areas.Administrators.Data
 {
-    public class AddSightViewModel
+    public class AddSightDto
     {
         [Required]
         public string SightseeingName { get; set; } = null!;
@@ -19,6 +19,7 @@ namespace _3TeamProject.Areas.Administrators.Data
         [Required]
         public int? SightseeingCategoryId { get; set; }
         public IList<IFormFile>? Files { get; set; }
+
 
     }
 }

@@ -10,11 +10,11 @@ namespace _3TeamProject.Areas.Sightseeings.Controllers
 {
     [Route("Sightseeings/[controller]")]
     [ApiController]
-    public class SightseeingController : ControllerBase
+    public class SightseeingApiController : ControllerBase
     {
         private readonly _3TeamProjectContext _context;
 
-        public SightseeingController(_3TeamProjectContext context)
+        public SightseeingApiController(_3TeamProjectContext context)
         {
             _context=context;
         }
@@ -23,7 +23,7 @@ namespace _3TeamProject.Areas.Sightseeings.Controllers
         public IActionResult GetAllSightseeings()
         {
             var Sight = _context.Sightseeings.Include(s => s.SightseeingPictureInfos)
-                .Include(s => s.SightseeingCategory).Select(s => new SightGetViewModel
+                .Include(s => s.SightseeingCategory).Select(s => new SightGetDto
                 {
                     SightseeingId = s.SightseeingId,
                     SightseeingName = s.SightseeingName,
@@ -33,7 +33,7 @@ namespace _3TeamProject.Areas.Sightseeings.Controllers
                     SightseeingScore = s.SightseeingScore,
                     CategoryName = s.SightseeingCategory.CategoryName,
                     SightseeingHomePage = s.SightseeingHomePage,
-                    SightseeingPictureInfos = s.SightseeingPictureInfos.Select(p => new SightPicInfoViewModel
+                    SightseeingPictureInfos = s.SightseeingPictureInfos.Select(p => new SightPicInfoDto
                     {
                         SightseeingPictureId = p.SightseeingPictureId,
                         SightseeingPictureName = p.SightseeingPictureName,
@@ -54,7 +54,7 @@ namespace _3TeamProject.Areas.Sightseeings.Controllers
             }
             var Sight = _context.Sightseeings.Include(p => p.SightseeingPictureInfos)
                 .Include(m => m.SightseeingMessageBoards).Include(c => c.SightseeingCategory)
-                .Where(s => s.SightseeingId == id).Select(s => new SightGetDetailViewModel
+                .Where(s => s.SightseeingId == id).Select(s => new SightGetDetailDto
                 {
                     SightseeingId = s.SightseeingId,
                     SightseeingName = s.SightseeingName,
@@ -63,13 +63,13 @@ namespace _3TeamProject.Areas.Sightseeings.Controllers
                     SightseeingAddress = s.SightseeingAddress,
                     SightseeingScore = s.SightseeingScore,
                     CategoryName = s.SightseeingCategory.CategoryName,
-                    SightseeingPictureInfos = s.SightseeingPictureInfos.Select(p => new SightPicInfoViewModel
+                    SightseeingPictureInfos = s.SightseeingPictureInfos.Select(p => new SightPicInfoDto
                     {
                         SightseeingPictureId = p.SightseeingPictureId,
                         SightseeingPictureName = p.SightseeingPictureName,
                         SightseeingPicturePath = p.SightseeingPicturePath
                     }),
-                    SightseeingMessageBoards = s.SightseeingMessageBoards.Select(m => new SightMessageViewModel
+                    SightseeingMessageBoards = s.SightseeingMessageBoards.Select(m => new SightMessageDto
                     {
                         MessageBoardId = m.MessageBoardId,
                         Account = m.User.Account,
@@ -83,7 +83,7 @@ namespace _3TeamProject.Areas.Sightseeings.Controllers
         //景點留言
         [Authorize]
         [HttpPost]
-        public IActionResult PostMessage([FromBody]SightPostMsgViewModel request)
+        public IActionResult PostMessage([FromBody]SightPostMsgDto request)
         {
             if (!ModelState.IsValid)
             {
@@ -103,10 +103,10 @@ namespace _3TeamProject.Areas.Sightseeings.Controllers
             _context.SaveChanges();
             var response = _context.Sightseeings.Include(p => p.SightseeingPictureInfos)
                 .Include(m => m.SightseeingMessageBoards).Include(c => c.SightseeingCategory)
-                .Where(s => s.SightseeingId == request.SightseeingId).Select(s => new SightGetDetailViewModel
+                .Where(s => s.SightseeingId == request.SightseeingId).Select(s => new SightGetDetailDto
                 {
                     SightseeingId = s.SightseeingId,
-                    SightseeingMessageBoards = s.SightseeingMessageBoards.Select(m => new SightMessageViewModel
+                    SightseeingMessageBoards = s.SightseeingMessageBoards.Select(m => new SightMessageDto
                     {
                         MessageBoardId = m.MessageBoardId,
                         Account = m.User.Account,

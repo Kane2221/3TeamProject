@@ -2,7 +2,7 @@
 
 namespace _3TeamProject.Areas.Suppliers.Data
 {
-    public class SupplierGetViewModel
+    public class GetSupplierDto
     {
         public string Account { get; set; } = string.Empty;
 

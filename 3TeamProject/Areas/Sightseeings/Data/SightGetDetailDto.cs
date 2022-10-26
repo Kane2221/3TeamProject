@@ -1,7 +1,6 @@
-﻿
-namespace _3TeamProject.Areas.Sightseeings.Data
+﻿namespace _3TeamProject.Areas.Sightseeings.Data
 {
-    public class SightGetViewModel
+    public class SightGetDetailDto
     {
         public int SightseeingId { get; set; }
         public string SightseeingName { get; set; } = null!;
@@ -10,8 +9,9 @@ namespace _3TeamProject.Areas.Sightseeings.Data
         public string? SightseeingAddress { get; set; }
         public double? SightseeingScore { get; set; }
         public string? CategoryName { get; set; }
-        public int? SightseeingHomePage { get; set; }
-        public virtual IEnumerable<SightPicInfoViewModel> SightseeingPictureInfos { get; set; }
-        
+        public virtual IEnumerable<SightMessageDto> SightseeingMessageBoards { get; set; }
+        public virtual IEnumerable<SightPicInfoDto> SightseeingPictureInfos { get; set; }
+
+
     }
 }

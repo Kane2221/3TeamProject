@@ -2,7 +2,7 @@
 
 namespace _3TeamProject.Areas.Sightseeings.Data
 {
-	public class SightPostMsgViewModel
+	public class SightPostMsgDto
 	{
         [Required]
         public int SightseeingId { get; set; }
