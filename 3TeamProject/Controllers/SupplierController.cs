@@ -1,9 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using _3TeamProject.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace _3TeamProject.Controllers
 {
+    [Route("/Supplier/[Action]")]
     public class SupplierController : Controller
     {
+        private _3TeamProjectContext _context;
+        public SupplierController(_3TeamProjectContext context)
+        {
+            this._context = context;
+        }
+
         public IActionResult Login()
         {
             return View();
@@ -24,9 +33,18 @@ namespace _3TeamProject.Controllers
         {
             return View();
         }
+        [HttpGet("/Supplier/AddOrder")]
         public IActionResult AddOrder()
         {
             return View();
+        }
+
+        [HttpPost("/Supplier/AddOrder")]
+        public async Task<JsonResult> AddOrder([FromBody] Product product)
+        {
+            _context.Add(product);
+            await _context.SaveChangesAsync();
+            return Json("新增成功!");
         }
     }
 }

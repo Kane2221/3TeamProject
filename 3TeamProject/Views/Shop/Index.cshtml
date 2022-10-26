@@ -1,18 +1,17 @@
-﻿
-<!DOCTYPE html>
+﻿<style>
+    .imgsrc{
+        width: 100%;
+        height: 300px;
+    }
 
-<html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <title>ShopIndex</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="Free HTML Templates" name="keywords">
-    <meta content="Free HTML Templates" name="description">
-
-</head>
-
-<body>
+   /* .card {
+        background-color: wheat
+    }
+*/
+    .none {
+        display: none;
+    }
+</style>
     <!-- Topbar Start -->
     <div class="container-fluid" style="background-color:#2f4f4f;">
         <div class="row align-items-center justify-content-md-end py-3 px-xl-5">
@@ -82,100 +81,41 @@
     </div>
     <!-- Categories End -->
 
-	<!-- Featured Start -->
-	<div class="container-fluid py-5">
-		<div class="row px-xl-5 pb-3">
-			<div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-				<div class="d-flex align-items-center border mb-4" style="padding: 30px;">
-					<h1 class="fa fa-check text-primary m-0 mr-3"></h1>
-					<h5 class="font-weight-semi-bold m-0">品質保證</h5>
-				</div>
-			</div>
-			<div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-				<div class="d-flex align-items-center border mb-4" style="padding: 30px;">
-					<h1 class="fa fa-shipping-fast text-primary m-0 mr-2"></h1>
-					<h5 class="font-weight-semi-bold m-0">全站免運</h5>
-				</div>
-			</div>
-			<div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-				<div class="d-flex align-items-center border mb-4" style="padding: 30px;">
-					<h1 class="fas fa-exchange-alt text-primary m-0 mr-3"></h1>
-					<h5 class="font-weight-semi-bold m-0">14天鑑賞期</h5>
-				</div>
-			</div>
-			<div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-				<div class="d-flex align-items-center border mb-4" style="padding: 30px;">
-					<h1 class="fa fa-phone-volume text-primary m-0 mr-3"></h1>
-					<h5 class="font-weight-semi-bold m-0">24小時客服</h5>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- Featured End -->
+	
 
 	<!-- Products Start -->
     <div class="container-fluid pt-6">
         <div class="text-center mb-4">
             <h2 class="section-title px-5"><span class="px-2">網站精選商品</span></h2>
         </div>
-        <div class="row px-xl-5 pb-3">
-            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+    <div class="row px-xl-5 pb-3" id="productIndex">
+        <div class="col-lg-3 col-md-6 col-sm-12 pb-1" v-for="(item,index) in products ">
                 <div class="card team-item border-0 mb-4">
-                    <a href="/Shop/ProductDetail" class="card-header team-img position-relative overflow-hidden bg-transparent border p-0">
-                        <img class="img-fluid w-100 " src="~/img/01.jpg" alt="">
-
+                <a class="ProductDetail" @@click.preventDefault="submit(index)">
+                    <form class="none" action="/Shop/ProductDetail">
+                        <input :value="item.productId" type="number" name="id" /><button type="submit" ref="form"></button>
+                    </form>
+                    <img class="imgsrc" :src="item.productPicturePath" alt="">
                     </a>
-                    <a href="/Shop/ProductDetail" class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-                        <h5 class="text-truncate mb-3">淺水錶</h5>
+                    @*<a href="/Shop/ProductDetail" class="card-body border-left border-right text-center p-0 pt-4 pb-3">*@
+                        <h5 class="text-truncate mb-3">{{item.productName}}</h5>
                         <div class="d-flex justify-content-center">
-                            <h6>$123.00</h6>
+                            <h6>{{item.productUnitPrice}}</h6>
                         </div>
-                    </a>
+                    @*</a>*@
                     <div class="card-footer d-flex justify-content-between bg-light border">
                         <a href="/Shop/ProductDetail" class="btn btn-sm text-dark p-0">
                             <i class="fas fa-eye text-primary mr-1"></i>商品詳情</a>
-                            <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>加入購物車</a>
+                    <a onclick="ShowMessage()" class="btn btn-sm text-dark p-0">
+                        <i class="fas fa-shopping-cart text-primary mr-1"></i>加入購物車
+                        <form class="none" action="/Shop/AddtoCart">
+                            <input :value="item.productId" type="number" name="id" /><button type="submit" ref="form"></button>
+                        </form>
+                    </a>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-                <div class="card team-item border-0 mb-4">
-                    <a href="" class="card-header team-img position-relative overflow-hidden bg-transparent border p-0">
-                        <img class="img-fluid w-100 " src="~/img/02.jpg" alt="">
-
-                    </a>
-                    <a href="" class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-                        <h5 class="text-truncate mb-3">淺水錶</h5>
-                        <div class="d-flex justify-content-center">
-                            <h6>$123.00</h6>
-                        </div>
-                    </a>
-                    <div class="card-footer d-flex justify-content-between bg-light border">
-                        <a href="" class="btn btn-sm text-dark p-0">
-                            <i class="fas fa-eye text-primary mr-1"></i>商品詳情</>
-                            <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>加入購物車</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-                <div class="card team-item border-0 mb-4">
-                    <a href="" class="card-header team-img position-relative overflow-hidden bg-transparent border p-0">
-                        <img class="img-fluid w-100 " src="~/img/04.jpg" alt="">
-
-                    </a>
-                    <a href="" class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-                        <h5 class="text-truncate mb-3">淺水錶</h5>
-                        <div class="d-flex justify-content-center">
-                            <h6>$123.00</h6>
-                        </div>
-                    </a>
-                    <div class="card-footer d-flex justify-content-between bg-light border">
-                        <a href="" class="btn btn-sm text-dark p-0">
-                            <i class="fas fa-eye text-primary mr-1"></i>商品詳情</>
-                            <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>加入購物車</a>
-                    </div>
-                </div>
-            </div>
+            @*
             <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
                 <div class="card team-item border-0 mb-4">
                     <a href="" class="card-header team-img position-relative overflow-hidden bg-transparent border p-0">
@@ -194,88 +134,41 @@
                             <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>加入購物車</a>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-                <div class="card team-item border-0 mb-4">
-                    <a href="" class="card-header team-img position-relative overflow-hidden bg-transparent border p-0">
-                        <img class="img-fluid w-100 " src="~/img/03.jpg" alt="">
-
-                    </a>
-                    <a href="" class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-                        <h5 class="text-truncate mb-3">淺水錶</h5>
-                        <div class="d-flex justify-content-center">
-                            <h6>$123.00</h6>
-                        </div>
-                    </a>
-                    <div class="card-footer d-flex justify-content-between bg-light border">
-                        <a href="" class="btn btn-sm text-dark p-0">
-                            <i class="fas fa-eye text-primary mr-1"></i>商品詳情</>
-                            <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>加入購物車</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-                <div class="card team-item border-0 mb-4">
-                    <a href="" class="card-header team-img position-relative overflow-hidden bg-transparent border p-0">
-                        <img class="img-fluid w-100 " src="~/img/03.jpg" alt="">
-
-                    </a>
-                    <a href="" class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-                        <h5 class="text-truncate mb-3">淺水錶</h5>
-                        <div class="d-flex justify-content-center">
-                            <h6>$123.00</h6>
-                        </div>
-                    </a>
-                    <div class="card-footer d-flex justify-content-between bg-light border">
-                        <a href="" class="btn btn-sm text-dark p-0">
-                            <i class="fas fa-eye text-primary mr-1"></i>商品詳情</>
-                            <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>加入購物車</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-                <div class="card team-item border-0 mb-4">
-                    <a href="" class="card-header team-img position-relative overflow-hidden bg-transparent border p-0">
-                        <img class="img-fluid w-100 " src="~/img/03.jpg" alt="">
-
-                    </a>
-                    <a href="" class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-                        <h5 class="text-truncate mb-3">淺水錶</h5>
-                        <div class="d-flex justify-content-center">
-                            <h6>$123.00</h6>
-                        </div>
-                    </a>
-                    <div class="card-footer d-flex justify-content-between bg-light border">
-                        <a href="" class="btn btn-sm text-dark p-0">
-                            <i class="fas fa-eye text-primary mr-1"></i>商品詳情</>
-                            <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>加入購物車</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-                <div class="card team-item border-0 mb-4">
-                    <a href="" class="card-header team-img position-relative overflow-hidden bg-transparent border p-0">
-                        <img class="img-fluid w-100 " src="~/img/03.jpg" alt="">
-
-                    </a>
-                    <a href="" class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-                        <h5 class="text-truncate mb-3">淺水錶</h5>
-                        <div class="d-flex justify-content-center">
-                            <h6>$123.00</h6>
-                        </div>
-                    </a>
-                    <div class="card-footer d-flex justify-content-between bg-light border">
-                        <a href="" class="btn btn-sm text-dark p-0">
-                            <i class="fas fa-eye text-primary mr-1"></i>商品詳情</>
-                            <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>加入購物車</a>
-                    </div>
-                </div>
-            </div>
+            </div>*@
 
         </div>
     </div>
     <!-- Products End -->
-
+<!-- Featured Start -->
+<div class="container-fluid py-5">
+    <div class="row px-xl-5 pb-3">
+        <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+            <div class="d-flex align-items-center border mb-4" style="padding: 30px;">
+                <h1 class="fa fa-check text-primary m-0 mr-3"></h1>
+                <h5 class="font-weight-semi-bold m-0">品質保證</h5>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+            <div class="d-flex align-items-center border mb-4" style="padding: 30px;">
+                <h1 class="fa fa-shipping-fast text-primary m-0 mr-2"></h1>
+                <h5 class="font-weight-semi-bold m-0">全站免運</h5>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+            <div class="d-flex align-items-center border mb-4" style="padding: 30px;">
+                <h1 class="fas fa-exchange-alt text-primary m-0 mr-3"></h1>
+                <h5 class="font-weight-semi-bold m-0">14天鑑賞期</h5>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+            <div class="d-flex align-items-center border mb-4" style="padding: 30px;">
+                <h1 class="fa fa-phone-volume text-primary m-0 mr-3"></h1>
+                <h5 class="font-weight-semi-bold m-0">24小時客服</h5>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Featured End -->
 
 @*    <!-- Subscribe Start -->
     <div class="container-fluid bg-secondary my-5">
@@ -357,14 +250,14 @@
 
     <!-- Template Javascript -->
     <script src="~/js/mainshop.js"></script>
-
-</body>
-</html>
+<script src="~/js/vue-number-input.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.7.10/dist/vue.js"></script>
 <script>
     //Vue.use(VueNumberInput);
     //Vue.component('vue-number-input', VueNumberInput);
     let app = new Vue({
-        el: "#productPanel",
+        el: "#productIndex",
         data: {
             products: [],
             productpic: []
@@ -401,6 +294,11 @@
                         }
 
                     })
+            },
+            submit: function (index) {
+                console.log(this.$refs.form[index]);
+                this.$refs.form[index].click();
+
             }
         },
         mounted: function () {
@@ -413,16 +311,13 @@
 
                         return x
                     })
-                }),
-                fetch("/api/ProductsPictureInfos")
-                    .then(function (response) { return response.json() })
-                    .then(function (result) {
-                        self.productpic = result.map(function (x) {
-                            //x.qty = 0;
-
-                            return x
-                        })
-                    })
+                })
         }
     })
+</script>
+<script>
+    function ShowMessage() {
+        //toastr["success"]("商品已加入購物車！");
+        alert("商品已加入購物車！");
+    }
 </script>

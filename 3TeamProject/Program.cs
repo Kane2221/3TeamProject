@@ -30,6 +30,11 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
             return Task.CompletedTask;
         };
     });
+builder.Services.AddSession(
+    (opt) =>
+    {
+        opt.IdleTimeout = TimeSpan.FromMinutes(10);
+    });
 
 //新增的服務，為了在串接兩張以上的表，不重覆讀取
 builder.Services.AddMvc()
@@ -49,6 +54,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseSession();
 
 app.UseRouting();
 

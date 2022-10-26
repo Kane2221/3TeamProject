@@ -1,34 +1,17 @@
-﻿<!DOCTYPE html>
+﻿<style>
+    .imgsrc {
+        width: 100%;
+        height: 300px;
+    }
 
-<html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <title>ShopIndex</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="Free HTML Templates" name="keywords">
-    <meta content="Free HTML Templates" name="description">
-
-    <!-- Favicon -->
-    <link href="~/img/favicon.ico" rel="icon">
-
-    <!-- Google Web Fonts -->
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
-
-    <!-- Libraries Stylesheet -->
-    <link href="~/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-    <link href="~/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
-
-    <!-- Customized Bootstrap Stylesheet -->
-    <link href="~/css/style.css" rel="stylesheet">
-
-</head>
-
-<body>
+    /* .card {
+            background-color: wheat
+        }
+    */
+    .none {
+        display: none;
+    }
+</style>
     <!-- Topbar Start -->
     <div class="container-fluid" style="background-color:#2f4f4f;">
         <div class="row align-items-center justify-content-md-end py-3 px-xl-5">
@@ -59,16 +42,17 @@
     <!-- Topbar End -->
 
     <!-- Shop Detail Start -->
-    <div class="container-fluid py-5">
+<div class="container-fluid py-5" id="productDetail">
+    <div v-for="item in products">
         <div class="row px-xl-5">
             <div class="col-lg-5 pb-5">
-                <div class="position-relative h-100">
-                    <img class="position-absolute w-100 h-100" src="~/img/01.jpg" style="object-fit: cover;">
+                <div class="position-relative">
+                    <img class="imgsrc" :src="item.productPicturePath" style="object-fit: cover;">
                 </div>
             </div>
 
             <div class="col-lg-7 pb-5">
-                <h3 class="font-weight-semi-bold">淺水錶</h3>
+                <h3 class="font-weight-semi-bold">{{item.productName}}</h3>
                 <div class="d-flex mb-3">
                     <div class="text-primary mr-2">
                         <small class="fas fa-star"></small>
@@ -79,61 +63,10 @@
                     </div>
                     <small class="pt-1">(50 Reviews)</small>
                 </div>
-                <h3 class="font-weight-semi-bold mb-4">$123</h3>
+                <h3 class="font-weight-semi-bold mb-4">${{item.productUnitPrice}}</h3>
                 <h6 class="font-weight-semi mb-4">商品單位：</h6>
-                <h6 class="font-weight-semi mb-4">庫存數量：</h6>
-
-@*                <div class="d-flex mb-3">
-                    <p class="text-dark font-weight-medium mb-0 mr-3">Sizes:</p>
-                    <form>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="size-1" name="size">
-                            <label class="custom-control-label" for="size-1">XS</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="size-2" name="size">
-                            <label class="custom-control-label" for="size-2">S</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="size-3" name="size">
-                            <label class="custom-control-label" for="size-3">M</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="size-4" name="size">
-                            <label class="custom-control-label" for="size-4">L</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="size-5" name="size">
-                            <label class="custom-control-label" for="size-5">XL</label>
-                        </div>
-                    </form>
-                </div>
-                <div class="d-flex mb-4">
-                    <p class="text-dark font-weight-medium mb-0 mr-3">Colors:</p>
-                    <form>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="color-1" name="color">
-                            <label class="custom-control-label" for="color-1">Black</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="color-2" name="color">
-                            <label class="custom-control-label" for="color-2">White</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="color-3" name="color">
-                            <label class="custom-control-label" for="color-3">Red</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="color-4" name="color">
-                            <label class="custom-control-label" for="color-4">Blue</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="color-5" name="color">
-                            <label class="custom-control-label" for="color-5">Green</label>
-                        </div>
-                    </form>
-                </div>
-*@                <div class="d-flex align-items-center mb-4 pt-2">
+                <h6 class="font-weight-semi mb-4">庫存數量：{{item.unitStock}}</h6>
+              <div class="d-flex align-items-center mb-4 pt-2">
                     <div class="input-group quantity mr-3" style="width: 130px;">
                         <div class="input-group-btn">
                             <button class="btn btn-primary btn-minus">
@@ -162,7 +95,8 @@
                     <div class="tab-pane fade show active" id="tab-pane-1">
                         <h4 class="mb-3">商品介紹</h4>
                             <p>
-                                超猛商品介紹 以下省略1萬字
+                                @*超猛商品介紹 以下省略1萬字*@
+                            {{item.productIntroduce}}
                             </p>                    
                 </div>
                     <div class="tab-pane fade" id="tab-pane-2">
@@ -180,7 +114,8 @@
                                             <i class="fas fa-star-half-alt"></i>
                                             <i class="far fa-star"></i>
                                         </div>
-                                        <p>Diam amet duo labore stet elitr ea clita ipsum, tempor labore accusam ipsum et no at. Kasd diam tempor rebum magna dolores sed sed eirmod ipsum.</p>
+                                        @*<p>Diam amet duo labore stet elitr ea clita ipsum, tempor labore accusam ipsum et no at. Kasd diam tempor rebum magna dolores sed sed eirmod ipsum.</p>*@
+                                        <p>{{item.productMessageContent}}</p>
                                     </div>
                                 </div>
                             </div>
@@ -236,6 +171,30 @@
 
     <!-- Template Javascript -->
     <script src="~/js/mainshop.js"></script>
-</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.7.10/dist/vue.js"></script>
+<script>
 
-</html>
+    //Vue.use(VueNumberInput);
+    //Vue.component('vue-number-input', VueNumberInput);
+    let app = new Vue({
+        el: "#productDetail",
+        data: {
+            products: []
+        },
+        mounted: function () {
+            let self = this;
+            fetch("/api/Product/@ViewBag.ProductId")
+                //fetch("/api/Product/")
+                .then(res => res.json())
+                .then(data => (this.products = data))
+        }
+    })
+
+</script>
+<script>
+    function ShowMessage() {
+        //toastr["success"]("商品已加入購物車！");
+        alert("商品已加入購物車！");
+    }
+</script>

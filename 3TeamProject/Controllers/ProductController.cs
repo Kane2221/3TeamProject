@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace _3TeamProject.Controllers
 {
-    //[Route("/Product")]
+    [Route("/Product/[Action]")]
     public class ProductController : Controller
     {
         private readonly IHostEnvironment environment;
@@ -66,22 +66,24 @@ namespace _3TeamProject.Controllers
             //                       //p.ProductName,
             //                       //p.ProductCategoryId
             //                   }).SingleOrDefault();
+            
+            //session.SetString();
             ViewBag.ProductId = pid;
             return View();
         }
-        [HttpGet("Create")]
+        [HttpGet("/Product/Create")]
         public IActionResult Create()
         {
             return View();
         }
-        [HttpPost("Create")]
+        [HttpPost("/Product/Create")]
         public async Task<JsonResult> Create([FromBody] Product product)
         {
             _context.Add(product);
             await _context.SaveChangesAsync();
             return Json("新增成功!");
         }
-        [HttpGet("Rating")]
+        [HttpGet("/Product/Rating")]
         public IActionResult Rating()
         {
             return View();

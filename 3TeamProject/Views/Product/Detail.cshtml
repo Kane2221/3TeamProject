@@ -146,8 +146,8 @@
                     <div>
                         <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
                         @*<a href="./product_main.html" class="btn btn-primary" a href="./shop_main.html">加入購物車</a>*@
-                        <vue-number-input v-model="item.qty" :min="1" :max="10" inline controls></vue-number-input>
-                            <a class="" asp-controller="Shop" asp-action="Cart">
+                        @*<vue-number-input v-model="item.qty" :min="1" :max="10" inline controls></vue-number-input>*@
+                            <a class="" onclick="ShowMessage()" asp-controller="Shop" asp-action="Cart">
                         <button @@click="addToCart(item)" class="btn btn-primary" >加入Go物車</button>
                         </a>
                     </div>
@@ -172,8 +172,10 @@
     </div>
     </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.7.10/dist/vue.js"></script>
 <script>
+
     //Vue.use(VueNumberInput);
     //Vue.component('vue-number-input', VueNumberInput);
     let app = new Vue({
@@ -190,4 +192,10 @@
         }
     })
 
+</script>
+<script>
+    function ShowMessage() {
+        //toastr["success"]("商品已加入購物車！");
+        alert("商品已加入購物車！");
+    }
 </script>
