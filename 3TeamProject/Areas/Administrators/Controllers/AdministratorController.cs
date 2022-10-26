@@ -79,7 +79,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
         }
         //新增管理員, 最高權限才能新增。
         [AllowAnonymous]
-        [HttpPost]
+        [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] AddNewAdminViewModel request)
         {
             if (!ModelState.IsValid)
@@ -118,8 +118,8 @@ namespace _3TeamProject.Areas.Administrators.Controllers
         }
         //TODO 新增審核管理員註冊
         //修改管理員資料
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int? id, [FromBody] UpdateAdminViewModel request)
+        [HttpPut("UpdateAdmin/{id}")]
+        public async Task<IActionResult> UpdateAdmin(int? id, [FromBody] UpdateAdminViewModel request)
         {
             var UserRole = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role).Value;
             var UserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);

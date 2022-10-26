@@ -13,7 +13,7 @@ using System.Security.Cryptography;
 
 namespace _3TeamProject.Areas.Sppliers.Controllers
 {
-
+    [Authorize(Roles ="Suppliers")]
     [Route("Suppliers/[controller]")]
     [ApiController]
     public class SupplierController : Controller
@@ -28,22 +28,18 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
             _config = config;
             _env=env;
         }
-        [Authorize("Suppliers")]
-        [HttpGet("GetSupplier/{id}")]
-        public IActionResult GetSupplier(int id)
+        //取得廠商資料by登入帳號
+        [HttpGet("GetSupplier")]
+        public IActionResult GetSupplier()
         {
             var UserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
-            if (id != UserId)
-            {
-                return BadRequest("與登入帳號不符");
-            }
             var user = _context.Users.Include(u => u.Suppliers).FirstOrDefault(x => x.UserId == UserId);
             if (user == null)
             {
                 return BadRequest("沒有此帳號");
             }
             var supplier = (from u in _context.Users
-                            where u.UserId == user.UserId
+                            where u.UserId == UserId
                             join s in _context.Suppliers
                             on u.UserId equals s.UserId
                             select new SupplierGetViewModel
@@ -99,7 +95,7 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
 
                 #region Send Email with verify code (正式再解開註解)
                 //TODO 修改寄信的超連結
-                //var root = $@"{Request.}User\Verify";
+                var root = $@"{HttpContext.Request.Path}User\Verify";
                 //using (MailMessage mail = new MailMessage())
                 //{
                 //    mail.From = new MailAddress("dotnettgm102@gmail.com", "帳號驗證碼");
@@ -123,9 +119,9 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
                 return Ok("註冊成功，請等待驗證信件");
             }
         }
-        [Authorize("Suppliers")]
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] SupplierUpdateViewModel request)
+        //廠商修改資料by登入帳號
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] SupplierUpdateViewModel request)
         {
             if (!ModelState.IsValid)
             {
@@ -133,11 +129,7 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
                 return BadRequest(errors);
             }
             var UserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
-            if (id != UserId)
-            {
-                return BadRequest("與登入帳號不符");
-            }
-            var supplier = _context.Suppliers.Include(s => s.User).Where(s => s.UserId == id)
+            var supplier = _context.Suppliers.Include(s => s.User).Where(s => s.UserId == UserId)
                 .Select(s => s).SingleOrDefault();
 
             using (var hmac = new HMACSHA512())
@@ -162,29 +154,25 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
             }
             return Ok("修改成功!");
         }
-        //廠商刪除自己帳號
-        [Authorize("Suppliers")]
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        //廠商刪除自己帳號by登入帳號
+        [HttpDelete]
+        public IActionResult Delete()
         {
             var UserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
-            if (id != UserId)
-            {
-                return BadRequest("與登入帳號不符");
-            }
-            var user = _context.Users.Include(u => u.Suppliers).FirstOrDefault(x => x.UserId == id);
+            var user = _context.Users.Include(u => u.Suppliers).FirstOrDefault(x => x.UserId == UserId);
             _context.Users.Remove(user);
             _context.SaveChanges();
             return Ok("此帳號已刪除");
         }
-        //廠商管理商品
-        [Authorize("Suppliers")]
-        [HttpGet("GetProduct/{id}")]
-        public IActionResult GetProduct(int id) //TODO 待測_廠商管理商品
+        //廠商管理的所有商品資料by登入帳號
+        [HttpGet("GetProduct")]
+        public IActionResult GetProduct() //TODO 待測_廠商管理商品
         {
             var UserID = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
-            var products = _context.Products.Include(p => p.ProductStatus).Include(p => p.ProductCategory).Include(p => p.ProductsPictureInfos)
-                .Where(p=>p.Supplier.UserId == UserID).Select(p => new GetProductViewModel
+            var products = _context.Products.Include(p => p.ProductStatus).Include(p => p.ProductCategory)
+                .Include(p => p.ProductsPictureInfos)
+                .Where(p=>p.Supplier.UserId == UserID)
+                .Select(p => new GetProductViewModel
                 {
                     ProductId = p.ProductId,
                     CategoryName = p.ProductCategory.CategoryName,
