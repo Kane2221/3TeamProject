@@ -64,7 +64,7 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
                             }).SingleOrDefault();
             return Ok(supplier);
         }
-
+        //廠商註冊
         [AllowAnonymous]
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] SupplierRegisterViewModel request)
@@ -123,7 +123,6 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
                 return Ok("註冊成功，請等待驗證信件");
             }
         }
-
         [Authorize("Suppliers")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] SupplierUpdateViewModel request)
@@ -163,6 +162,7 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
             }
             return Ok("修改成功!");
         }
+        //廠商刪除自己帳號
         [Authorize("Suppliers")]
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
@@ -177,6 +177,7 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
             _context.SaveChanges();
             return Ok("此帳號已刪除");
         }
+        //廠商管理商品
         [Authorize("Suppliers")]
         [HttpGet("GetProduct/{id}")]
         public IActionResult GetProduct(int id) //TODO 待測_廠商管理商品
@@ -197,12 +198,13 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
                 });
             return Ok(products);
         }
-        [Authorize("Suppliers")]
-        [HttpPost("Upload")]
-        public IActionResult UploadProduct() //TODO 商品上架
-        {
-            return Ok();
-        }
+        //商品上架，烜嘉做了
+        //[Authorize("Suppliers")]
+        //[HttpPost("Upload")]
+        //public IActionResult UploadProduct() 
+        //{
+        //    return Ok();
+        //}
         //TODO 商品修改
         //TODO 商品下架(下架後隱藏)
     }

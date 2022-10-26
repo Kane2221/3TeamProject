@@ -1,6 +1,6 @@
 ﻿namespace _3TeamProject.Areas.Administrators.Data
 {
-    public class SightGetViewModel
+    public class GetSightViewModel
     {
         public int SightseeingId { get; set; }
         public string SightseeingName { get; set; } = null!;

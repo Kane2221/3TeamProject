@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace _3TeamProject.Areas.Administrators.Data
 {
-    public class AdminUpdateViewModel
+    public class UpdateAdminViewModel
     {
         [Required, EmailAddress]
         public string Email { get; set; } = string.Empty;

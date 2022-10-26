@@ -4,14 +4,17 @@ using _3TeamProject.Areas.Suppliers.Data;
 using _3TeamProject.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
+using System;
 using System.Data;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using SightGetViewModel = _3TeamProject.Areas.Administrators.Data.SightGetViewModel;
+using SightGetViewModel = _3TeamProject.Areas.Administrators.Data.GetSightViewModel;
 
 namespace _3TeamProject.Areas.Administrators.Controllers
 {
@@ -25,11 +28,13 @@ namespace _3TeamProject.Areas.Administrators.Controllers
 
         private readonly IConfiguration _config;
 
-        public AdministratorController(_3TeamProjectContext Context, IConfiguration config)
+        public IHostEnvironment _env { get; }
+
+        public AdministratorController(_3TeamProjectContext Context, IConfiguration config, IHostEnvironment env)
         {
             _context = Context;
             _config = config;
-
+            _env=env;
         }
         [HttpGet("GetAllAdmins")]//權限Administrator只能看見同權限以下的清單，更高權限可以看見所有人清單
         public IActionResult GetAllAdmins()
@@ -38,7 +43,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
             if (UserRole == "Administrator")
             {
                 var admin = _context.Administrators.Include(u => u.User)
-                        .Where(u => u.User.Roles == 5).Select(u => new AdminGetViewModel
+                        .Where(u => u.User.Roles == 5).Select(u => new GetAdminViewModel
                         {
                             Account = u.User.Account,
                             Email = u.User.Email,
@@ -51,7 +56,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
             else if (UserRole == "ChiefAdministrator")
             {
                 var admin = _context.Administrators.Include(u => u.User)
-                    .Where(u => u.User.Roles != 3).Select(u => new AdminGetViewModel
+                    .Where(u => u.User.Roles != 3).Select(u => new GetAdminViewModel
                     {
                         Account = u.User.Account,
                         Email = u.User.Email,
@@ -62,7 +67,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
                 return Ok(admin);
             }
             var adminSuper = _context.Administrators.Include(u => u.User)
-                    .Select(u => new AdminGetViewModel
+                    .Select(u => new GetAdminViewModel
                     {
                         Account = u.User.Account,
                         Email = u.User.Email,
@@ -114,7 +119,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
         //TODO 新增審核管理員註冊
         //修改管理員資料
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int? id, [FromBody] AdminUpdateViewModel request)
+        public async Task<IActionResult> Update(int? id, [FromBody] UpdateAdminViewModel request)
         {
             var UserRole = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role).Value;
             var UserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
@@ -263,13 +268,67 @@ namespace _3TeamProject.Areas.Administrators.Controllers
         //TODO 商品上下架
         //TODO 審核商品
         //TODO 審核訂單退訂
-        //TODO 景點新增及上傳圖片
+        //景點新增及上傳圖片
         [HttpPost("AddSight")]
-        public IActionResult AddSight()
+        public async Task<IActionResult> AddSight([FromForm]AddSightViewModel request)
         {
-            return Ok("1123");
+            var UserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
+            var admin = _context.Sightseeings.FirstOrDefault(x => x.Administrator.UserId == UserId);
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Select(x => x.Value.Errors).Where(y => y.Count > 0).ToList();
+                return BadRequest(errors);
+            }
+            if (await _context.Sightseeings.AnyAsync(s => s.SightseeingName == request.SightseeingName))
+            {
+                return BadRequest("景點已經存在");
+            }
+            var sight = new Sightseeing
+            {
+                SightseeingName = request.SightseeingName,
+                SightseeingCountry = request.SightseeingCountry,
+                SightseeingCity = request.SightseeingCity,
+                SightseeingAddress = request.SightseeingAddress,
+                SightseeingScore = request.SightseeingScore,
+                AdministratorId = admin.AdministratorId,
+                SightseeingIntroduce = request.SightseeingIntroduce,
+                SightseeingCategoryId = request.SightseeingCategoryId,
+            };
+            //為每一張上傳圖片給值及上傳位置
+            if (request.Files != null)
+            {
+                foreach (var file in request.Files)
+                {
+                    var root = $@"{_env.ContentRootPath}\wwwroot\";
+                    var tempRoot = "";
+                    if (file.FileName.Contains(".jpg"))
+                    {
+                        tempRoot = root +"img"+"\\"+"Sight"+"\\" +"picture"+ "\\" + request.SightseeingName;
+                    }
+                    else
+                    {
+                        tempRoot = root +"img"+"\\"+"Sight"+"\\"+"other"+ "\\" +request.SightseeingName;
+                    }
+                    if (!Directory.Exists(tempRoot)) 
+                    {
+                        Directory.CreateDirectory(tempRoot);
+                    }
+                    var path = tempRoot +"\\" + file.FileName;
+
+                    file.CopyTo(System.IO.File.Create(path));
+                    var pic = new SightseeingPictureInfo
+                    {
+                        SightseeingPicturePath = "\\" + path.Replace(root, ""),
+                        SightseeingPictureName = request.SightseeingName
+                    };
+                    sight.SightseeingPictureInfos.Add(pic);
+                }
+            }
+            _context.Sightseeings.Add(sight);
+            _context.SaveChanges();
+            return Ok("已新增景點");
         }
-        //修改景點訊息
+        //TODO 修改景點訊息OK, 缺圖片置換或新增功能
         [HttpPut("UpdateSight/{id}")]
         public IActionResult UpdateSight(int id, UpdateSightViewModel request)
         {
@@ -315,3 +374,4 @@ namespace _3TeamProject.Areas.Administrators.Controllers
         //TODO 後台首頁功能
     }
 }
+    

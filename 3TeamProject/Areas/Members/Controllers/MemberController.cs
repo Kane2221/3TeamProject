@@ -13,7 +13,7 @@ using System.Security.Cryptography;
 
 namespace _3TeamProject.Areas.Members.Controllers
 {
-    [Authorize(Roles ="Members")]
+    [Authorize(Roles = "Members")]
     [Route("Members/[controller]")]
     [ApiController]
     public class MemberController : Controller
@@ -180,36 +180,38 @@ namespace _3TeamProject.Areas.Members.Controllers
         }
         //會員我的訂單
         [HttpGet("GetOrder")]
-        public IActionResult GetOrder() //TODO 待測_我的訂單，需加時間篩選條件
+        public IActionResult GetOrder() //TODO 待測_我的訂單
         {
             var UserID = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
-            var myOrder = _context.Orders.Include(o => o.Member).Include(o => o.OrderDetails).Include(o => o.OrderStatusNavigation)
-                                .Include(o => o.PaymentStatusNavigation).Include(o => o.ShipStatusNavigation).Where(o => o.Member.UserId == UserID)
-                                .Select(o => new GetAllOrdersViewModel
-                                {
-                                    OrderId = o.OrderId,
-                                    OrderDate = o.OrderDate,
-                                    ShipDate = o.ShipDate,
-                                    OrderCategoryName = o.OrderStatusNavigation.OrderCategoryName,
-                                    PaymentCategoryName = o.PaymentStatusNavigation.PaymentCategoryName,
-                                    ShipCategoryName = o.ShipStatusNavigation.ShipCategoryName,
-                                    OrderDetails = o.OrderDetails.Select(od => new OrderDetailViewModel
-                                    {
-                                        ProductId = od.ProductId,
-                                        UnitPrice = od.UnitPrice,
-                                        Discount = od.Discount,
-                                        Quantity = od.Quantity,
-                                    })
-                                });
+            var myOrder = _context.Orders.Include(o => o.Member).Include(o => o.OrderDetails)
+                .Include(o => o.OrderStatusNavigation).Include(o => o.PaymentStatusNavigation)
+                .Include(o => o.ShipStatusNavigation).Where(o => o.Member.UserId == UserID && o.ShipStatus != 2)
+                .Select(o => new GetAllOrdersViewModel
+                {
+                    OrderId = o.OrderId,
+                    OrderDate = o.OrderDate,
+                    ShipDate = o.ShipDate,
+                    OrderCategoryName = o.OrderStatusNavigation.OrderCategoryName,
+                    PaymentCategoryName = o.PaymentStatusNavigation.PaymentCategoryName,
+                    ShipCategoryName = o.ShipStatusNavigation.ShipCategoryName,
+                    OrderDetails = o.OrderDetails.Select(od => new OrderDetailViewModel
+                    {
+                        ProductId = od.ProductId,
+                        UnitPrice = od.UnitPrice,
+                        Discount = od.Discount,
+                        Quantity = od.Quantity,
+                    })
+                });
             return Ok(myOrder);
         }
         //會員訂購記錄
         [HttpGet("GetOrderRecord")]
-        public IActionResult GetOrderRecord()//TODO 待測_訂購記錄，需加時間篩選條件
+        public IActionResult GetOrderRecord()//TODO 待測_訂購記錄
         {
             var UserID = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
-            var OrderRecord = _context.Orders.Include(o => o.Member).Include(o => o.OrderDetails).Include(o => o.OrderStatusNavigation)
-                                .Include(o => o.PaymentStatusNavigation).Include(o => o.ShipStatusNavigation).Where(o => o.Member.UserId == UserID)
+            var OrderRecord = _context.Orders.Include(o => o.Member).Include(o => o.OrderDetails)
+                .Include(o => o.OrderStatusNavigation).Include(o => o.PaymentStatusNavigation)
+                .Include(o => o.ShipStatusNavigation).Where(o => o.Member.UserId == UserID && o.ShipStatus == 2)
                                 .Select(o => new GetAllOrdersViewModel
                                 {
                                     OrderId = o.OrderId,
@@ -228,9 +230,9 @@ namespace _3TeamProject.Areas.Members.Controllers
                                 });
             return Ok(OrderRecord);
         }
-        //會員參與活動記錄
+        //TODO會員參與活動記錄
         [HttpGet("ParticipatedRecord")]
-        public IActionResult ParticipatedRecord()//TODO 活動參與記錄
+        public IActionResult ParticipatedRecord()
         {
             return Ok();
         }
