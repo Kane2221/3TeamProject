@@ -229,7 +229,7 @@ namespace _3TeamProject.Areas.Members.Controllers
             return Ok(OrderRecord);
         }
         //會員參與活動記錄
-        [HttpGet("{id}")]
+        [HttpGet("ParticipatedRecord")]
         public IActionResult ParticipatedRecord()//TODO 活動參與記錄
         {
             return Ok();

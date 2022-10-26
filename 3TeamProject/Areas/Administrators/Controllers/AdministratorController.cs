@@ -153,8 +153,8 @@ namespace _3TeamProject.Areas.Administrators.Controllers
         [Authorize(Roles = "SuperAdministrator")]
         public async Task<IActionResult> Delete(int id)
         {
-            User user = _context.Users.Include(u => u.Administrators).FirstOrDefault(x => x.UserId == id);
-            _context.Users.Remove(user);
+            User admin = _context.Users.Include(u => u.Administrators).FirstOrDefault(x => x.UserId == id);
+            _context.Users.Remove(admin);
             await _context.SaveChangesAsync();
             return Ok("此帳號已刪除");
         }
@@ -263,9 +263,54 @@ namespace _3TeamProject.Areas.Administrators.Controllers
         //TODO 商品上下架
         //TODO 審核商品
         //TODO 審核訂單退訂
-        //TODO 修改景點訊息
-        //TODO 景點上傳
-        //TODO 景點刪除
+        //TODO 景點新增及上傳圖片
+        [HttpPost("AddSight")]
+        public IActionResult AddSight()
+        {
+            return Ok("1123");
+        }
+        //修改景點訊息
+        [HttpPut("UpdateSight/{id}")]
+        public IActionResult UpdateSight(int id, UpdateSightViewModel request)
+        {
+            var sid = _context.Sightseeings.FirstOrDefault(s => s.SightseeingId == id);
+            if (sid == null)
+            {
+                return BadRequest("沒有此景點");
+            }
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Select(x => x.Value.Errors).Where(y => y.Count > 0).ToList();
+                return BadRequest(errors);
+            }
+            var Sight = _context.Sightseeings.Where(s => s.SightseeingId == id).Select(s => s).SingleOrDefault();
+            Sight.SightseeingName = request.SightseeingName;
+            Sight.SightseeingCountry = request.SightseeingCountry;
+            Sight.SightseeingCity = request.SightseeingCity;
+            Sight.SightseeingAddress = request.SightseeingAddress;
+            Sight.SightseeingScore = request.SightseeingScore;
+            Sight.SightseeingIntroduce = request.SightseeingIntroduce;
+            Sight.SightseeingHomePage = request.SightseeingHomePage;
+            Sight.SightseeingCategoryId = request.SightseeingCategoryId;
+            _context.Sightseeings.Update(Sight);
+            _context.SaveChanges();
+            return Ok("已修改");
+        }
+        //景點刪除
+        [HttpDelete("DeleteSight/{id}")]
+        public async Task<IActionResult> DeleteSight(int id)
+        {
+            var sid = _context.Sightseeings.FirstOrDefault(s => s.SightseeingId == id);
+            if (sid == null)
+            {
+                return BadRequest("沒有此景點");
+            }
+            var sightseeings = _context.Sightseeings.Include(s => s.SightseeingMessageBoards).Include(s => s.SightseeingPictureInfos)
+                .Where(x => x.SightseeingId == id).FirstOrDefault();
+            _context.Sightseeings.Remove(sightseeings);
+            await _context.SaveChangesAsync();
+            return Ok("此景點已刪除");
+        }
         //TODO 修改會員資料(最高權限管理員)
         //TODO 後台首頁功能
     }

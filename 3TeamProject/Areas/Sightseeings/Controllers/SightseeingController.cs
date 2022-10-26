@@ -47,7 +47,11 @@ namespace _3TeamProject.Areas.Sightseeings.Controllers
         [HttpGet("{id}")]
         public IActionResult GetSightseeingsDetail(int id)
         {
-            var UserRole = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role).Value;
+            var sid = _context.Sightseeings.FirstOrDefault(s => s.SightseeingId == id);
+            if (sid == null)
+            {
+                return BadRequest("沒有此景點");
+            }
             var Sight = _context.Sightseeings.Include(p => p.SightseeingPictureInfos)
                 .Include(m => m.SightseeingMessageBoards).Include(c => c.SightseeingCategory)
                 .Where(s => s.SightseeingId == id).Select(s => new SightGetDetailViewModel
@@ -79,7 +83,7 @@ namespace _3TeamProject.Areas.Sightseeings.Controllers
         //景點留言
         [Authorize]
         [HttpPost]
-        public IActionResult PostMessage(SightPostMsgViewModel request)
+        public IActionResult PostMessage([FromBody]SightPostMsgViewModel request)
         {
             if (!ModelState.IsValid)
             {
