@@ -91,6 +91,7 @@ namespace _3TeamProject.Areas.Sightseeings.Controllers
                 return BadRequest(errors);
             }
             var UserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
+            var UserrRole = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role).Value;
             var message = new SightseeingMessageBoard
             {
                 SightseeingId = request.SightseeingId,
@@ -108,6 +109,7 @@ namespace _3TeamProject.Areas.Sightseeings.Controllers
                     SightseeingId = s.SightseeingId,
                     SightseeingMessageBoards = s.SightseeingMessageBoards.Select(m => new SightMessageDto
                     {
+                        UserRole = UserrRole,
                         MessageBoardId = m.MessageBoardId,
                         Account = m.User.Account,
                         SightseeingMessageContent = m.SightseeingMessageContent,

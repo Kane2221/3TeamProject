@@ -9,22 +9,41 @@ using _3TeamProject.Data;
 using Microsoft.AspNetCore.Authorization;
 using System.Net.Mail;
 
-namespace _3TeamProject.Controllers
+namespace _3TeamProject.Controllers.Api
 {
-    public class UserController : Controller
+    [Route("Users/[controller]")]
+    [ApiController]
+    public class UserApiController : ControllerBase
     {
         private readonly _3TeamProjectContext _context;
         private readonly IConfiguration _config;
 
-        public UserController(_3TeamProjectContext context, IConfiguration config)
+        public UserApiController(_3TeamProjectContext context, IConfiguration config)
         {
             _context = context;
-            _config=config;
+            _config = config;
         }
+        //登入帳號
+        [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginReuqest request)
         {
-            var user = await _context.Users.Include(u => u.RolesNavigation).FirstOrDefaultAsync(u => u.Account == request.Account);
+            var user = await _context.Users.Include(u => u.RolesNavigation)
+                .FirstOrDefaultAsync(u => u.Account == request.Account);
             if (user == null)
+            {
+                return BadRequest("帳號不存在");
+            }
+            //判斷會員帳號已刪除的情況不能登入
+            var member = _context.Members.Include(m => m.User)
+                .Where(m => m.User.Account == request.Account).FirstOrDefault();
+            if (member == null || member.MemberStatusId == 4)
+            {
+                return BadRequest("帳號不存在");
+            }
+            //判斷廠商帳號已刪除的情況不能登入
+            var supplier = _context.Suppliers.Include(m => m.User)
+                .Where(m => m.User.Account == request.Account).FirstOrDefault();
+            if (supplier == null || supplier.SupplierStatusId == 3)
             {
                 return BadRequest("帳號不存在");
             }
@@ -50,9 +69,15 @@ namespace _3TeamProject.Controllers
             return Ok("登入成功");
             //return RedirectToAction("index", "home");
         }
+        [HttpPost("Verify")]
+        //驗證帳號
         public async Task<IActionResult> Verify([FromBody] string token)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.VerficationToken == token);
+            var member = _context.Members.Include(m => m.User)
+                .Where(m => m.User.VerficationToken == token).FirstOrDefault();
+            var supplier = _context.Suppliers.Include(m => m.User)
+                .Where(m => m.User.VerficationToken == token).FirstOrDefault();
             if (user == null)
             {
                 return BadRequest("無效的驗證碼");
@@ -62,9 +87,13 @@ namespace _3TeamProject.Controllers
                 return BadRequest("已驗證過的驗證碼");
             }
             user.VerfiedAt = DateTime.Now;
+            member.MemberStatusId = 2;
+            supplier.SupplierStatusId = 1;
             await _context.SaveChangesAsync();
             return Ok("驗證成功");
         }
+        [HttpPost("ForgotPassword")]
+        //忘記密碼
         public async Task<IActionResult> ForgotPassword([FromBody] string email)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
@@ -97,6 +126,8 @@ namespace _3TeamProject.Controllers
             await _context.SaveChangesAsync();
             return Ok("請等待驗證信件");
         }
+        [HttpPost("ResetPassword")]
+        //重設密碼
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
         {
             if (!ModelState.IsValid)
@@ -127,11 +158,13 @@ namespace _3TeamProject.Controllers
             }
             return Ok("密碼重設成功");
         }
+        //登出
         [Authorize]
+        [HttpDelete("Logout")]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return Ok("Logout");
+            return Ok("已登出");
             //return RedirectToAction("Login", "home");
         }
     }

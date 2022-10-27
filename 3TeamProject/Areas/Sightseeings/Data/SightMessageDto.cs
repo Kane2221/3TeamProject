@@ -2,6 +2,7 @@
 {
     public class SightMessageDto
     {
+        public string UserRole { get; set; } = null!;
         public int MessageBoardId { get; set; }
         public string Account { get; set; } = null!;
         public string? SightseeingMessageContent { get; set; }

@@ -8,6 +8,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 using System.Net;
+using System.Net.Mail;
 using System.Net.NetworkInformation;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -181,7 +182,8 @@ namespace _3TeamProject.Areas.Administrators.Controllers
                                SupplierPostalCode = s.SupplierPostalCode,
                                SupplierCountry = s.SupplierCountry,
                                SupplierCity = s.SupplierCity,
-                               SupplierAddress = s.SupplierAddress
+                               SupplierAddress = s.SupplierAddress,
+                               SupplierStatusId = s.SupplierStatusId,
                            };
             return Ok(supplier);
         }
@@ -240,17 +242,8 @@ namespace _3TeamProject.Areas.Administrators.Controllers
         public IActionResult GetAllSightseeings()
         {
             var Sight = _context.Sightseeings.Include(s => s.SightseeingPictureInfos)
-                .Include(s => s.SightseeingCategory).Select(s => new SightGetViewModel
-                {
-                    SightseeingId = s.SightseeingId,
-                    SightseeingName = s.SightseeingName,
-                    SightseeingCountry = s.SightseeingCountry,
-                    SightseeingCity = s.SightseeingCity,
-                    SightseeingAddress = s.SightseeingAddress,
-                    SightseeingScore = s.SightseeingScore,
-                    CategoryName = s.SightseeingCategory.CategoryName,
-                    SightseeingHomePage = s.SightseeingHomePage,
-                });
+                .Include(s => s.SightseeingCategory).Select(s => s).FirstOrDefault();
+
             return Ok(Sight);
         }
 
@@ -259,9 +252,33 @@ namespace _3TeamProject.Areas.Administrators.Controllers
         {
             return Ok();
         }
-        //TODO 審核廠商
-        //TODO 廠商停權
-        //TODO 會員停權
+        //TODO 審核廠商資料(send mail)
+        [HttpGet("AproveSupplier/{id}")]
+        public IActionResult AproveSupplier(int id)
+        {
+            var supplier = _context.Suppliers.Include(s => s.User).Where(s => s.UserId == id).FirstOrDefault();
+            supplier.SuppliersId = 1;
+            _context.SaveChanges();
+            return Ok("已審核");
+        }
+        //TODO 廠商停權(send mail)
+        [HttpGet("SuspendSupplier/{id}")]
+        public IActionResult SuspendSupplier(int id)
+        {
+            var supplier = _context.Suppliers.Include(s => s.User).Where(s => s.UserId == id).FirstOrDefault();
+            supplier.SuppliersId = 2;
+            _context.SaveChanges();
+            return Ok("已停權");
+        }
+        //TODO 會員停權(send mail)
+        [HttpGet("SuspendMember/{id}")]
+        public IActionResult SuspendMember(int id)
+        {
+            var member = _context.Members.Include(s => s.User).Where(s => s.UserId == id).FirstOrDefault();
+            member.MemberStatusId = 3;
+            _context.SaveChanges();
+            return Ok("會員已停權");
+        }
         //TODO 商品上下架
         //TODO 審核商品
         //TODO 審核訂單退訂
@@ -306,7 +323,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
                     {
                         tempRoot = root +"img"+"\\"+"Sight"+"\\"+"other"+ "\\" +request.SightseeingName;
                     }
-                    if (!Directory.Exists(tempRoot)) 
+                    if (!Directory.Exists(tempRoot))
                     {
                         Directory.CreateDirectory(tempRoot);
                     }
@@ -339,7 +356,8 @@ namespace _3TeamProject.Areas.Administrators.Controllers
                 var errors = ModelState.Select(x => x.Value.Errors).Where(y => y.Count > 0).ToList();
                 return BadRequest(errors);
             }
-            var Sight = _context.Sightseeings.Where(s => s.SightseeingId == id).Select(s => s).SingleOrDefault();
+            var Sight = _context.Sightseeings.Where(s => s.SightseeingId == id)
+                .Select(s => s).SingleOrDefault();
             Sight.SightseeingName = request.SightseeingName;
             Sight.SightseeingCountry = request.SightseeingCountry;
             Sight.SightseeingCity = request.SightseeingCity;
@@ -367,21 +385,16 @@ namespace _3TeamProject.Areas.Administrators.Controllers
             await _context.SaveChangesAsync();
             return Ok("此景點已刪除");
         }
-        //TODO 修改會員資料(最高權限管理員)
-        [Authorize(Roles ="SuperAdministrator")]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateMemberDto request)
+        //TODO 修改會員密碼並送信給會員(最高權限管理員)(send mail)
+        [Authorize(Roles = "SuperAdministrator")]
+        [HttpPut("UpdateMember/{id}")]
+        public async Task<IActionResult> UpdateMemberPassword(int id, [FromBody] UpdateMemberPasswordDto request)
         {
-            var UserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
-            if (id != UserId)
-            {
-                return BadRequest("與登入帳號不符");
-            }
             if (!ModelState.IsValid)
             {
                 var errors = ModelState.Select(x => x.Value.Errors).Where(y => y.Count > 0).ToList();
                 return BadRequest(errors);
             }
-
             var member = _context.Members.Include(a => a.User)
                     .Where(a => a.UserId == id).Select(a => a).SingleOrDefault();
 
@@ -389,25 +402,31 @@ namespace _3TeamProject.Areas.Administrators.Controllers
             {
                 var passwordSalt = hmac.Key;
                 var passwordHsah = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(request.Password));
-                member.MemberName = request.MemberName;
-                member.NickName = request.NickName;
-                member.Birthday = request.Birthday;
-                member.IdentityNumber = request.IdentityNumber;
-                member.CellPhoneNumber = request.CellPhoneNumber;
-                member.PhoneNumber = request.PhoneNumber;
-                member.PostalCode = request.PostalCode;
-                member.Country = request.Country;
-                member.City = request.City;
-                member.Address = request.Address;
-                member.User.Email = request.Email;
                 member.User.PasswordHash = passwordHsah;
                 member.User.PasswordSalt = passwordSalt;
+                member.User.VerfiedAt = DateTime.UtcNow;
                 _context.Members.Update(member);
                 await _context.SaveChangesAsync();
+
+                using (MailMessage mail = new MailMessage())
+                {
+                    mail.From = new MailAddress("dotnettgm102@gmail.com", "帳號驗證碼");
+                    mail.To.Add(member.User.Email);
+                    mail.Priority = MailPriority.Normal;
+                    mail.Subject = "帳號驗證碼";
+                    mail.Body = $"<h1>您的新密碼為:{request.Password}，請去個人資料修改密碼</h1>";
+                    mail.IsBodyHtml = true;
+                    SmtpClient MySmtp = new SmtpClient("smtp.gmail.com", 587);
+                    MySmtp.UseDefaultCredentials = false;
+                    MySmtp.Credentials = new System.Net.NetworkCredential(_config["mail:Account"], _config["mail:Password"]);
+                    MySmtp.EnableSsl = true;
+                    MySmtp.Send(mail);
+                    MySmtp = null;
+                };
             }
             return Ok("修改成功!");
         }
         //TODO 後台首頁功能
     }
 }
-    
+

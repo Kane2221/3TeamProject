@@ -82,6 +82,7 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
 
                 Supplier supplier = new Supplier
                 {
+                    SupplierStatusId = 0,
                     User = new User
                     {
                         Account = request.Account,
@@ -95,14 +96,15 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
 
                 #region Send Email with verify code (正式再解開註解)
                 var root = $@"{Request.Scheme}:/{Request.Host}/User/Verify";
-                //TODO 修改寄信的超連結
+                //TODO 修改寄信的超連結, 修改寄到管理員審核
                 using (MailMessage mail = new MailMessage())
                 {
                     mail.From = new MailAddress("dotnettgm102@gmail.com", "帳號驗證碼");
-                    mail.To.Add("dotnettgm102@gmail.com");
+                    mail.To.Add(request.Email);
                     mail.Priority = MailPriority.Normal;
                     mail.Subject = "帳號驗證碼";
-                    mail.Body = $"<a href=\"{root}\" value=\"{verifyToken}\">帳號驗證碼</a>";
+                    mail.Body = $"<h1>請到以下頁面輸入驗證碼 : {verifyToken}</h1>/n " +
+                                $"<a href=\"{root}\">帳號驗證碼</a>";
                     mail.IsBodyHtml = true;
                     SmtpClient MySmtp = new SmtpClient("smtp.gmail.com", 587);
                     MySmtp.UseDefaultCredentials = false;

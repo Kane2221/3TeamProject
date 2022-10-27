@@ -61,7 +61,8 @@ namespace _3TeamProject.Areas.Members.Controllers
             return Ok(member);
         }
         //會員註冊
-        [HttpPost]
+        [AllowAnonymous]
+        [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterMemberDto request)
         {
             if (!ModelState.IsValid)
@@ -91,6 +92,7 @@ namespace _3TeamProject.Areas.Members.Controllers
                     Country = request.Country,
                     City = request.City,
                     Address = request.Address,
+                    MemberStatusId = 1,
                     User = new User
                     {
                         Account = request.Account,
@@ -107,10 +109,11 @@ namespace _3TeamProject.Areas.Members.Controllers
                 using (MailMessage mail = new MailMessage())
                 {
                     mail.From = new MailAddress("dotnettgm102@gmail.com", "帳號驗證碼");
-                    mail.To.Add("dotnettgm102@gmail.com");
+                    mail.To.Add(request.Email);
                     mail.Priority = MailPriority.Normal;
                     mail.Subject = "帳號驗證碼";
-                    mail.Body = $"<a href=\"{root}\" value=\"{verifyToken}\">帳號驗證碼</a>";
+                    mail.Body = $"<h1>請到以下頁面輸入驗證碼 : {verifyToken}</h1>/n " +
+                                $"<a href=\"{root}\">帳號驗證碼</a>";
                     mail.IsBodyHtml = true;
                     SmtpClient MySmtp = new SmtpClient("smtp.gmail.com", 587);
                     MySmtp.UseDefaultCredentials = false;
@@ -167,7 +170,7 @@ namespace _3TeamProject.Areas.Members.Controllers
             return Ok("修改成功!");
         }
         //會員刪除
-        [HttpDelete]
+        [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             var UserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
@@ -175,8 +178,9 @@ namespace _3TeamProject.Areas.Members.Controllers
             {
                 return BadRequest("與登入帳號不符");
             }
-            var user = _context.Users.Include(u => u.Members).FirstOrDefault(x => x.UserId == id);
-            _context.Users.Remove(user);
+            var member = _context.Members.Include(u => u.User).FirstOrDefault(x => x.UserId == id);
+            member.MemberStatusId = 4;
+            _context.Members.Update(member);
             await _context.SaveChangesAsync();
             return Ok("此帳號已刪除");
         }
