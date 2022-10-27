@@ -100,17 +100,17 @@
                     @*<a href="/Shop/ProductDetail" class="card-body border-left border-right text-center p-0 pt-4 pb-3">*@
                         <h5 class="text-truncate mb-3">{{item.productName}}</h5>
                         <div class="d-flex justify-content-center">
-                            <h6>{{item.productUnitPrice}}</h6>
+                            <h6>${{item.productUnitPrice}}</h6>
                         </div>
                     @*</a>*@
                     <div class="card-footer d-flex justify-content-between bg-light border">
-                        <a href="/Shop/ProductDetail" class="btn btn-sm text-dark p-0">
-                            <i class="fas fa-eye text-primary mr-1"></i>商品詳情</a>
-                    <a onclick="ShowMessage()" class="btn btn-sm text-dark p-0">
+@*                        <a href="/Shop/ProductDetail" class="btn btn-sm text-dark p-0">
+                            <i class="fas fa-eye text-primary mr-1"></i>商品詳情</a>*@
+                    <a :href="'Shop/AddtoCart?id='+ item.productId" class="Shopping-Cart" onclick="ShowMessage()">
                         <i class="fas fa-shopping-cart text-primary mr-1"></i>加入購物車
-                        <form class="none" action="/Shop/AddtoCart">
-                            <input :value="item.productId" type="number" name="id" /><button type="submit" ref="form"></button>
-                        </form>
+@*                        <form class="none" action="/Shop/AddtoCart">
+                            <input :value="item.productId" type="number" name="id2" /><button type="submit" ref="form"></button>
+                        </form>*@
                     </a>
                     </div>
                 </div>
