@@ -242,7 +242,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
                                     ShipCountry = o.ShipCountry,
                                     ShipCity = o.ShipCity,
                                     ShipAddress = o.ShipAddress,
-                                    OrderDetails = o.OrderDetails.Select(od => new OrderDetailDto
+                                    OrderDetails = o.OrderDetails.Select(od => new GetOrderDetailDto
                                     {
                                         ProductId = od.ProductId,
                                         UnitPrice = od.UnitPrice,
@@ -286,14 +286,11 @@ namespace _3TeamProject.Areas.Administrators.Controllers
                 ActivityId = s.ActivityId,
                 MemberName = s.Member.MemberName,
                 ActivitiesName = s.ActivitiesName,
-                ActivitiesContent = s.ActivitiesContent,
                 ActivitiesAddress = s.ActivitiesAddress,
                 CreatedTime = s.CreatedTime,
                 EndTime = s.EndTime,
                 LimitCount = s.LimitCount,
-                JoinCount = s.JoinCount,
-                ActitiesStartDate = s.ActitiesStartDate,
-                ActitiesFinishDate = s.ActitiesFinishDate
+                JoinCount = s.JoinCount
             });
             return Ok(Activities);
         }

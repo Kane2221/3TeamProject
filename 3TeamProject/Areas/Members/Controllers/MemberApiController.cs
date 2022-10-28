@@ -200,7 +200,7 @@ namespace _3TeamProject.Areas.Members.Controllers
                     OrderCategoryName = o.OrderStatusNavigation.OrderCategoryName,
                     PaymentCategoryName = o.PaymentStatusNavigation.PaymentCategoryName,
                     ShipCategoryName = o.ShipStatusNavigation.ShipCategoryName,
-                    OrderDetails = o.OrderDetails.Select(od => new OrderDetailDto
+                    OrderDetails = o.OrderDetails.Select(od => new GetOrderDetailDto
                     {
                         ProductId = od.ProductId,
                         UnitPrice = od.UnitPrice,
@@ -226,7 +226,7 @@ namespace _3TeamProject.Areas.Members.Controllers
                                     OrderCategoryName = o.OrderStatusNavigation.OrderCategoryName,
                                     PaymentCategoryName = o.PaymentStatusNavigation.PaymentCategoryName,
                                     ShipCategoryName = o.ShipStatusNavigation.ShipCategoryName,
-                                    OrderDetails = o.OrderDetails.Select(od => new OrderDetailDto
+                                    OrderDetails = o.OrderDetails.Select(od => new GetOrderDetailDto
                                     {
                                         ProductId = od.ProductId,
                                         UnitPrice = od.UnitPrice,

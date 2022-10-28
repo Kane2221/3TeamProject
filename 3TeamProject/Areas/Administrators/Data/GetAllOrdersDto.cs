@@ -16,6 +16,6 @@ namespace _3TeamProject.Areas.Administrators.Data
         public string ShipAddress { get; set; } = null!;
         public string PaymentCategoryName { get; set; } = null!;
         public string ShipCategoryName { get; set; } = null!;
-        public virtual IEnumerable<OrderDetailDto> OrderDetails { get; set; }
+        public virtual IEnumerable<GetOrderDetailDto> OrderDetails { get; set; }
     }
 }
