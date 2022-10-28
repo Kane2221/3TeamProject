@@ -1,4 +1,5 @@
-﻿using _3TeamProject.Helpers;
+﻿using _3TeamProject.Data;
+using _3TeamProject.Helpers;
 using _3TeamProject.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -22,13 +23,19 @@ namespace _3TeamProject.Controllers
         public IActionResult Cart()
         {
             ISession session = this.HttpContext.Session;
-            var pid = session.GetString("cart");
-            List<Cart> CartItem = SessionHelper.GetObjectFromJson<List<Cart>>(session, "cart");
+            //var c = session.GetString("cart");
+            //var pid = session.GetString("ProductId");
+            List<CartSessionDto> CartItem = SessionHelper.GetObjectFromJson<List<CartSessionDto>>(session, "cart");
             
             if(CartItem!= null)
             {
-               // ViewBag.Total = CartItem.Sum(n => n.SubTotal);
+                ViewBag.Total = CartItem.Sum(n => n.SubTotal);
+                ViewBag.Amount = CartItem.Sum(n => n.Amount);
                 //CartItem = new List<Cart>()
+            }
+            else
+            {
+                ViewBag.Total = 0;
             }
             return View(CartItem);
         }
@@ -44,26 +51,30 @@ namespace _3TeamProject.Controllers
         {
             ISession session = this.HttpContext.Session;
 
-            Cart item = new Cart
+            CartSessionDto item = new CartSessionDto
             {
                 ProductId = id,
-                Amount = 1
+                Amount = 1,
+                SubTotal = (int)_context.Products.Single(n => n.ProductId == id).ProductUnitPrice
+                           //Int32.Parse(from p in _context.Products where p.ProductId == id select p.UnitStock),
+                
             };
 
-            if (SessionHelper.GetObjectFromJson<List<Cart>>(session, "cart") == null)//session內沒有購物車
+            if (SessionHelper.GetObjectFromJson<List<CartSessionDto>>(session, "cart") == null)//session內沒有購物車
             {
-                List<Cart> cart = new List<Cart>();
+                List<CartSessionDto> cart = new List<CartSessionDto>();
                 cart.Add(item);
                 SessionHelper.SetObjectAsJson(session, "cart", cart);
             }
             else
             {
-                List<Cart> cart = SessionHelper.GetObjectFromJson<List<Cart>>(session, "cart");
+                List<CartSessionDto> cart = SessionHelper.GetObjectFromJson<List<CartSessionDto>>(session, "cart");
                 int index = cart.FindIndex(n => n.ProductId.Equals(id));
                 //int index = cart.Find(id);
                 if (index !=-1)
                 {
                     cart[index].Amount += item.Amount;
+                    cart[index].SubTotal += item.SubTotal;
                 }
                 else
                 {
@@ -80,7 +91,7 @@ namespace _3TeamProject.Controllers
         public IActionResult RemoveCart(int id)
         {
             ISession session = this.HttpContext.Session;
-            List<Cart> cart = SessionHelper.GetObjectFromJson<List<Cart>>(session, "cart");
+            List<CartSessionDto> cart = SessionHelper.GetObjectFromJson<List<CartSessionDto>>(session, "cart");
 
             int index = cart.FindIndex(n => n.ProductId.Equals(id));
             cart.RemoveAt(index);
@@ -93,12 +104,13 @@ namespace _3TeamProject.Controllers
                 SessionHelper.SetObjectAsJson(session, "cart", cart);
             }
 
-            return NoContent();
+            //return NoContent();
+            return RedirectToAction ("Cart");
         }
         public IActionResult Checkout()
         {
             ISession session = this.HttpContext.Session;
-            if(SessionHelper.GetObjectFromJson<List<Cart>>(session,"cart")==null)
+            if(SessionHelper.GetObjectFromJson<List<CartSessionDto>>(session,"cart")==null)
             {
                 return RedirectToAction("Cart");
             }

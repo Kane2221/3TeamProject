@@ -1,6 +1,6 @@
 ﻿<!-- Cart Start -->
 <div class="container-fluid pt-5" id="Cart">
-    <div class="row px-xl-5">
+    <div class="row px-xl-5" >
         <div class="col-lg-8 table-responsive mb-5">
             <table class="table table-bordered text-center mb-0">
                 <thead class="bg-secondary text-dark">
@@ -13,16 +13,20 @@
                         <th>移除</th>
                     </tr>
                 </thead>
-                <tbody class="align-middle">
+                <tbody class="align-middle" V-for="(item,index) in products">
                     <tr id="cart1">
-                        <td class="align-middle"><a href="/Shop/ProductDetail"><img src="~/img/01.jpg" alt="" style="width: 100px;"> 淺水錶</a></td>
-                        <td class="align-middle">$123</td>
-                        <td class="align-middle">1</td>
-                        <td class="align-middle">$123</td>
-                        <td class="align-middle">2</td>
-                        <td class="align-middle"><button class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button></td>
+                        <td class="align-middle"><a :href="'ProductDetail?id='+ item.productId"><img :src="item.productPicturePath" alt="" style="width: 100px;"><p>{{item.productName}}</p></a></td>
+                        <td class="align-middle">${{item.productUnitPrice}}</td>
+                        <td class="align-middle">{{item.amount}}</td>
+                        <td class="align-middle">{{item.subtotal}}</td>
+                        <td class="align-middle">{{item.unitStock}}</td>
+                        <td class="align-middle">
+                            <a :href="'./RemoveCart?id='+ item.productId" >
+                                <button class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button>
+                            </a>
+                            </td>
                     </tr>
-                    <tr>
+                    @*<tr>
                         <td class="align-middle"><a href="/Shop/ProductDetail"><img src="~/img/01.jpg" alt="" style="width: 100px;"> 淺水錶</a></td>
                         <td class="align-middle">$123</td>
                         <td class="align-middle">
@@ -43,7 +47,7 @@
                         <td class="align-middle">$123</td>
                         <td class="align-middle">2</td>
                         <td class="align-middle"><button class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button></td>
-                    </tr>
+                    </tr>*@
 
                 </tbody>
             </table>
@@ -64,17 +68,17 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between mb-3 pt-1">
                         <h6 class="font-weight-medium">商品總金額</h6>
-                        <h6 class="font-weight-medium">$123</h6>
+                        <h6 class="font-weight-medium">@ViewBag.Total</h6>
                     </div>
                     <div class="d-flex justify-content-between">
                         <h6 class="font-weight-medium">優惠碼折抵</h6>
-                        <h6 class="font-weight-medium">-$10</h6>
+                        <h6 class="font-weight-medium">-$0</h6>
                     </div>
                 </div>
                 <div class="card-footer border-secondary bg-transparent">
                     <div class="d-flex justify-content-between mt-2">
                         <h5 class="font-weight-bold">訂單總金額</h5>
-                        <h5 class="font-weight-bold">$123</h5>
+                        <h5 class="font-weight-bold">@ViewBag.Total</h5>
                     </div>
                     <button class="btn btn-block btn-outline-primary my-3 py-3"><a data-toggle="click" href="/Shop/Checkout"> 前往結帳</a></button>
                 </div>
@@ -108,38 +112,38 @@
             productpic: []
         },
         methods: {
-            addToCart: function (product) {
-                console.log(product);
-                let data = {
-                    productId: product.id,
-                    amount: product.qty
-                }
-                fetch("/api/Cart/", {
-                    body: JSON.stringify(data),
-                    headers: {
-                        'content-type': 'application/json'
-                    },
-                    method: 'POST',
-                }).then(function (response) { return response.text() })
-                    .then(function (result) {
-                        if (result) {
-                            master.getData();
-                            Swal.fire({
-                                icon: 'success',
-                                title: '加入成功',
-                                text: '您已成功加入商品!'
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Oops...',
-                                text: 'Something went wrong!',
-                                footer: '<a href="">Why do I have this issue?</a>'
-                            })
-                        }
+        //    addToCart: function (product) {
+        //        console.log(product);
+        //        let data = {
+        //            productId: product.id,
+        //            amount: product.qty
+        //        }
+        //        fetch("/api/Cart/", {
+        //            body: JSON.stringify(data),
+        //            headers: {
+        //                'content-type': 'application/json'
+        //            },
+        //            method: 'POST',
+        //        }).then(function (response) { return response.text() })
+        //            .then(function (result) {
+        //                if (result) {
+        //                    master.getData();
+        //                    Swal.fire({
+        //                        icon: 'success',
+        //                        title: '加入成功',
+        //                        text: '您已成功加入商品!'
+        //                    });
+        //                } else {
+        //                    Swal.fire({
+        //                        icon: 'error',
+        //                        title: 'Oops...',
+        //                        text: 'Something went wrong!',
+        //                        footer: '<a href="">Why do I have this issue?</a>'
+        //                    })
+        //                }
 
-                    })
-            },
+        //            })
+        //    },
             submit: function (index) {
                 console.log(this.$refs.form[index]);
                 this.$refs.form[index].click();
