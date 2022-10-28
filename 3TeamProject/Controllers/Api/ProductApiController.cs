@@ -9,6 +9,7 @@ using _3TeamProject.Models;
 using Microsoft.CodeAnalysis;
 using System.Text.Json.Nodes;
 using Newtonsoft.Json;
+using _3TeamProject.Data;
 
 namespace _3TeamProject.Controllers.Api
 {
@@ -167,23 +168,26 @@ namespace _3TeamProject.Controllers.Api
             //   }).Where(pi=>pi.ProductId== id);
 
             //Linq left join 寫法
-            //var productFound = from product in _context.Products
-            //                   join Info in _context.ProductsPictureInfos
-            //                   on product.ProductId equals Info.ProductId into pInfo
-            //                   from Info in pInfo.DefaultIfEmpty()
-            //                   join Board in _context.ProductsMessageBoards                             
-            //                   on product.ProductId equals Board.ProductId into InfoB
-            //                   from Board in InfoB.DefaultIfEmpty()
-            //                   where product.ProductId == id
-            //                   select new
-
             var productFound = from product in _context.Products
                                join Info in _context.ProductsPictureInfos
-                               on product.ProductId equals Info.ProductId
+                               on product.ProductId equals Info.ProductId into pInfo
+                               from Info in pInfo.DefaultIfEmpty()
                                join Board in _context.ProductsMessageBoards
-                               on product.ProductId equals Board.ProductId
+                               on product.ProductId equals Board.ProductId into InfoB
+                               from Board in InfoB.DefaultIfEmpty()
+                               join Sup in _context.Suppliers
+                               on product.SupplierId equals Sup.SuppliersId into Supp
+                               from Sup in Supp.DefaultIfEmpty()
                                where product.ProductId == id
-                               select new
+                               select new ProductApiDto
+
+                               //var productFound = from product in _context.Products
+                               //                   join Info in _context.ProductsPictureInfos
+                               //                   on product.ProductId equals Info.ProductId
+                               //                   join Board in _context.ProductsMessageBoards
+                               //                   on product.ProductId equals Board.ProductId
+                               //                   where product.ProductId == id
+                               //                   select new
                                {
                                    ProductId = product.ProductId,
                                    ProductCategoryId = product.ProductCategoryId,
@@ -193,10 +197,11 @@ namespace _3TeamProject.Controllers.Api
                                    QuantityPerUnit = product.QuantityPerUnit,
                                    UnitStock = product.UnitStock,
                                    ProductRecommendation = product.ProductRecommendation,
-                                   ProductStatus = product.ProductStatus,
+                                   ProductStatusId = product.ProductStatusId,
                                    ProductPicturePath = Info.ProductPicturePath,
                                    ProductMessageContent = Board.ProductMessageContent,
-                                   ProductIntroduce = product.ProductIntroduce
+                                   ProductIntroduce = product.ProductIntroduce,
+                                   CompanyName = Sup.CompanyName
                                    //p.ProductName,
                                    //p.ProductCategoryId
 

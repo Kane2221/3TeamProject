@@ -21,7 +21,7 @@
                         <td class="align-middle">{{item.subtotal}}</td>
                         <td class="align-middle">{{item.unitStock}}</td>
                         <td class="align-middle">
-                            <a :href="'./RemoveCart?id='+ item.productId" >
+                            <a :href="'./RemoveCart?id='+ item.productId" onclick="RemoveMessage()">
                                 <button class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button>
                             </a>
                             </td>
@@ -80,7 +80,7 @@
                         <h5 class="font-weight-bold">訂單總金額</h5>
                         <h5 class="font-weight-bold">@ViewBag.Total</h5>
                     </div>
-                    <button class="btn btn-block btn-outline-primary my-3 py-3"><a data-toggle="click" href="/Shop/Checkout"> 前往結帳</a></button>
+                    <button class="btn btn-block btn-outline-primary my-3 py-3"><a data-toggle="click" href="/Shop/Checkout">前往結帳</a></button>
                 </div>
             </div>
         </div>
@@ -102,6 +102,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.7.10/dist/vue.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     //Vue.use(VueNumberInput);
     //Vue.component('vue-number-input', VueNumberInput);
@@ -163,4 +164,17 @@
                 })
         }
     })
+</script>
+<script>
+    function RemoveMessage() {
+        //toastr["success"]("商品已加入購物車！");
+        //alert("商品已移除！");
+        Swal.fire({
+            position: 'top-end',
+            //icon: 'success',
+            title: '商品已移除！',
+            showConfirmButton: false,
+            timer: 500
+        })
+    }
 </script>

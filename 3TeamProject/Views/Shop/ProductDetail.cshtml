@@ -64,7 +64,7 @@
                     <small class="pt-1">(50 Reviews)</small>
                 </div>
                 <h3 class="font-weight-semi-bold mb-4">${{item.productUnitPrice}}</h3>
-                <h6 class="font-weight-semi mb-4">商品單位：</h6>
+                <h6 class="font-weight-semi mb-4">提供廠商：{{item.companyName}}</h6>
                 <h6 class="font-weight-semi mb-4">庫存數量：{{item.unitStock}}</h6>
               <div class="d-flex align-items-center mb-4 pt-2">
                     <div class="input-group quantity mr-3" style="width: 130px;">
@@ -145,6 +145,7 @@
     <script src="~/js/mainshop.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.7.10/dist/vue.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 
     //Vue.use(VueNumberInput);
@@ -167,6 +168,13 @@
 <script>
     function ShowMessage() {
         //toastr["success"]("商品已加入購物車！");
-        alert("商品已加入購物車！");
+        //alert("商品已加入購物車！");
+        Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: '商品已加入購物車！',
+            showConfirmButton: false,
+            timer: 500
+        })
     }
 </script>
