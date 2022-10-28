@@ -33,20 +33,20 @@ namespace _3TeamProject.Controllers.Api
             {
                 return BadRequest("帳號不存在");
             }
-            //判斷會員帳號已刪除的情況不能登入
-            var member = _context.Members.Include(m => m.User)
-                .Where(m => m.User.Account == request.Account).FirstOrDefault();
-            if (member == null || member.MemberStatusId == 4)
-            {
-                return BadRequest("帳號不存在");
-            }
-            //判斷廠商帳號已刪除的情況不能登入
-            var supplier = _context.Suppliers.Include(m => m.User)
-                .Where(m => m.User.Account == request.Account).FirstOrDefault();
-            if (supplier == null || supplier.SupplierStatusId == 3)
-            {
-                return BadRequest("帳號不存在");
-            }
+            ////判斷會員帳號已刪除的情況不能登入
+            //var member = _context.Members.Include(m => m.User)
+            //    .Where(m => m.User.Account == request.Account).FirstOrDefault();
+            //if (member == null || member.MemberStatusId == 4)
+            //{
+            //    return BadRequest("帳號不存在");
+            //}
+            ////判斷廠商帳號已刪除的情況不能登入    
+            //var supplier = _context.Suppliers.Include(m => m.User)
+            //    .Where(m => m.User.Account == request.Account).FirstOrDefault();
+            //if (supplier == null || supplier.SupplierStatusId == 3)
+            //{
+            //    return BadRequest("帳號不存在");
+            //}
             var hmac = new HMACSHA512(user.PasswordSalt);
             var computeHsah = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(request.Password));
             if (!computeHsah.SequenceEqual(user.PasswordHash))
