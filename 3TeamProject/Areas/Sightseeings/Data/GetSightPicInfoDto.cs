@@ -1,6 +1,6 @@
 ﻿namespace _3TeamProject.Areas.Sightseeings.Data
 {
-    public class SightPicInfoDto
+    public class GetSightPicInfoDto
     {
         public int SightseeingPictureId { get; set; }
         public string SightseeingPicturePath { get; set; } = null!;

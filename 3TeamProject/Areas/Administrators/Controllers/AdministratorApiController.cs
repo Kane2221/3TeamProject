@@ -1,5 +1,5 @@
 ﻿using _3TeamProject.Areas.Administrators.Data;
-using _3TeamProject.Areas.Members.Data;
+using _3TeamProject.Areas.SocialActivities.Data;
 using _3TeamProject.Areas.Suppliers.Data;
 using _3TeamProject.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -7,12 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
+using System.Diagnostics.Metrics;
 using System.Net;
 using System.Net.Mail;
 using System.Net.NetworkInformation;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using SightGetViewModel = _3TeamProject.Areas.Administrators.Data.GetSightDto;
 
 namespace _3TeamProject.Areas.Administrators.Controllers
 {
@@ -76,7 +76,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
             return Ok(adminSuper);
         }
         //新增管理員, 最高權限才能新增。
-        [AllowAnonymous]
+        [Authorize(Roles = "SuperAdministrator")]
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] AddNewAdminDto request)
         {
@@ -98,7 +98,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
                 {
                     AdministratorName = request.AdministratorName,
                     PhoneNumber = request.PhoneNumber,
-                    AdministratorStatusId = 0,
+                    AdministratorStatusId = 1,
                     User = new User
                     {
                         Account = request.Account,
@@ -111,10 +111,25 @@ namespace _3TeamProject.Areas.Administrators.Controllers
                 };
                 _context.Administrators.Add(admin);
                 await _context.SaveChangesAsync();
-                return Ok("註冊成功，請等待驗證信件");
+                using (MailMessage mail = new MailMessage())
+                {
+                    mail.From = new MailAddress("dotnettgm102@gmail.com", "新增員工帳號");
+                    mail.To.Add(request.Email);
+                    mail.Priority = MailPriority.Normal;
+                    mail.Subject = "新增員工帳號";
+                    mail.Body = $"<h1>管理員帳號 : {request.Account}, 管理員密碼 : {request.Password}</h1>/n ";
+                    mail.IsBodyHtml = true;
+                    SmtpClient MySmtp = new SmtpClient("smtp.gmail.com", 587);
+                    MySmtp.UseDefaultCredentials = false;
+                    MySmtp.Credentials = new System.Net.NetworkCredential(_config["mail:Account"], _config["mail:Password"]);
+                    MySmtp.EnableSsl = true;
+                    MySmtp.Send(mail);
+                    MySmtp = null;
+                };
+                return Ok("老");
             }
         }
-        //TODO 新增審核管理員註冊
+
         //修改管理員資料
         [HttpPut("UpdateAdmin/{id}")]
         public async Task<IActionResult> UpdateAdmin(int? id, [FromBody] UpdateAdminDto request)
@@ -242,46 +257,124 @@ namespace _3TeamProject.Areas.Administrators.Controllers
         public IActionResult GetAllSightseeings()
         {
             var Sight = _context.Sightseeings.Include(s => s.SightseeingPictureInfos)
-                .Include(s => s.SightseeingCategory).Select(s => s).FirstOrDefault();
+                .Include(s => s.SightseeingCategory).Select(s => new GetSightByAdminDto
+                {
+                    SightseeingId = s.SightseeingId,
+                    SightseeingName = s.SightseeingName,
+                    SightseeingCountry = s.SightseeingCountry,
+                    SightseeingCity = s.SightseeingCity,
+                    SightseeingAddress = s.SightseeingAddress,
+                    SightseeingScore = s.SightseeingScore,
+                    CategoryName = s.SightseeingCategory.CategoryName,
+                    SightseeingHomePage = s.SightseeingHomePage,
+                    SightseeingPictureInfos = s.SightseeingPictureInfos.Select(p => new GetSightPicInfoByAdmin
+                    {
+                        SightseeingPictureId = p.SightseeingPictureId,
+                        SightseeingPictureName = p.SightseeingPictureName,
+                        SightseeingPicturePath = p.SightseeingPicturePath
+                    })
+                });
 
             return Ok(Sight);
         }
-
+        //社群活動管理頁
         [HttpGet("GetAllActivities")]
-        public IActionResult GetAllActivities() // TODO 社群活動管理頁
+        public IActionResult GetAllActivities() 
         {
-            return Ok();
+            var Activities = _context.SocialActivities.Include(s => s.Member).Select(s=> new GetAllActivitiesDto
+            {
+                ActivityId = s.ActivityId,
+                MemberName = s.Member.MemberName,
+                ActivitiesName = s.ActivitiesName,
+                ActivitiesContent = s.ActivitiesContent,
+                ActivitiesAddress = s.ActivitiesAddress,
+                CreatedTime = s.CreatedTime,
+                EndTime = s.EndTime,
+                LimitCount = s.LimitCount,
+                JoinCount = s.JoinCount,
+                ActitiesStartDate = s.ActitiesStartDate,
+                ActitiesFinishDate = s.ActitiesFinishDate
+            });
+            return Ok(Activities);
         }
-        //TODO 審核廠商資料(send mail)
+        //審核廠商資料
         [HttpGet("AproveSupplier/{id}")]
         public IActionResult AproveSupplier(int id)
         {
             var supplier = _context.Suppliers.Include(s => s.User).Where(s => s.UserId == id).FirstOrDefault();
             supplier.SuppliersId = 1;
+            supplier.User.VerfiedAt = DateTime.Now;
             _context.SaveChanges();
-            return Ok("已審核");
+            using (MailMessage mail = new MailMessage())
+            {
+                mail.From = new MailAddress("dotnettgm102@gmail.com", "帳號驗證碼");
+                mail.To.Add(supplier.User.Email);
+                mail.Priority = MailPriority.Normal;
+                mail.Subject = "帳號驗證碼";
+                mail.Body = $"<h1>您的帳號已被審核!</h1>";
+                mail.IsBodyHtml = true;
+                SmtpClient MySmtp = new SmtpClient("smtp.gmail.com", 587);
+                MySmtp.UseDefaultCredentials = false;
+                MySmtp.Credentials = new System.Net.NetworkCredential(_config["mail:Account"], _config["mail:Password"]);
+                MySmtp.EnableSsl = true;
+                MySmtp.Send(mail);
+                MySmtp = null;
+            };
+            return Ok("廠商申請帳號已審核通過");
         }
-        //TODO 廠商停權(send mail)
+        //廠商停權
         [HttpGet("SuspendSupplier/{id}")]
         public IActionResult SuspendSupplier(int id)
         {
             var supplier = _context.Suppliers.Include(s => s.User).Where(s => s.UserId == id).FirstOrDefault();
             supplier.SuppliersId = 2;
             _context.SaveChanges();
+            using (MailMessage mail = new MailMessage())
+            {
+                mail.From = new MailAddress("dotnettgm102@gmail.com", "帳號驗證碼");
+                mail.To.Add(supplier.User.Email);
+                mail.Priority = MailPriority.Normal;
+                mail.Subject = "帳號停權";
+                mail.Body = $"<h1>您的帳號已被停權，請聯絡管理人員!</h1>";
+                mail.IsBodyHtml = true;
+                SmtpClient MySmtp = new SmtpClient("smtp.gmail.com", 587);
+                MySmtp.UseDefaultCredentials = false;
+                MySmtp.Credentials = new System.Net.NetworkCredential(_config["mail:Account"], _config["mail:Password"]);
+                MySmtp.EnableSsl = true;
+                MySmtp.Send(mail);
+                MySmtp = null;
+            };
             return Ok("已停權");
         }
-        //TODO 會員停權(send mail)
+        //會員停權
         [HttpGet("SuspendMember/{id}")]
         public IActionResult SuspendMember(int id)
         {
             var member = _context.Members.Include(s => s.User).Where(s => s.UserId == id).FirstOrDefault();
             member.MemberStatusId = 3;
             _context.SaveChanges();
+            using (MailMessage mail = new MailMessage())
+            {
+                mail.From = new MailAddress("dotnettgm102@gmail.com", "帳號驗證碼");
+                mail.To.Add(member.User.Email);
+                mail.Priority = MailPriority.Normal;
+                mail.Subject = "帳號停權";
+                mail.Body = $"<h1>您的帳號已被停權，請聯絡管理人員!</h1>";
+                mail.IsBodyHtml = true;
+                SmtpClient MySmtp = new SmtpClient("smtp.gmail.com", 587);
+                MySmtp.UseDefaultCredentials = false;
+                MySmtp.Credentials = new System.Net.NetworkCredential(_config["mail:Account"], _config["mail:Password"]);
+                MySmtp.EnableSsl = true;
+                MySmtp.Send(mail);
+                MySmtp = null;
+            };
             return Ok("會員已停權");
         }
         //TODO 商品上下架
         //TODO 審核商品
         //TODO 審核訂單退訂
+        //TODO 審核社群活動
+
         //景點新增及上傳圖片
         [HttpPost("AddSight")]
         public async Task<IActionResult> AddSight([FromForm] AddSightDto request)
@@ -385,7 +478,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
             await _context.SaveChangesAsync();
             return Ok("此景點已刪除");
         }
-        //TODO 修改會員密碼並送信給會員(最高權限管理員)(send mail)
+        //修改會員密碼並送信給會員(最高權限管理員)
         [Authorize(Roles = "SuperAdministrator")]
         [HttpPut("UpdateMember/{id}")]
         public async Task<IActionResult> UpdateMemberPassword(int id, [FromBody] UpdateMemberPasswordDto request)
@@ -426,7 +519,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
             }
             return Ok("修改成功!");
         }
-        //TODO 後台首頁功能
+        //TODO 後台首頁
     }
 }
 

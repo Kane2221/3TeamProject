@@ -74,10 +74,7 @@ namespace _3TeamProject.Controllers.Api
         public async Task<IActionResult> Verify([FromBody] string token)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.VerficationToken == token);
-            var member = _context.Members.Include(m => m.User)
-                .Where(m => m.User.VerficationToken == token).FirstOrDefault();
-            var supplier = _context.Suppliers.Include(m => m.User)
-                .Where(m => m.User.VerficationToken == token).FirstOrDefault();
+            
             if (user == null)
             {
                 return BadRequest("無效的驗證碼");
@@ -86,6 +83,10 @@ namespace _3TeamProject.Controllers.Api
             {
                 return BadRequest("已驗證過的驗證碼");
             }
+            var member = _context.Members.Include(m => m.User)
+                .Where(m => m.User.VerficationToken == token).FirstOrDefault();
+            var supplier = _context.Suppliers.Include(m => m.User)
+                .Where(m => m.User.VerficationToken == token).FirstOrDefault();
             user.VerfiedAt = DateTime.Now;
             member.MemberStatusId = 2;
             supplier.SupplierStatusId = 1;

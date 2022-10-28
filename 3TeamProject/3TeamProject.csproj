@@ -28,7 +28,6 @@
     <Folder Include="Areas\Sightseeings\Views\" />
     <Folder Include="Areas\Members\Models\" />
     <Folder Include="Areas\Members\Views\" />
-    <Folder Include="Areas\SocialActivities\Data\" />
     <Folder Include="Areas\SocialActivities\Models\" />
     <Folder Include="Areas\SocialActivities\Views\" />
     <Folder Include="Areas\Suppliers\Models\" />

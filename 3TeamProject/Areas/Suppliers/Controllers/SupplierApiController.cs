@@ -93,32 +93,9 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
                         Roles = request.Roles
                     }
                 };
-
-                #region Send Email with verify code (正式再解開註解)
-                var root = $@"{Request.Scheme}:/{Request.Host}/User/Verify";
-                //TODO 修改寄信的超連結, 修改寄到管理員審核
-                using (MailMessage mail = new MailMessage())
-                {
-                    mail.From = new MailAddress("dotnettgm102@gmail.com", "帳號驗證碼");
-                    mail.To.Add(request.Email);
-                    mail.Priority = MailPriority.Normal;
-                    mail.Subject = "帳號驗證碼";
-                    mail.Body = $"<h1>請到以下頁面輸入驗證碼 : {verifyToken}</h1>/n " +
-                                $"<a href=\"{root}\">帳號驗證碼</a>";
-                    mail.IsBodyHtml = true;
-                    SmtpClient MySmtp = new SmtpClient("smtp.gmail.com", 587);
-                    MySmtp.UseDefaultCredentials = false;
-                    MySmtp.Credentials = new System.Net.NetworkCredential(_config["mail:Account"], _config["mail:Password"]);
-                    MySmtp.EnableSsl = true;
-                    MySmtp.Send(mail);
-                    MySmtp = null;
-                };
-                #endregion
-
-                //_context.Suppliers.Add(supplier);
                 _context.Suppliers.Add(supplier).CurrentValues.SetValues(request);
                 await _context.SaveChangesAsync();
-                return Ok("註冊成功，請等待驗證信件");
+                return Ok("註冊成功，請等待管理員之審核信件");
             }
         }
         //廠商修改資料by登入帳號
