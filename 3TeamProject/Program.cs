@@ -16,8 +16,8 @@ builder.Services.AddControllersWithViews();
 //·s¼WCookieÅçÃÒ
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(opt => {
-        opt.AccessDeniedPath = "/Home/Error";
-        opt.LoginPath = "/Home"; // TODO Login Path
+        opt.AccessDeniedPath = "/Home";
+        opt.LoginPath = "/Home";
         opt.ExpireTimeSpan = TimeSpan.FromMinutes(30);
        
     }).AddGoogle( opt =>
