@@ -57,5 +57,10 @@ namespace _3TeamProject.Controllers
             return View();
         }
 
+        public IActionResult Rating()
+        {
+            return View();
+        }
+
     }
 }
