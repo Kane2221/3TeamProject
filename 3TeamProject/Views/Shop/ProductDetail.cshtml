@@ -67,8 +67,9 @@
                 <h6 class="font-weight-semi mb-4">提供廠商：{{item.companyName}}</h6>
                 <h6 class="font-weight-semi mb-4">庫存數量：{{item.unitStock}}</h6>
               <div class="d-flex align-items-center mb-4 pt-2">
-                    <div class="input-group quantity mr-3" style="width: 130px;">
-                        <div class="input-group-btn">
+                    <div class="input-group quantity mr-3" style="width: 80px;">
+                        <input type="number" id="quantity" name="quantity" min="1" max="30" value="1">
+@*                        <div class="input-group-btn">
                             <button class="btn btn-primary btn-minus">
                                 <i class="fa fa-minus"></i>
                             </button>
@@ -78,7 +79,7 @@
                             <button class="btn btn-primary btn-plus">
                                 <i class="fa fa-plus"></i>
                             </button>
-                        </div>
+                        </div>*@
                     </div>
                     
                     <a :href="'./AddtoCart?id='+ item.productId" class="Shopping-Cart" onclick="ShowMessage()">
@@ -171,7 +172,7 @@
         //alert("商品已加入購物車！");
         Swal.fire({
             position: 'top-end',
-            icon: 'success',
+            //icon: 'success',
             title: '商品已加入購物車！',
             showConfirmButton: false,
             timer: 500
