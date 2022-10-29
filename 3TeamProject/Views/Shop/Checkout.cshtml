@@ -1,40 +1,26 @@
-﻿<!DOCTYPE html>
-
-<html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <title>ShopIndex</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="Free HTML Templates" name="keywords">
-    <meta content="Free HTML Templates" name="description">
-    <link rel="stylesheet" href="~/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
-
-</head>
-
-<body>
-    <!-- Checkout Start -->
-    <div class="container-fluid pt-5">
-        <div class="row px-xl-5">
+﻿<!-- Checkout Start -->
+<div class="container-fluid pt-5">
+    <div class="row px-xl-5">
+        <form action="/Shop/Pay" method="post">
             <div class="col-lg-8">
                 <div class="mb-4">
                     <h4 class="font-weight-semi-bold mb-4">付款資訊</h4>
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label>姓名</label>
-                            <input class="form-control" type="text" placeholder="請輸入付款人姓名">
+                            <input class="form-control" name="MemberName" type="text" placeholder="請輸入付款人姓名">
                         </div>
                         <div class="col-md-6 form-group">
                             <label>電子信箱</label>
-                            <input class="form-control" type="text" placeholder="example@email.com">
+                            <input class="form-control" name="Email" type="text" placeholder="example@email.com">
                         </div>
                         <div class="col-md-6 form-group">
                             <label>手機號碼</label>
-                            <input class="form-control" type="text" placeholder="0987-654-321">
+                            <input class="form-control" name="CellPhoneNumber" type="text" placeholder="0987-654-321">
                         </div>
                         <div class="col-md-6 form-group">
                             <label>市話</label>
-                            <input class="form-control" type="text" placeholder="02-1234-5678">
+                            <input class="form-control" name="PhoneNumber" type="text" placeholder="02-1234-5678">
                         </div>
                         <div class="col-md-12 form-group">
                             <label>地址</label>
@@ -88,18 +74,18 @@
                     <div class="card-header bg-secondary border-0">
                         <h4 class="font-weight-semi-bold m-0">訂單詳情</h4>
                     </div>
-                    
+
                     <div class="card-body">
                         <div class="card border-0">
                             <button class="btn justify-content-end" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCheckout" aria-expanded="false" aria-controls="collapseCheckout">
-								商品清單
+                                商品清單
                                 <i class="zmdi zmdi-chevron-down"></i>
-							</button>
-							<div class="collapse" id="collapseCheckout">
-								<div class="d-flex justify-content-between">
-                                    <a href="" >淺水錶</a>
-									<p>$123</p>
-								</div>
+                            </button>
+                            <div class="collapse" id="collapseCheckout">
+                                <div class="d-flex justify-content-between">
+                                    <a href="">淺水錶</a>
+                                    <p>$123</p>
+                                </div>
                                 <div class="d-flex justify-content-between">
                                     <a href=""> 淺水錶</a>
                                     <p>$123</p>
@@ -108,63 +94,34 @@
                                     <a href="">淺水錶</a>
                                     <p>$123</p>
                                 </div>
-                        </div>
+                            </div>
 
 
-                        <hr class="mt-0">
-                        <div class="d-flex justify-content-between mb-3 pt-1">
-                            <h6 class="font-weight-medium">商品總金額</h6>
-                            <h6 class="font-weight-medium">$123</h6>
+                            <hr class="mt-0">
+                            <div class="d-flex justify-content-between mb-3 pt-1">
+                                <h6 class="font-weight-medium">商品總金額</h6>
+                                <h6 class="font-weight-medium">$123</h6>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <h6 class="font-weight-medium">優惠碼折抵</h6>
+                                <h6 class="font-weight-medium">-$10</h6>
+                            </div>
                         </div>
-                        <div class="d-flex justify-content-between">
-                            <h6 class="font-weight-medium">優惠碼折抵</h6>
-                            <h6 class="font-weight-medium">-$10</h6>
+                        <div class="card-footer border-secondary bg-transparent">
+                            <div class="d-flex justify-content-between mt-2">
+                                <h5 class="font-weight-bold">訂單總金額</h5>
+                                <h5 class="font-weight-bold">$123</h5>
+                            </div>
+                            <hr />
+                            <button type="submit" class="btn btn-block btn-primary my-3 py-3">確定</button>
+                            <button type="button" class="btn btn-block btn-outline-primary my-3 py-3" href="/Shop/Cart">取消</button>
                         </div>
                     </div>
-                    <div class="card-footer border-secondary bg-transparent">
-                        <div class="d-flex justify-content-between mt-2">
-                            <h5 class="font-weight-bold">訂單總金額</h5>
-                            <h5 class="font-weight-bold">$123</h5>
-                        </div>
-                        <hr />
-						    <button type="submit" class="btn btn-block btn-primary my-3 py-3">確定</button>
-						    <button type="button" class="btn btn-block btn-outline-primary my-3 py-3" href="/Shop/Cart">取消</button>
-					</div>
+
                 </div>
-                
+            </div>
+        </form>
 
-@*                <div class="card border-secondary mb-5">
-                    <div class="card-header bg-secondary border-0">
-                        <h4 class="font-weight-semi-bold m-0">Payment</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="form-group">
-                            <div class="custom-control custom-radio">
-                                <input type="radio" class="custom-control-input" name="payment" id="paypal">
-                                <label class="custom-control-label" for="paypal">Paypal</label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="custom-control custom-radio">
-                                <input type="radio" class="custom-control-input" name="payment" id="directcheck">
-                                <label class="custom-control-label" for="directcheck">Direct Check</label>
-                            </div>
-                        </div>
-                        <div class="">
-                            <div class="custom-control custom-radio">
-                                <input type="radio" class="custom-control-input" name="payment" id="banktransfer">
-                                <label class="custom-control-label" for="banktransfer">Bank Transfer</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer border-secondary bg-transparent">
-                        <button class="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3">Place Order</button>
-                    </div>
-                </div>
-*@            </div>
-        </div>
     </div>
-    <!-- Checkout End -->
-
-</body>
-</html>
+</div>
+<!-- Checkout End -->

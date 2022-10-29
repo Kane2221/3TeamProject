@@ -1,9 +1,13 @@
 ﻿using _3TeamProject.Data;
+using _3TeamProject.Extensions;
 using _3TeamProject.Helpers;
 using _3TeamProject.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using System.Text;
+
 
 namespace _3TeamProject.Controllers
 {
@@ -11,7 +15,17 @@ namespace _3TeamProject.Controllers
     {
         private readonly IHostEnvironment environment;
         private _3TeamProjectContext _context;
-        
+        private BankInfoModel _bankInfoModel = new BankInfoModel
+        {
+            MerchantID = "MS144606325",
+            HashKey = "T5iAuriSnKw7g7o2o477WZlSAitdS17F",
+            HashIV = "Ci2lec2SHxLfCyPP",
+            ReturnURL = "http://yourWebsitUrl/Bank/SpgatewayReturn",
+            NotifyURL = "http://yourWebsitUrl/Bank/SpgatewayNotify",
+            CustomerURL = "http://yourWebsitUrl/Bank/SpgatewayCustomer",
+            AuthUrl = "https://ccore.spgateway.com/MPG/mpg_gateway",
+            CloseUrl = "https://core.newebpay.com/API/CreditCard/Close"
+        };
         public ShopController(_3TeamProjectContext context)
         {
             this._context = context;
@@ -110,18 +124,20 @@ namespace _3TeamProject.Controllers
         public IActionResult Checkout()
         {
             ISession session = this.HttpContext.Session;
-            if(SessionHelper.GetObjectFromJson<List<CartSessionDto>>(session,"cart")==null)
+            List<CartSessionDto> CartItem = SessionHelper.GetObjectFromJson<List<CartSessionDto>>(session, "cart");
+            if (CartItem == null)
             {
                 return RedirectToAction("Cart");
             }
             else
             {
-                var setorder = new Order
+                PayDto payDto = new PayDto
                 {
-                    MemberId = 1,
-                    AdministratorId=1,
-                    OrderDate = DateTime.Now,
-                    ShipDate = DateTime.Now,
+                    SubTotal = CartItem.Sum(n => n.SubTotal),
+                    //MemberId = 1,
+                    //AdministratorId=1,
+                    //OrderDate = DateTime.Now,
+                    //ShipDate = DateTime.Now,
                 };
             }
             return View();
@@ -131,6 +147,80 @@ namespace _3TeamProject.Controllers
         {
             return View();
         }
+
+        public IActionResult Pay(PayDto payDto)
+        {
+            string version = "1.5";
+
+            TradeInfo tradeInfo = new TradeInfo()
+            {
+                // * 商店代號
+                MerchantID = _bankInfoModel.MerchantID,
+                // * 回傳格式
+                RespondType = "String",
+                // * TimeStamp
+                TimeStamp = DateTimeOffset.Now.ToOffset(new TimeSpan(8, 0, 0)).ToUnixTimeSeconds().ToString(),
+                // * 串接程式版本
+                Version = version,
+                // * 商店訂單編號
+                //MerchantOrderNo = $"T{DateTime.Now.ToString("yyyyMMddHHmm")}",
+                //MerchantOrderNo = payDto.ordernumber,
+                MerchantOrderNo = "A45645641a1",
+                // * 訂單金額
+                //Amt = payDto.amount,
+                Amt=payDto.SubTotal,
+                // * 商品資訊
+                ItemDesc = "商品資訊(自行修改)",
+                // 支付完成 返回商店網址
+                ReturnURL = _bankInfoModel.ReturnURL,
+                // 支付通知網址
+                NotifyURL = _bankInfoModel.NotifyURL,
+                // 商店取號網址
+                CustomerURL = _bankInfoModel.CustomerURL,
+                // * 付款人電子信箱
+                Email = payDto.Email,
+                // 付款人電子信箱 是否開放修改(1=可修改 0=不可修改)
+                EmailModify = 0,
+                // 商店備註
+                OrderComment = null,
+                // 信用卡 一次付清啟用(1=啟用、0或者未有此參數=不啟用)
+                CREDIT = 1,
+            };
+
+            var inputModel = new SpgatewayInputModel
+            {
+                MerchantID = _bankInfoModel.MerchantID,
+                Version = version
+            };
+
+            var tradeQueryPara = string.Join("&", LambdaUtil.ModelToKeyValuePairList<TradeInfo>(tradeInfo).Select(x => $"{x.Key}={x.Value}"));
+            // AES 加密
+            inputModel.TradeInfo = CryptoUtil.EncryptAESHex(tradeQueryPara, _bankInfoModel.HashKey, _bankInfoModel.HashIV);
+            // SHA256 加密
+            inputModel.TradeSha = CryptoUtil.EncryptSHA256($"HashKey={_bankInfoModel.HashKey}&{inputModel.TradeInfo}&HashIV={_bankInfoModel.HashIV}");
+
+            // 將model 轉換為List<KeyValuePair<string, string>>, null值不轉
+            var postData = LambdaUtil.ModelToKeyValuePairList<SpgatewayInputModel>(inputModel);
+            //將5個欄位放入並以form submit方式送出
+            StringBuilder s = new StringBuilder();
+            s.Append("<html>");
+            //<body onload='document.forms[\"form\"].submit()'>  ->onload的時候就自己submit一次
+            s.AppendFormat("<body onload='document.forms[\"form\"].submit()'>");
+            s.AppendFormat("<form name='form' action='{0}' method='post'>", _bankInfoModel.AuthUrl);
+            foreach (KeyValuePair<string, string> item in postData)
+            {
+                s.AppendFormat("<input type='hidden' name='{0}' value='{1}' />", item.Key, item.Value);
+            }
+
+            s.Append("</form></body></html>");
+
+            //HttpContext.Response.WriteAsync(s.ToString());
+            //回傳Content s內html字串 指定為 "text/html" 格式
+            return Content(s.ToString(), "text/html");
+            //return View();
+        }
+
+
 
     }
 }
