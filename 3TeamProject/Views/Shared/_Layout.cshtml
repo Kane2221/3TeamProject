@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 
-@*    <link rel="stylesheet" href="~/_3TeamProject.styles.css" asp-append-version="true" />*@
+    @*<link rel="stylesheet" href="~/_3TeamProject.styles.css" asp-append-version="true" />*@
     
 
     <!-- Axios -->
@@ -15,7 +15,7 @@
     <!-- SweetAlert -->
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@@11"></script>
 
-@*    <link rel="stylesheet" href="~/Project2.styles.css" asp-append-version="true" />*@
+   @* <link rel="stylesheet" href="~/Project2.styles.css" asp-append-version="true" />*@
     <!-- Favicon -->
     <link href="~/img/favicon.ico" rel="icon">
 
@@ -113,23 +113,8 @@
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
-            <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-            <script src="~/lib/easing/easing.min.js"></script>
-            <script src="~/lib/owlcarousel/owl.carousel.min.js"></script>
-            <script src="~/lib/tempusdominus/js/moment.min.js"></script>
-            <script src="~/lib/tempusdominus/js/moment-timezone.min.js"></script>
-            <script src="~/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
-@*            <!-- Contact Javascript File -->
-            <script src="~/mail/jqBootstrapValidation.min.js"></script>
-            <script src="~/mail/contact.js"></script>*@
-
-            <!-- Template Javascript -->
-            <script src="~/js/main.js"></script>
-
-@*            @RenderSection("scripts", required: false)
-*@        </main>
+    </main>
     </div>
     <div id="master">
         <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
@@ -157,11 +142,24 @@
     </footer>
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="fa fa-angle-double-up"></i></a>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/easing/easing.min.js"></script>
+    <script src="~/lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="~/lib/tempusdominus/js/moment.min.js"></script>
+    <script src="~/lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="~/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
+    <!-- Contact Javascript File
+    <script src="~/mail/jqBootstrapValidation.min.js"></script>
+    <script src="~/mail/contact.js"></script> -->
+
+    <!-- Template Javascript -->
+    <script src="~/js/main.js"></script>
     <script src="~/js/mainmember.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!--<script src="~/lib/jquery/dist/jquery.min.js"></script>-->
+    <!--<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>-->
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

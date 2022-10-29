@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using _3TeamProject.Models;
 
@@ -11,9 +12,10 @@ using _3TeamProject.Models;
 namespace _3TeamProject.Migrations
 {
     [DbContext(typeof(_3TeamProjectContext))]
-    partial class _3TeamProjectContextModelSnapshot : ModelSnapshot
+    [Migration("20221029090031_Update-ActivitiesMessageState")]
+    partial class UpdateActivitiesMessageState
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
