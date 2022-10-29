@@ -1,6 +1,6 @@
-﻿namespace _3TeamProject.Models
+﻿namespace _3TeamProject.Data
 {
-    public class Cart
+    public class CartSessionDto
     {
         public int Id { get; set; }
         public int MemberId { get; set; }
