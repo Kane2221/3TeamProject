@@ -14,3 +14,4 @@ namespace _3TeamProject.Areas.Administrators.Data
         public int? SightseeingHomePage { get; set; }
         public virtual IEnumerable<GetSightPicInfoByAdmin> SightseeingPictureInfos { get; set; }
     }
+}
