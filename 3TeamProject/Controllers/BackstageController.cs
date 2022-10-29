@@ -32,7 +32,15 @@ namespace _3TeamProject.Controllers
         {
             return View();
         }
+        public IActionResult AddAttraction()
+        {
+            return View();
+        }
         public IActionResult Community()
+        {
+            return View();
+        }
+        public IActionResult Login()
         {
             return View();
         }
