@@ -40,5 +40,9 @@ namespace _3TeamProject.Controllers
         {
             return View();
         }
+        public IActionResult Login()
+        {
+            return View();
+        }
     }
 }
