@@ -236,12 +236,22 @@ namespace _3TeamProject.Areas.Members.Controllers
                                 });
             return Ok(OrderRecord);
         }
-        //TODO會員參與活動記錄
+        //會員參與活動記錄
         [HttpGet("ParticipatedRecord")]
         public IActionResult ParticipatedRecord()
         {
-            return Ok();
+            var UserID = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
+            var record = _context.SocialActivities.Include(s => s.Member)
+                .ThenInclude(m => m.User).Where(m => m.Member.UserId == UserID).Select(s=>new GetActRecord
+                {
+                    ActivityId = s.ActivityId,
+                    ActivitiesName = s.ActivitiesName,
+                    CreatedTime = s.CreatedTime,
+                    EndTime = s.EndTime
+                }).FirstOrDefault();
+
+            return Ok(record);
         }
-        //TODO 活動退出
+
     }
 }
