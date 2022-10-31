@@ -13,6 +13,8 @@
         public DateTime? RemovedTime { get; set; }
         public string? ProductIntroduce { get; set; }
         public int? ProductStatusId { get; set; }
+        public string ProductPictureName { get; set; } = null!;
+        public IList<IFormFile> files { get; set; }
 
     }
 }

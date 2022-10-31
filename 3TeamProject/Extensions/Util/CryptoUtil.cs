@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace _3TeamProject.Extensions
+namespace _3TeamProject.Extensions.Util
 {
     /// <summary>
     /// 智付通加解密Util

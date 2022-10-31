@@ -1,13 +1,16 @@
 ﻿using _3TeamProject.Data;
 using _3TeamProject.Extensions;
+using _3TeamProject.Extensions.Util;
 using _3TeamProject.Helpers;
 using _3TeamProject.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
+using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Security.Cryptography;
 using System.Text;
-
+using System.Web;
 
 namespace _3TeamProject.Controllers
 {
@@ -17,10 +20,10 @@ namespace _3TeamProject.Controllers
         private _3TeamProjectContext _context;
         private BankInfoModel _bankInfoModel = new BankInfoModel
         {
-            MerchantID = "MS144606325",
-            HashKey = "T5iAuriSnKw7g7o2o477WZlSAitdS17F",
-            HashIV = "Ci2lec2SHxLfCyPP",
-            ReturnURL = "http://yourWebsitUrl/Bank/SpgatewayReturn",
+            //MerchantID = "MS144606325",
+            //HashKey = "T5iAuriSnKw7g7o2o477WZlSAitdS17F",
+            //HashIV = "Ci2lec2SHxLfCyPP",
+            ReturnURL = "https://localhost:7007/Shop/SpgatewayReturn",
             NotifyURL = "http://yourWebsitUrl/Bank/SpgatewayNotify",
             CustomerURL = "http://yourWebsitUrl/Bank/SpgatewayCustomer",
             AuthUrl = "https://ccore.spgateway.com/MPG/mpg_gateway",
@@ -131,14 +134,18 @@ namespace _3TeamProject.Controllers
             }
             else
             {
+                Random or = new Random();//亂數種子
+                int i = or.Next(0, 100000000);//回傳0-99的亂數
                 PayDto payDto = new PayDto
                 {
                     SubTotal = CartItem.Sum(n => n.SubTotal),
+                    ordernumber = DateTime.Now.ToString("yyyyMMdd") + i.ToString() ,
                     //MemberId = 1,
                     //AdministratorId=1,
                     //OrderDate = DateTime.Now,
                     //ShipDate = DateTime.Now,
                 };
+                ViewBag.Total = payDto.SubTotal;
             }
             return View();
         }
@@ -151,11 +158,11 @@ namespace _3TeamProject.Controllers
         public IActionResult Pay(PayDto payDto)
         {
             string version = "1.5";
-
+            IConfiguration Config = new ConfigurationBuilder().AddJsonFile("appSettings.json").Build();
             TradeInfo tradeInfo = new TradeInfo()
             {
                 // * 商店代號
-                MerchantID = _bankInfoModel.MerchantID,
+                MerchantID = Config.GetSection("PayConfig").GetSection("MerchantID").Value,
                 // * 回傳格式
                 RespondType = "String",
                 // * TimeStamp
@@ -164,8 +171,8 @@ namespace _3TeamProject.Controllers
                 Version = version,
                 // * 商店訂單編號
                 //MerchantOrderNo = $"T{DateTime.Now.ToString("yyyyMMddHHmm")}",
-                //MerchantOrderNo = payDto.ordernumber,
-                MerchantOrderNo = "A45645641a1",
+                MerchantOrderNo = payDto.ordernumber,
+                //MerchantOrderNo = "A45645641a1a1",
                 // * 訂單金額
                 //Amt = payDto.amount,
                 Amt=payDto.SubTotal,
@@ -189,15 +196,16 @@ namespace _3TeamProject.Controllers
 
             var inputModel = new SpgatewayInputModel
             {
-                MerchantID = _bankInfoModel.MerchantID,
+                MerchantID = Config.GetSection("PayConfig").GetSection("MerchantID").Value,
                 Version = version
             };
-
+            string HashKey = Config.GetSection("PayConfig").GetSection("HashKey").Value;
+            string HashIV = Config.GetSection("PayConfig").GetSection("HashIV").Value;
             var tradeQueryPara = string.Join("&", LambdaUtil.ModelToKeyValuePairList<TradeInfo>(tradeInfo).Select(x => $"{x.Key}={x.Value}"));
             // AES 加密
-            inputModel.TradeInfo = CryptoUtil.EncryptAESHex(tradeQueryPara, _bankInfoModel.HashKey, _bankInfoModel.HashIV);
+            inputModel.TradeInfo = CryptoUtil.EncryptAESHex(tradeQueryPara, HashKey, HashIV);
             // SHA256 加密
-            inputModel.TradeSha = CryptoUtil.EncryptSHA256($"HashKey={_bankInfoModel.HashKey}&{inputModel.TradeInfo}&HashIV={_bankInfoModel.HashIV}");
+            inputModel.TradeSha = CryptoUtil.EncryptSHA256($"HashKey={HashKey}&{inputModel.TradeInfo}&HashIV={HashIV}");
 
             // 將model 轉換為List<KeyValuePair<string, string>>, null值不轉
             var postData = LambdaUtil.ModelToKeyValuePairList<SpgatewayInputModel>(inputModel);
@@ -218,6 +226,44 @@ namespace _3TeamProject.Controllers
             //回傳Content s內html字串 指定為 "text/html" 格式
             return Content(s.ToString(), "text/html");
             //return View();
+        }
+        public ActionResult SpgatewayReturn()
+        {
+            //   Request.LogFormData("SpgatewayReturn(支付完成)");
+
+            // Status 回傳狀態 
+            // MerchantID 回傳訊息
+            // TradeInfo 交易資料AES 加密
+            // TradeSha 交易資料SHA256 加密
+            // Version 串接程式版本
+            StringBuilder receive = new StringBuilder();
+            foreach (var item in Request.Form)
+            {
+                receive.AppendLine(item.Key + "=" + item.Value + "<br>");
+            }
+            //NameValueCollection collection = Request.Form;
+
+            if ( string.Equals(Request.Form["MerchantID"], _bankInfoModel.MerchantID) &&
+                 string.Equals(Request.Form["TradeSha"], CryptoUtil.EncryptSHA256($"HashKey={_bankInfoModel.HashKey}&{Request.Form["TradeInfo"]}&HashIV={_bankInfoModel.HashIV}")))
+            {
+                var decryptTradeInfo = CryptoUtil.DecryptAESHex(Request.Form["TradeInfo"], _bankInfoModel.HashKey, _bankInfoModel.HashIV);
+
+                // 取得回傳參數(ex:key1=value1&key2=value2),儲存為NameValueCollection
+                NameValueCollection decryptTradeCollection = HttpUtility.ParseQueryString(decryptTradeInfo);
+                SpgatewayOutputDataModel convertModel = LambdaUtil.DictionaryToObject<SpgatewayOutputDataModel>(decryptTradeCollection.AllKeys.ToDictionary(k => k, k => decryptTradeCollection[k]));
+
+               // LogUtil.WriteLog(JsonConvert.SerializeObject(convertModel));
+
+                // TODO 將回傳訊息寫入資料庫
+
+                return Content(JsonConvert.SerializeObject(convertModel));
+            }
+            else
+            {
+              //  LogUtil.WriteLog("MerchantID/TradeSha驗證錯誤");
+            }
+
+            return Content(string.Empty, "text/html");
         }
 
 

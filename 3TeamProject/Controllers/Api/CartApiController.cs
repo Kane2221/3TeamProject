@@ -26,7 +26,8 @@ namespace _3TeamProject.Controllers.Api
             //var C = CartItem.Count;
             //var temp= CartItem[0].ProductId;
             var ids = CartItem.Select(x => x.ProductId).ToList();
-            var t = CartItem.Select(q=>q.Amount).ToList();
+            var amount = CartItem.Select(q=>q.Amount).ToList();
+            var money = CartItem.Select(m=>m.SubTotal).ToList();
 
             var cart= _context.Products.Include(x => x.ProductsPictureInfos)
                 .Where(x => ids.Contains(x.ProductId))
@@ -37,7 +38,8 @@ namespace _3TeamProject.Controllers.Api
                     ProductName = x.ProductName,
                     ProductUnitPrice = x.ProductUnitPrice,
                     ProductPicturePath = x.ProductsPictureInfos.FirstOrDefault().ProductPicturePath,
-                    Amount = t.Count,
+                    Amount = amount[0],
+                    SubTotal = money[0]
                     //SubTotal = CartItem.Sum(n => n.SubTotal)
 
                 });

@@ -18,7 +18,7 @@
                         <td class="align-middle"><a :href="'ProductDetail?id='+ item.productId"><img :src="item.productPicturePath" alt="" style="width: 100px;"><p>{{item.productName}}</p></a></td>
                         <td class="align-middle">${{item.productUnitPrice}}</td>
                         <td class="align-middle">{{item.amount}}</td>
-                        <td class="align-middle">{{item.subtotal}}</td>
+                        <td class="align-middle">{{item.subTotal}}</td>
                         <td class="align-middle">{{item.unitStock}}</td>
                         <td class="align-middle">
                             <a :href="'./RemoveCart?id='+ item.productId" onclick="RemoveMessage()">

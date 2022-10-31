@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace _3TeamProject.Extensions
+namespace _3TeamProject.Extensions.Util
 {
     /// <summary>
     /// [Lambda]通用函式

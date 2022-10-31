@@ -1,4 +1,4 @@
-﻿namespace _3TeamProject.Data
+﻿namespace _3TeamProject.Extensions
 {
     /// <summary>執行結果基元(泛型)</summary>
     public class Atom<T>

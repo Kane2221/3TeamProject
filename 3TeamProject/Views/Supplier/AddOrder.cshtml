@@ -63,6 +63,7 @@
 
                     <div class="col-lg-9">
                         <div class="mb-4">
+                            <form action="/Supplier/AddOrder" method="post" enctype="multipart/form-data">
                             <div class="card-body" id="ProductCreate">
 
                                 @*<div class="container col-lg-5 mb-4 col-md-6 ">
@@ -86,9 +87,9 @@
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="card ">
-                                            <div class="card-body">
+                                                <div class="card-body" id="picpreview">
                                                 <label for="Image" class="form-label">商品圖片上傳</label>
-                                                <input class="form-control" type="file" id="formFile" onchange="preview()">
+                                                    <input type="file" name="files" id="files" onchange="preview()">
                                                 <button onclick="clearImage()" class="btn btn-primary mt-3">刪除</button>
                                             </div>
                                             <img id="frame" src="" class="img-fluid" />
@@ -99,7 +100,7 @@
                                             <div class="card-body">
                                                 <div class="form-group">
                                                     <label for="exampleFormControlTextarea1">商品介紹</label>
-                                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                                    <textarea class="form-control" v-model="ProductIntroduce" id="productIntroduce"></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -154,11 +155,12 @@
                                 <div>
                                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                         <button type="button" class="btn btn-outline-primary rounded px-3" href="/Member/Register">取消</button>
-                                        <button type="submit" class="btn btn-primary rounded submit px-3" @@click="insertProduct">送出</button>
+                                        <button type="submit" class="btn btn-primary rounded submit px-3" >送出</button>
                                     </div>
                                 </div>
 
                             </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -168,6 +170,21 @@
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.1.2/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.7.10/dist/vue.js"></script>
+<script>
+    var file = document.getElementById("files");
+    file.addEventListener("change", function (e) {
+        RenderPicPreview(e.target.files);
+    });
+
+    function RenderPicPreview(files) {
+        var target = document.getElementById("picpreview");
+        for (var i = 0; i < files.length; i++) {
+            var img = document.createElement("img");
+            img.src = URL.createObjectURL(files[i]);
+            target.append(img);
+        }
+    }
+</script>
 <script>
     var ProductCreate = new Vue({
         el: "#ProductCreate",
@@ -191,9 +208,11 @@
                 request.ProductUnitPrice = parseFloat(_this.ProductUnitPrice);
                 request.UnitStock = parseFloat(_this.UnitStock);
                 request.ProductStatus = _this.ProductStatus;
+                request.ProductIntroduce = _this.ProductIntroduce;
+                request.ProductPictureName = _this.ProductPictureName
                 axios.post(window.location.origin + "/Supplier/AddOrder", request).then(response => {
                     alert(response.data);
-                    window.location = 'Supplier/Orderlist'
+                    window.location = '/Supplier/Orderlist'
                 });
             },
 
