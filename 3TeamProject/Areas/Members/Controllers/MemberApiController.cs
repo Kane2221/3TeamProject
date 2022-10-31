@@ -2,6 +2,7 @@
 using _3TeamProject.Areas.Members.Data;
 using _3TeamProject.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +14,7 @@ using System.Security.Cryptography;
 
 namespace _3TeamProject.Areas.Members.Controllers
 {
-    [Authorize(Roles = "Members")]
+    [Authorize(Roles ="Members")]
     [Route("Members/[controller]")]
     [ApiController]
     public class MemberApiController : ControllerBase
@@ -28,14 +29,10 @@ namespace _3TeamProject.Areas.Members.Controllers
             _config = config;
         }
         //取得會員資料
-        [HttpGet("GetMember/{id}")]
-        public IActionResult GetMember(int id)
+        [HttpGet("GetMember")]
+        public IActionResult GetMember()
         {
             var UserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
-            if (id != UserId)
-            {
-                return BadRequest("與登入帳號不符");
-            }
             var user = _context.Users.Include(u => u.Members).FirstOrDefault(x => x.UserId == UserId);
             var member = (from u in _context.Users
                           where u.UserId == user.UserId
@@ -48,7 +45,7 @@ namespace _3TeamProject.Areas.Members.Controllers
                               RoleName = u.RolesNavigation.RoleName,
                               MemberName = m.MemberName,
                               NickName = m.NickName,
-                              Birthday = m.Birthday,
+                              Birthday = m.Birthday.ToShortDateString(),
                               IdentityNumber = m.IdentityNumber,
                               CellPhoneNumber = m.CellPhoneNumber,
                               PhoneNumber = m.PhoneNumber,
@@ -100,11 +97,11 @@ namespace _3TeamProject.Areas.Members.Controllers
                         PasswordHash = passwordHsah,
                         PasswordSalt = passwordSalt,
                         VerficationToken = Convert.ToHexString(RandomNumberGenerator.GetBytes(64)),
-                        Roles = request.Roles
+                        Roles = 1
                     }
                 };
                 #region Send Email with verify code (正式再解開註解)
-                var root = $@"{Request.Scheme}:/{Request.Host}/User/Verify";
+                var root = $@"{Request.Scheme}:/{Request.Host}/Member/Verify";
                 //TODO 修改寄信的超連結
                 using (MailMessage mail = new MailMessage())
                 {
@@ -242,7 +239,7 @@ namespace _3TeamProject.Areas.Members.Controllers
         {
             var UserID = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
             var record = _context.SocialActivities.Include(s => s.Member)
-                .ThenInclude(m => m.User).Where(m => m.Member.UserId == UserID).Select(s=>new GetActRecord
+                .ThenInclude(m => m.User).Where(m => m.Member.UserId == UserID).Select(s => new GetActRecord
                 {
                     ActivityId = s.ActivityId,
                     ActivitiesName = s.ActivitiesName,
@@ -251,6 +248,6 @@ namespace _3TeamProject.Areas.Members.Controllers
                 }).FirstOrDefault();
 
             return Ok(record);
-        } 
+        }
     }
 }

@@ -10,10 +10,5 @@ namespace _3TeamProject.Data
         [Required]
         public string Account { get; set; } = string.Empty;
 
-        [Required, MinLength(8), PasswordPropertyText]
-        public string Password { get; set; } = string.Empty;
-
-        [Required, Compare("Password"), PasswordPropertyText]
-        public string ComfirmPassword { get; set; } = string.Empty;
     }
 }

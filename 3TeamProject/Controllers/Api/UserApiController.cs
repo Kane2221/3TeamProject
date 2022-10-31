@@ -56,14 +56,17 @@ namespace _3TeamProject.Controllers.Api
             var claimsPricipal = new ClaimsPrincipal(claimsIdentity);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPricipal);
             return Ok("登入成功");
-            //return RedirectToAction("index", "home");
         }
         //註冊驗證帳號
         [HttpPost("Verify")]
         public async Task<IActionResult> Verify([FromBody] VerifyDto request)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.VerficationToken == request.Token);
-            
+            var account = await _context.Users.FirstOrDefaultAsync(a=>a.Account == request.Account);
+            if (account == null)
+            {
+                return BadRequest("帳號錯誤");
+            }
             if (user == null)
             {
                 return BadRequest("無效的驗證碼");
@@ -77,8 +80,14 @@ namespace _3TeamProject.Controllers.Api
             var supplier = _context.Suppliers.Include(m => m.User)
                 .Where(m => m.User.VerficationToken == request.Token).FirstOrDefault();
             user.VerfiedAt = DateTime.Now;
-            member.MemberStatusId = 2;
-            supplier.SupplierStatusId = 1;
+            if (member != null)
+            {
+                member.MemberStatusId = 2;
+            }
+            else if (supplier != null)
+            {
+                supplier.SupplierStatusId = 1;
+            }
             await _context.SaveChangesAsync();
             return Ok("驗證成功");
         }

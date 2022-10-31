@@ -18,15 +18,15 @@ namespace _3TeamProject.Controllers
 
         public IActionResult Index()
         {
-            var claims = new List<Claim>()
-            {
-                new Claim(ClaimTypes.Name, ""),
-                new Claim(ClaimTypes.Sid, ""),
-                new Claim(ClaimTypes.Role, "")
-            };
-            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            var claimsPricipal = new ClaimsPrincipal(claimsIdentity);
-            HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPricipal);
+            //var claims = new List<Claim>()
+            //{
+            //    new Claim(ClaimTypes.Name, ""),
+            //    new Claim(ClaimTypes.Sid, ""),
+            //    new Claim(ClaimTypes.Role, "")
+            //};
+            //var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            //var claimsPricipal = new ClaimsPrincipal(claimsIdentity);
+            //HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPricipal);
             return View();
         }
 

@@ -10,7 +10,7 @@
     <link href="~/css/style.css" rel="stylesheet">
 }
 
-<body>
+
     <div id="VuePage">
         <div class="row justify-content-center">
             <div class="col-md-12 col-lg-10">
@@ -53,7 +53,7 @@
                                 <div class="w-50 text-left">
                                     <label class="checkbox-wrap checkbox-primary mb-0">
                                         記住我的帳號
-                                        <input type="checkbox" checked>
+                                        <input type="checkbox" v-model="isChecked">
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>
@@ -82,8 +82,8 @@
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
-    </div>*@
+        </div><!-- /.modal -->*@
+    </div>
 
     @section scripts {
         <script>
@@ -93,7 +93,8 @@
                     Account: '',
                     Password: '',
                     ErrMsg:'',
-                    Success:''
+                    Success:'',
+                    isChecked: false
                 },
                 methods: {
                     SubmitData: function () {
@@ -134,6 +135,6 @@
             
         </script>
     }
-    </body>
+
     
 
