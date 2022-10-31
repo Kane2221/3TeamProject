@@ -2,7 +2,7 @@
 
 namespace _3TeamProject.Data
 {
-    public class LoginReuqest
+    public class LoginDto
     {
         [Required]
         public string Account { get; set; } = string.Empty;

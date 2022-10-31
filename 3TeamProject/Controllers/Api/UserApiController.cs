@@ -25,28 +25,17 @@ namespace _3TeamProject.Controllers.Api
         }
         //登入帳號
         [HttpPost("Login")]
-        public async Task<IActionResult> Login([FromBody] LoginReuqest request)
+        public async Task<IActionResult> Login([FromBody] LoginDto request)
         {
             var user = await _context.Users.Include(u => u.RolesNavigation)
+                .Include(u=>u.Members).Include(u=>u.Suppliers)
                 .FirstOrDefaultAsync(u => u.Account == request.Account);
-            if (user == null)
+            if (user == null || 
+                user.Members.Where(m=>m.MemberStatusId == 4).SingleOrDefault() != null || 
+                user.Suppliers.Where(s=>s.SupplierStatusId == 3).SingleOrDefault() != null)
             {
                 return BadRequest("帳號不存在");
             }
-            ////判斷會員帳號已刪除的情況不能登入
-            //var member = _context.Members.Include(m => m.User)
-            //    .Where(m => m.User.Account == request.Account).FirstOrDefault();
-            //if (member == null || member.MemberStatusId == 4)
-            //{
-            //    return BadRequest("帳號不存在");
-            //}
-            ////判斷廠商帳號已刪除的情況不能登入    
-            //var supplier = _context.Suppliers.Include(m => m.User)
-            //    .Where(m => m.User.Account == request.Account).FirstOrDefault();
-            //if (supplier == null || supplier.SupplierStatusId == 3)
-            //{
-            //    return BadRequest("帳號不存在");
-            //}
             var hmac = new HMACSHA512(user.PasswordSalt);
             var computeHsah = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(request.Password));
             if (!computeHsah.SequenceEqual(user.PasswordHash))
@@ -69,11 +58,11 @@ namespace _3TeamProject.Controllers.Api
             return Ok("登入成功");
             //return RedirectToAction("index", "home");
         }
+        //註冊驗證帳號
         [HttpPost("Verify")]
-        //驗證帳號
-        public async Task<IActionResult> Verify([FromBody] string token)
+        public async Task<IActionResult> Verify([FromBody] VerifyDto request)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.VerficationToken == token);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.VerficationToken == request.Token);
             
             if (user == null)
             {
@@ -84,9 +73,9 @@ namespace _3TeamProject.Controllers.Api
                 return BadRequest("已驗證過的驗證碼");
             }
             var member = _context.Members.Include(m => m.User)
-                .Where(m => m.User.VerficationToken == token).FirstOrDefault();
+                .Where(m => m.User.VerficationToken == request.Token).FirstOrDefault();
             var supplier = _context.Suppliers.Include(m => m.User)
-                .Where(m => m.User.VerficationToken == token).FirstOrDefault();
+                .Where(m => m.User.VerficationToken == request.Token).FirstOrDefault();
             user.VerfiedAt = DateTime.Now;
             member.MemberStatusId = 2;
             supplier.SupplierStatusId = 1;
@@ -95,9 +84,9 @@ namespace _3TeamProject.Controllers.Api
         }
         [HttpPost("ForgotPassword")]
         //忘記密碼
-        public async Task<IActionResult> ForgotPassword([FromBody] string email)
+        public async Task<IActionResult> ForgotPassword([FromBody] FogotPasswordDto request)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
             if (user == null)
             {
                 return BadRequest("帳號不存在");
@@ -110,11 +99,12 @@ namespace _3TeamProject.Controllers.Api
             //TODO 修改寄信的超連結
             using (MailMessage mail = new MailMessage())
             {
-                mail.From = new MailAddress("dotnettgm102@gmail.com", "帳號驗證碼");
-                mail.To.Add("dotnettgm102@gmail.com");
+                mail.From = new MailAddress("dotnettgm102@gmail.com", "帳號重設驗證碼");
+                mail.To.Add(request.Email);
                 mail.Priority = MailPriority.Normal;
-                mail.Subject = "帳號驗證碼";
-                mail.Body = $"<a href=\"{root}\" value=\"{verifyToken}\">帳號驗證碼</a>";
+                mail.Subject = "帳號重設驗證碼";
+                mail.Body = $"<h1>請到以下頁面輸入驗證碼 : {verifyToken}</h1>/n " +
+                            $"<a href=\"{root}\">帳號重設驗證碼</a>";
                 mail.IsBodyHtml = true;
                 SmtpClient MySmtp = new SmtpClient("smtp.gmail.com", 587);
                 MySmtp.UseDefaultCredentials = false;
@@ -129,7 +119,7 @@ namespace _3TeamProject.Controllers.Api
         }
         [HttpPost("ResetPassword")]
         //重設密碼
-        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto request)
         {
             if (!ModelState.IsValid)
             {
@@ -139,11 +129,11 @@ namespace _3TeamProject.Controllers.Api
             var user = await _context.Users.FirstOrDefaultAsync(u => u.PasswordResetToken == request.Token);
             if (user == null || user.ResetTokenExpires < DateTime.Now)
             {
-                return BadRequest("驗證碼已過期，請重新申請!");
+                return BadRequest("驗證碼錯誤");
             }
-            if (request.Password != request.ComfirmPassword)
+            if (user.ResetTokenExpires < DateTime.Now)
             {
-                return BadRequest("密碼與確認密碼不一致");
+                return BadRequest("驗證碼已過期，請重新申請!");
             }
             using (var hmac = new HMACSHA512())
             {

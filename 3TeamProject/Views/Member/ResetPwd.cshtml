@@ -29,31 +29,91 @@
 							</p>
 						</div>
 					</div>
-					<form action="#" class="fgpwd-form">
-						<div class="form-group mb-3">
-							<label class="label" for="email">請輸入舊密碼</label>
-							<input type="password" class="form-control" placeholder="舊密碼" required>
-						</div>
-						<div class="form-group mb-3">
-							<label class="label" for="email">請輸入新密碼</label>
-							<input type="password" class="form-control" placeholder="新密碼" required>
-						</div>
-						<div class="form-group mb-3">
-							<label class="label" for="email">請再次輸入新密碼</label>
-							<input type="password" class="form-control" placeholder="再次輸入新密碼" required>
-						</div>
-						<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-							<button type="button" class="btn btn-outline-primary rounded px-3">取消</button>
-							<button type="submit" class="btn btn-primary rounded submit px-3">送出</button>
-						</div>
+                    <div id="VuePage">
+                            <form v-on:submit.prevent="SubmitData" class="fgpwd-form">
+                                <div class="form-group mb-3">
+                                    <label class="label" for="Token">請輸入驗證碼</label>
+                                    <input type="password" v-model.lazy="Token" class="form-control" placeholder="驗證碼" required>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label class="label" for="Password">請輸入新密碼</label>
+                                    <input type="password" v-model.lazy="Password" class="form-control" placeholder="新密碼" required>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label class="label" for="ConfirmPassword">請再次輸入新密碼</label>
+                                    <input type="password" v-model.lazy="ConfirmPassword" class="form-control" placeholder="再次輸入新密碼" required>
+                                </div>
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <button type="button" class="btn btn-outline-primary rounded px-3" v-on:click="cancel">取消</button>
+                                    <button type="submit" class="btn btn-primary rounded submit px-3">送出</button>
+                                </div>
 
-					</form>
-
-
+                            </form>
+                    </div>
 				</div>
 			</div>
 		</div>
 	</div>
+        @section scripts {
+        <script>
+            var VuePage = new Vue({
+                el: "#VuePage",
+                data: {
+                    Token: '',
+                    Password:'',
+                    ConfirmPassword:'',
+                    ErrMsg: '',
+                    Success: ''
+                },
+                methods: {
+                    SubmitData: function () {
+                        var self = this;
+                        axios({
+                            method: 'post',
+                            url: '/Users/UserApi/ResetPassword',
+                            data: {
+                                Token: self.Token,
+                                Password: self.Password,
+                                ConfirmPassword: self.ConfirmPassword
+                            }
+                        })
+                        .then(function (response) {
+                            self.Success = response.data;
+                            Swal.fire({
+                                title: self.Success,
+                                icon: 'success',
+                                timer: 12000
+                            }).then((result => {
+                                window.location.assign("/Member/Login")
+                            }));
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            var er = error.response.data.errors;
+                            self.ErrMsg = error.response.data;
+                            if (er != null){
+                                var confirm = er.ConfirmPassword != null ? er.ConfirmPassword+',' : '';
+                                var pass = er.Password != null ? er.Password : '';
+                                    self.ErrMsg =  confirm + pass;
+                            }
+                            //TODO 驗證還要在修改
+                            Swal.fire({
+                                title: '失敗',
+                                text: self.ErrMsg,
+                                icon: 'error',
+                                timer: 12000
+                            });
+                            console.log(error);
+                            return;
+                        });
+                    },
+                    cancel: function () {
+                        window.location.assign("/Member/Login");
+                    }
+                }
+            });
 
+        </script>
+    }
 </body>
 

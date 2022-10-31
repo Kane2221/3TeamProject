@@ -1,17 +1,19 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 
 namespace _3TeamProject.Data
 {
-    public class ResetPasswordRequest
+    public class VerifyDto
     {
         [Required]
         public string Token { get; set; } = string.Empty;
+        [Required]
+        public string Account { get; set; } = string.Empty;
 
-        [Required, MinLength(8, ErrorMessage = "密碼少於8位數")]
+        [Required, MinLength(8), PasswordPropertyText]
         public string Password { get; set; } = string.Empty;
 
-        [Required, Compare("Password", ErrorMessage = "密碼不一致")]
+        [Required, Compare("Password"), PasswordPropertyText]
         public string ComfirmPassword { get; set; } = string.Empty;
-
     }
 }

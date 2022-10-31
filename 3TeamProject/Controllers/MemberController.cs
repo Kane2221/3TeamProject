@@ -63,6 +63,10 @@ namespace _3TeamProject.Controllers
         {
             return View();
         }
+        public IActionResult Verify()
+        {
+            return View();
+        }
         public IActionResult MyOrder()
         {
             return View();

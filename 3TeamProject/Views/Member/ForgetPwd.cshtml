@@ -27,23 +27,72 @@
 							</p>
 						</div>
 				</div>
-					<form action="#" class="fgpwd-form">
-							<div class="form-group mb-5">
-								<label class="label" for="email">請輸入電子郵件</label>
-								<input type="text" class="form-control" placeholder="電子郵件" required>
-							</div>
-							<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-							<button type="button" class="btn btn-outline-primary rounded px-3" href="/Member/Register">取消</button>
-								<button type="submit" class="btn btn-primary rounded submit px-3">送出</button>
-							</div>
-
-					</form>
-
-				
+                <div id="VuePage">
+                    <form v-on:submit.prevent="SubmitData" class="fgpwd-form">
+                        <div class="form-group mb-5">
+                            <label class="label" for="email">請輸入電子郵件</label>
+                            <input type="email" v-model.lazy="Email" class="form-control" placeholder="電子郵件" required>
+                        </div>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button type="button" class="btn btn-outline-primary rounded px-3" v-on:click="cancel">取消</button>
+                            <button type="submit" class="btn btn-primary rounded submit px-3">送出</button>
+                        </div>
+                    </form>
+                </div>
+                    
             </div>
         </div>
     </div>
 </div>
+@section scripts {
+        <script>
+            var VuePage = new Vue({
+                el: "#VuePage",
+                data: {
+                    Email: '',
+                    ErrMsg: '',
+                    Success: ''
+                },
+                methods: {
+                    SubmitData: function () {
+                        var self = this;
+                        axios({
+                            method: 'post',
+                            url: '/Users/UserApi/ForgotPassword',
+                            data: {
+                                Email: self.Email
+                            }
+                        })
+                        .then(function (response) {
+                            self.Success = response.data;
+                            Swal.fire({
+                                title: self.Success,
+                                icon: 'success',
+                                timer: 12000
+                            }).then((result => {
+                                    window.location.assign("/Member/ResetPwd")
+                            }));
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            self.ErrMsg = error.response.data;
+                            Swal.fire({
+                                title: '失敗',
+                                text: self.ErrMsg,
+                                icon: 'error',
+                                timer: 12000
+                            });
+                            console.log(error);
+                            return;
+                        });
+                    },
+                    cancel: function(){
+                        window.location.assign("/Member/Login");
+                    }
+                }
+            });
 
+        </script>
+    }
 </body>
-</html>
+

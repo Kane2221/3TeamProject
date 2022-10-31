@@ -134,8 +134,8 @@ namespace _3TeamProject.Areas.SocialActivities.Controllers
             return Ok("已留言");
         }
         //參與活動
-        [HttpPost("ParticipateAct/{id}")]
-        public IActionResult ParticipateAct(int id)
+        [HttpPost("JoinAct/{id}")]
+        public IActionResult JoinAct(int id)
         {
             var UserID = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
             var user = _context.JoinMembers.Include(j=>j.Member).ThenInclude(m=>m.User).Where(j=>j.Member.UserId == UserID).SingleOrDefault();
@@ -156,9 +156,8 @@ namespace _3TeamProject.Areas.SocialActivities.Controllers
             _context.SaveChanges();
             return Ok("您已參與此活動");
         }
-
         //活動退出
-        [HttpDelete("QuitAct")]
+        [HttpDelete("QuitAct/{id}")]
         public IActionResult QuitAct(int id)
         {
             var UserID = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);

@@ -251,7 +251,6 @@ namespace _3TeamProject.Areas.Members.Controllers
                 }).FirstOrDefault();
 
             return Ok(record);
-        }
-
+        } 
     }
 }

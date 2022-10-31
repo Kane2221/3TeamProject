@@ -35,7 +35,7 @@
                                 </p>
                             </div>
                         </div>
-                        <form v-on:submit.prevent="confirm" class="signin-form">
+                        <form v-on:submit.prevent="SubmitData" class="signin-form">
                             <div class="form-group mb-3">
                                 <label class="label" for="name">請輸入帳號</label>
                                 <input type="text" class="form-control" v-model.lazy="Account" placeholder="帳號"
@@ -68,7 +68,7 @@
             </div>
         </div>
 
-        <!--使用 Bootstrap Modal 樣式，當執行有錯誤時，顯示錯誤訊息-->
+        @*<!--使用 Bootstrap Modal 樣式，當執行有錯誤時，顯示錯誤訊息-->
         <div class="modal fade" id="ErrorAlert" tabindex="-1" role="dialog" v-if="ErrMsg != null">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
@@ -83,7 +83,7 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
-    </div>
+    </div>*@
 
     @section scripts {
         <script>
@@ -96,7 +96,7 @@
                     Success:''
                 },
                 methods: {
-                    confirm: function () {
+                    SubmitData: function () {
                         var self = this;
                         axios({
                         method: 'post',
@@ -133,14 +133,7 @@
             });
             
         </script>
-}
-
-        <script src="~/js/jquery.min.js"></script>
-        <script src="~/js/popper.js"></script>
-        <script src="~/js/bootstrap.min.js"></script>
-        <script src="~/js/main.js"></script>
-
-
+    }
     </body>
+    
 
-    </html>
