@@ -20,7 +20,7 @@ builder.Services.AddControllersWithViews();
 //    policy => policy.WithOrigins("https://localhost:7007").WithHeaders("*").WithMethods("*")));
 
 
-//新增Cookie驗證
+//新增Cookie驗證，第二段為新增Google第三方登入認證。
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(opt => {
         opt.AccessDeniedPath = "/Home";

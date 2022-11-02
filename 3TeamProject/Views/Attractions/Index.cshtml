@@ -1,8 +1,4 @@
-﻿<!DOCTYPE html>
-
-<html lang="en">
-
-<head>
+﻿@section Head{
     <meta charset="utf-8">
     <title>ShopIndex</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -10,37 +6,42 @@
     <meta content="Free HTML Templates" name="description">
     <link href=https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.41/vue.cjs.js>
     <link rel="stylesheet" href="~/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
+    <style>
+        .checked {
+          color: orange;
+        }
+    </style>
 
-</head>
-
-<body>
-    <!-- Search Bar Start -->
-    <div class="container-fluid" style="background-color:#2f4f4f;">
-        <div class="row align-items-center justify-content-center py-3 px-xl-5">
-            <div class="col-lg-6 col-6 text-left ">
-                <form action="">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="搜尋景點">
-                        <div class="input-group-append">
-                            <span class="btn input-group-text bg-transparent text-primary">
-                                <i class="fa fa-search"></i>
-                            </span>
+}
+    
+<div id="VuePage">
+        <!-- Search Bar Start -->
+        <div class="container-fluid" style="background-color:#2f4f4f;">
+            <div class="row align-items-center justify-content-center py-3 px-xl-5">
+                <div class="col-lg-6 col-6 text-left ">
+                    <form action="">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="搜尋景點">
+                            <div class="input-group-append">
+                                <span class="btn input-group-text bg-transparent text-primary">
+                                    <i class="fa fa-search"></i>
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-    <!-- Search Bar End -->
-    <!-- Theme Start -->
-    <div class="container-fluid pt-5">
+        <!-- Search Bar End -->
+        <!-- Theme Start -->
+        <div class="container-fluid pt-5">
             <div class="text-center mb-3 pb-3">
                 <h1>主題景點</h1>
             </div>
             <div class="row">
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="destination-item position-relative overflow-hidden mb-2">
-                    <img class="img-fluid" src="img/destination-1.jpg" alt="">
+                        <img class="img-fluid" src="img/destination-1.jpg" alt="">
                         <a class="destination-overlay text-white text-decoration-none" href="Attractions/AttractionsDetail">
                             <h5 class="text-white">景點名稱</h5>
                         </a>
@@ -58,129 +59,114 @@
                     <div class="destination-item position-relative overflow-hidden mb-2">
                         <img class="img-fluid" src="img/destination-3.jpg" alt="">
                         <a class="destination-overlay text-white text-decoration-none" href="">
-                        <h5 class="text-white">景點名稱</h5>
+                            <h5 class="text-white">景點名稱</h5>
                         </a>
                     </div>
                 </div>
             </div>
-    </div>
-    <!-- Theme End -->
-    <br />
-    <br />
-    <br />
+        </div>
+        <!-- Theme End -->
+        <br />
+        <br />
+        <br />
 
-    <!-- Detail Start -->
-    <div class="d-flex justify-content-center">
-        <div class="col-md-2">
-            <div class="accordion" id="accordionPanelsStayOpenExample">
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-                        <button class="accordion-button btn-primary collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                            景點分類
-                        </button>
-                    </h2>
-                    <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
-                        <div class="accordion-body">
-                            <button class="btn btn-secondary">
-                                登山
+        <!-- Detail Start -->
+        <div class="d-flex justify-content-center">
+            <div class="col-md-2">
+                <div class="accordion" id="accordionPanelsStayOpenExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                            <button class="accordion-button btn-primary collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                                景點分類
                             </button>
-                            <br />
-                            <button class="btn btn-secondary">
-                                淺水
-                            </button>
+                        </h2>
+                        <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+                            <div class="accordion-body">
+                                <button class="btn btn-secondary">
+                                    登山
+                                </button>
+                                <br />
+                                <button class="btn btn-secondary">
+                                    潛水
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
-                        <button class="accordion-button btn-primary collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-                            景點分區
-                        </button>
-                    </h2>
-                    <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
-                        <div class="accordion-body">
-                            <button class="btn btn-secondary">
-                                台北市
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+                            <button class="accordion-button btn-primary collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                                景點分區
                             </button>
-                            <br />
-                            <button class="btn btn-secondary">
-                                新北市
-                            </button>
+                        </h2>
+                        <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
+                            <div class="accordion-body">
+                                <button class="btn btn-secondary">
+                                    台北市
+                                </button>
+                                <br />
+                                <button class="btn btn-secondary">
+                                    新北市
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
             <div class="col-md-10">
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th class="text-center">
-                                <div class="toggle-btn">
-                                    <div class="inner-circle"></div>
-                                </div>
-                            </th>
-                            <th>景點編號</th>
-                            <th>景點名稱</th>
-                            <th>景點國家</th>
-                            <th>景點城市</th>
-                            <th>景點地址</th>
-                            <th>景點推薦度</th>
-                            <th>備註</th>
-                        </tr>
-                    </thead>
-                    <tbody class="table-body">
-                        <tr class="cell-1">
-                            <td class="text-center">
-                                <div class="toggle-btn">
-                                    <div class="inner-circle"></div>
-                                </div>
-                            </td>
-                            <td>#1591234</td>
-                            <td>屏東墾丁後壁湖潛水</td>
-                            <td>台灣</td>
-                            <td>屏東</td>
-                            <td>屏東墾丁後壁湖</td>
-                            <td>
-                                <div>
-                                    推薦星星
-@*									<b-form-rating v-model="value" readonly></b-form-rating>
-									<p class="mt-2">Value: {{ value }}</p>
-*@                              </div>
-                            </td>
-                            <td>123</td>
-                        </tr>
-                        <tr class="cell-1">
-                            <td class="text-center">
-                                <div class="toggle-btn">
-                                    <div class="inner-circle"></div>
-                                </div>
-                            </td>
-                            <td>#1591234</td>
-                            <td>屏東墾丁後壁湖潛水</td>
-                            <td>台灣</td>
-                            <td>屏東</td>
-                            <td>屏東墾丁後壁湖</td>
-                            <td>
-                                <div>
-                                    推薦星星
-                                    @*									<b-form-rating v-model="value" readonly></b-form-rating>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="text-center">
+                                    <div class="toggle-btn">
+                                        <div class="inner-circle"></div>
+                                    </div>
+                                </th>
+                                <th>景點編號</th>
+                                <th>景點名稱</th>
+                                <th>景點國家</th>
+                                <th>景點城市</th>
+                                <th>景點地址</th>
+                                <th>景點推薦度</th>
+                                <th>備註</th>
+                            </tr>
+                        </thead>
+                        <tbody v-for="sight in Sightseeings" class="table-body">
+                            <tr class="cell-1">
+                                <td class="text-center">
+                                    <div class="toggle-btn">
+                                        <div class="inner-circle"></div>
+                                    </div>
+                                </td>
+                                <td>#{{sight.sightseeingId}}</td>
+                                <td>{{sight.sightseeingName}}</td>
+                                <td>{{sight.SightseeingCountry}}</td>
+                                <td>{{sight.SightseeingCity}}</td>
+                                <td>{{sight.SightseeingAddress}}</td>
+                                <td>
+                                    <div>
+                                        <span class="fa fa-star checked"></span>
+                                        <span class="fa fa-star checked"></span>
+                                        <span class="fa fa-star checked"></span>
+                                        <span class="fa fa-star"></span>
+                                        <span class="fa fa-star"></span>
+                                        @*									<b-form-rating v-model="value" readonly></b-form-rating>
                                     <p class="mt-2">Value: {{ value }}</p>
                                     *@
-                                </div>
-                            </td>
-                            <td>123</td>
-                        </tr>
-
-                    </tbody>
-                </table>
+                                    </div>
+                                </td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Detail End -->
+        <!-- Detail End -->
+</div>
+    
     <!-- Footer Start -->
     <div class="container-fluid bg-dark text-white-50 py-5 px-sm-3 px-lg-5" style="margin-top: 90px;">
         <div class="row pt-5">
@@ -227,17 +213,32 @@
         </div>
     </div>
     <!-- Footer End -->
+    @section scripts {
+    <script>
+        var VuePage = new Vue({
+            el: "#VuePage",
+            data: {
+                Sightseeings:[],
+                ErrMsg: '',
+                Success: ''
+            },
+            mounted: function () {
+                var self = this;
+                axios({
+                    method: 'get',
+                    url: '/Sightseeings/SightseeingApi'
+                })
+                .then(function (res) {
+                    console.log(res);
+                    self.Sightseeings = res.data;
+                    var result = new Set(res.data.categoryName);
+                    self.Category = [...result];
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+            },
+        });
 
-</body>
-
-</html>
-<script src="https://cdn.jsdelivr.net/npm/vue@2.7.13/dist/vue.js"></script>
-<script>
-    export default {
-        data() {
-            return {
-                value: 2.567
-            }
-        }
+    </script>
     }
-</script>
