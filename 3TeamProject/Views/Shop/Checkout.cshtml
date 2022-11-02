@@ -1,30 +1,42 @@
 ﻿<!-- Checkout Start -->
 <div class="container-fluid pt-5">
-    <div class="row px-xl-5">
-        <form action="/Shop/Pay" method="post">
+    <div class="row px-xl-5" id="checkout">
+        <form v-on:submit.prevent="ShopDetail">
             <div class="col-lg-8">
                 <div class="mb-4">
                     <h4 class="font-weight-semi-bold mb-4">付款資訊</h4>
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label>姓名</label>
-                            <input class="form-control" name="MemberName" type="text" placeholder="請輸入付款人姓名">
+                            <input class="form-control" v-model="MemberName" type="text" placeholder="請輸入付款人姓名" required>
                         </div>
                         <div class="col-md-6 form-group">
                             <label>電子信箱</label>
-                            <input class="form-control" name="Email" type="text" placeholder="example@email.com">
+                            <input class="form-control" v-model="Email" type="text" placeholder="example@email.com" required>
                         </div>
                         <div class="col-md-6 form-group">
                             <label>手機號碼</label>
-                            <input class="form-control" name="CellPhoneNumber" type="text" placeholder="0987-654-321">
+                            <input class="form-control" v-model="CellPhoneNumber" type="text" placeholder="0987-654-321" required>
                         </div>
                         <div class="col-md-6 form-group">
                             <label>市話</label>
-                            <input class="form-control" name="PhoneNumber" type="text" placeholder="02-1234-5678">
+                            <input class="form-control" v-model="PhoneNumber" type="text" placeholder="02-1234-5678" required>
+                        </div>
+                        <div class="col-md-3 form-group">
+                            <label>郵遞區號</label>
+                            <input class="form-control" v-model="ShipPostalCode" type="text" placeholder="請輸入郵遞區號" required>
+                        </div>
+                        <div class="col-md-3 form-group">
+                            <label>鄉鎮</label>
+                            <input class="form-control" v-model="ShipCountry" type="text" placeholder="請輸入鄉鎮" required>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>城市</label>
+                            <input class="form-control" v-model="ShipCity" type="text" placeholder="請輸入城市" required>
                         </div>
                         <div class="col-md-12 form-group">
                             <label>地址</label>
-                            <input class="form-control" name="Address" type="text" placeholder="請輸入地址">
+                            <input class="form-control" v-model="ShipAddress" type="text" placeholder="請輸入地址" required>
                         </div>
                         <div class="col-md-12 form-group" style="display:none">
                             <label>金額</label>
@@ -135,10 +147,20 @@
     //Vue.use(VueNumberInput);
     //Vue.component('vue-number-input', VueNumberInput);
     let app = new Vue({
-        el: "#collapseCheckout",
+        el: "#checkout",
         data: {
             products: [],
-            productpic: []
+            productpic: [],
+            MemberName: '',
+            CellPhoneNumber: '',
+            PhoneNumber: '',
+            Email: '',
+            ordernumber: '',
+            ShipPostalCode: '',
+            ShipCountry: '',
+            ShipCity: '',
+            ShipAddress: '',
+            SubTotal: '',
         },
         methods: {
             submit: function (index) {
@@ -148,16 +170,51 @@
             }
         },
         mounted: function () {
-            let self = this;
-            fetch("/api/Cart")
-                .then(function (response) { return response.json() })
-                .then(function (result) {
-                    self.products = result.map(function (x) {
-                        //x.qty = 0;
+            this.CartApi(),
+            this.ShopDetail()
+        },
+        methods:{
+            CartApi:function(){
+                let self = this;
+                fetch("/api/Cart")
+                    .then(function (response) { return response.json() })
+                    .then(function (result) {
+                        self.products = result.map(function (x) {
+                            //x.qty = 0;
 
-                        return x
+                            return x
+                        })
+
+                    })
+            },
+            ShopDetail: function () {
+                let self = this;
+                fetch("/Shop/Checkout",
+                {
+                    method:'POST',
+                    headers:{
+                        'Content-Type':'appliction/json'
+                    },
+                    body:JSON.stringify({
+                            MemberName: self.MemberName,
+                            CellPhoneNumber: self.CellPhoneNumber,
+                            PhoneNumber: self.PhoneNumber,
+                            Email: self.Email,
+                            ShipPostalCode: self.ShipPostalCode,
+                            ShipCountry: self.ShipCountry,
+                            ShipCity: self.ShipCity,
+                            ShipAddress: self.ShipAddress,
+                            SubTotal: self.SubTotal
                     })
                 })
+                    .then(function (response) { return response.json() })
+                    .then(function (jsonData) {
+                        console.log(jsonData)
+                    })
+            }
         }
+            
+        
+
     })
 </script>

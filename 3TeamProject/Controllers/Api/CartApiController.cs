@@ -26,11 +26,11 @@ namespace _3TeamProject.Controllers.Api
             //var C = CartItem.Count;
             //var temp= CartItem[0].ProductId;
             var ids = CartItem.Select(x => x.ProductId).ToList();
-            var amount = CartItem.Select(q=>q.Amount).ToList();
-            var money = CartItem.Select(m=>m.SubTotal).ToList();
+            var quantity = CartItem.Select(q=>q.Quantity).ToList();
+            var subTotal = CartItem.Select(m=>m.SubTotal).ToList();
 
-            var cart= _context.Products.Include(x => x.ProductsPictureInfos)
-                .Where(x => ids.Contains(x.ProductId))
+            var cart = _context.Products.Include(x => x.ProductsPictureInfos)
+                .Where(x => ids.Contains(x.ProductId)).ToList()
                 .Select(x => new CartApiDto
                 {
                     ProductId = x.ProductId,
@@ -38,12 +38,12 @@ namespace _3TeamProject.Controllers.Api
                     ProductName = x.ProductName,
                     ProductUnitPrice = x.ProductUnitPrice,
                     ProductPicturePath = x.ProductsPictureInfos.FirstOrDefault().ProductPicturePath,
-                    Amount = amount[0],
-                    SubTotal = money[0]
-                    //SubTotal = CartItem.Sum(n => n.SubTotal)
+                    //Quantity = CartItem.FirstOrDefault(z=>x.ProductId == z.ProductId).Quantity
+                    SubTotal = CartItem.FirstOrDefault(z => x.ProductId == z.ProductId).SubTotal
+                    
 
                 });
-
+            //var sss = _context.Products.Select(x=>x).ToList();
 
 
 
