@@ -141,9 +141,9 @@
                                 </td>
                                 <td>#{{sight.sightseeingId}}</td>
                                 <td>{{sight.sightseeingName}}</td>
-                                <td>{{sight.SightseeingCountry}}</td>
-                                <td>{{sight.SightseeingCity}}</td>
-                                <td>{{sight.SightseeingAddress}}</td>
+                                <td>{{sight.sightseeingCountry}}</td>
+                                <td>{{sight.sightseeingCity}}</td>
+                                <td>{{sight.sightseeingAddress}}</td>
                                 <td>
                                     <div>
                                         <span class="fa fa-star checked"></span>
@@ -219,6 +219,8 @@
             el: "#VuePage",
             data: {
                 Sightseeings:[],
+                SightByTheme:[],
+                SightByArea:[],
                 ErrMsg: '',
                 Success: ''
             },
@@ -231,12 +233,22 @@
                 .then(function (res) {
                     console.log(res);
                     self.Sightseeings = res.data;
-                    var result = new Set(res.data.categoryName);
-                    self.Category = [...result];
+                    //var result = new Set(res.data.categoryName);
+                    //self.Category = [...result];
+
                 })
                 .catch(function (error) {
                     console.log(error);
                 })
+            },
+            methods:{
+                area: function () {
+                    var sight = self.Sightbyarea;
+                    // 提取出category
+                    const array = self.Sightseeings.map((sight) => self.Sightseeings.categoryName)
+                    // 過濾出重複的元素
+                    return [...new Set(array)]
+                }
             },
         });
 

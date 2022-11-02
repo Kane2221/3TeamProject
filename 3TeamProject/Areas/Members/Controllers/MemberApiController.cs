@@ -183,7 +183,7 @@ namespace _3TeamProject.Areas.Members.Controllers
         }
         //會員我的訂單
         [HttpGet("GetOrder")]
-        public IActionResult GetOrder() //TODO 待測_我的訂單
+        public IActionResult GetOrder()
         {
             var UserID = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
             var myOrder = _context.Orders.Include(o => o.Member).Include(o => o.OrderDetails)
@@ -200,6 +200,7 @@ namespace _3TeamProject.Areas.Members.Controllers
                     OrderDetails = o.OrderDetails.Select(od => new GetOrderDetailDto
                     {
                         ProductId = od.ProductId,
+                        ProductName = od.Product.ProductName,
                         UnitPrice = od.UnitPrice,
                         Discount = od.Discount,
                         Quantity = od.Quantity,

@@ -90,7 +90,7 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
                         PasswordHash = passwordHsah,
                         PasswordSalt = passwordSalt,
                         VerficationToken = verifyToken,
-                        Roles = request.Roles
+                        Roles = 2
                     }
                 };
                 _context.Suppliers.Add(supplier).CurrentValues.SetValues(request);

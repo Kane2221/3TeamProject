@@ -18,8 +18,6 @@ namespace _3TeamProject.Areas.Sppliers.Data
         public string ComfirmPassword { get; set; } = string.Empty;
 
         [Required]
-        public int Roles { get; set; }
-        [Required]
         public string ContactName { get; set; } = string.Empty;
         [Required]
         public string CompanyName { get; set; } = string.Empty;

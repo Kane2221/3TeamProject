@@ -8,7 +8,7 @@ namespace _3TeamProject.Controllers
         {
             return View();
         }
-        public IActionResult AttractionsDetail()
+        public IActionResult AttractionsDetail(int id)
         {
             return View();
         }

@@ -46,5 +46,9 @@ namespace _3TeamProject.Controllers
             await _context.SaveChangesAsync();
             return Json("新增成功!");
         }
+        public IActionResult Verify()
+        {
+            return View();
+        }
     }
 }
