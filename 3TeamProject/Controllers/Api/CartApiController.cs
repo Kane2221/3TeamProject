@@ -38,7 +38,7 @@ namespace _3TeamProject.Controllers.Api
                     ProductName = x.ProductName,
                     ProductUnitPrice = x.ProductUnitPrice,
                     ProductPicturePath = x.ProductsPictureInfos.FirstOrDefault().ProductPicturePath,
-                    //Quantity = CartItem.FirstOrDefault(z=>x.ProductId == z.ProductId).Quantity
+                    Amount = CartItem.FirstOrDefault(z=>x.ProductId == z.ProductId).Quantity,
                     SubTotal = CartItem.FirstOrDefault(z => x.ProductId == z.ProductId).SubTotal
                     
 
