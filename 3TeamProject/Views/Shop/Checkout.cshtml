@@ -1,26 +1,26 @@
 ﻿<!-- Checkout Start -->
 <div class="container-fluid pt-5">
     <div class="row px-xl-5" id="checkout">
-        <form v-on:submit.prevent="ShopDetail">
+        <form action="/Shop/Checkout" method="post">
             <div class="col-lg-8">
                 <div class="mb-4">
                     <h4 class="font-weight-semi-bold mb-4">付款資訊</h4>
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label>姓名</label>
-                            <input class="form-control" v-model="MemberName" type="text" placeholder="請輸入付款人姓名" required>
+                            <input class="form-control" name="MemberName" type="text" placeholder="請輸入付款人姓名" required>
                         </div>
                         <div class="col-md-6 form-group">
                             <label>電子信箱</label>
-                            <input class="form-control" v-model="Email" type="text" placeholder="example@email.com" required>
+                            <input class="form-control" name="Email" type="text" placeholder="example@email.com" required>
                         </div>
                         <div class="col-md-6 form-group">
                             <label>手機號碼</label>
-                            <input class="form-control" v-model="CellPhoneNumber" type="text" placeholder="0987-654-321" required>
+                            <input class="form-control" name="CellPhoneNumber" type="text" placeholder="0987-654-321" required>
                         </div>
                         <div class="col-md-6 form-group">
                             <label>市話</label>
-                            <input class="form-control" v-model="PhoneNumber" type="text" placeholder="02-1234-5678" required>
+                            <input class="form-control" name="PhoneNumber" type="text" placeholder="02-1234-5678" required>
                         </div>
 
                         <div class="col-md-12 form-group" style="display:none">
@@ -70,19 +70,19 @@
                         </div>*@
                         <div class="col-md-3 form-group">
                             <label>郵遞區號</label>
-                            <input class="form-control" v-model="ShipPostalCode" type="text" placeholder="請輸入郵遞區號" required>
+                            <input class="form-control" name="ShipPostalCode" type="text" placeholder="請輸入郵遞區號" required>
                         </div>
                         <div class="col-md-3 form-group">
                             <label>鄉鎮</label>
-                            <input class="form-control" v-model="ShipCountry" type="text" placeholder="請輸入鄉鎮" required>
+                            <input class="form-control" name="ShipCountry" type="text" placeholder="請輸入鄉鎮" required>
                         </div>
                         <div class="col-md-6 form-group">
                             <label>城市</label>
-                            <input class="form-control" v-model="ShipCity" type="text" placeholder="請輸入城市" required>
+                            <input class="form-control" name="ShipCity" type="text" placeholder="請輸入城市" required>
                         </div>
                         <div class="col-md-12 form-group">
                             <label>地址</label>
-                            <input class="form-control" v-model="ShipAddress" type="text" placeholder="請輸入地址" required>
+                            <input class="form-control" name="ShipAddress" type="text" placeholder="請輸入地址" required>
                         </div>
                     </div>
                 </div>

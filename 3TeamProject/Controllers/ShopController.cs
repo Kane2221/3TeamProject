@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
@@ -154,15 +155,18 @@ namespace _3TeamProject.Controllers
 
         }
         [HttpPost("/Shop/Checkout")]
-        public IActionResult Checkout([FromBody] PayDto request)
+        public IActionResult Checkout([FromForm] PayDto request)
         {
+            //var UserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
+            var member = _context.Members.FirstOrDefault(x => x.UserId == 60);
+            var lastOrder = _context.Orders.Include(o=>o.Administrator).Where(o => o.MemberId == member.MemberId).OrderByDescending(o => o.OrderDate).FirstOrDefault();
             ISession session = this.HttpContext.Session;
             List<CartSessionDto> CartItem = SessionHelper.GetObjectFromJson<List<CartSessionDto>>(session, "cart");
             var order = new Order
             {
                 //OrderId = int.Parse(DateTime.Now.ToString("yyyyMMdd") + i.ToString()),
-                MemberId = 2,
-                AdministratorId = 8,
+                MemberId = member.MemberId,
+                //AdministratorId = lastOrder.AdministratorId,
                 OrderDate = DateTime.Now,
                 ShipDate = DateTime.Now,
                 PaymentStatus = 0,
@@ -186,24 +190,13 @@ namespace _3TeamProject.Controllers
             _context.Orders.Add(order);
             _context.SaveChanges();
 
-            Pay(request);
-            //return RedirectToAction("Pay");
-            return Ok();
-        }
-
-        public IActionResult Rating()
-        {
-            return View();
-        }
-
-        public IActionResult Pay(PayDto payDto)
-        {
+            
             string version = "1.5";
             IConfiguration Config = new ConfigurationBuilder().AddJsonFile("appSettings.json").Build();
             TradeInfo tradeInfo = new TradeInfo()
             {
                 // * 商店代號
-                MerchantID = Config.GetSection("PayConfig").GetSection("MerchantID").Value,
+                MerchantID = Config["PayConfig:MerchantID"],// Config.GetSection("PayConfig").GetSection("MerchantID").Value,
                 // * 回傳格式
                 RespondType = "String",
                 // * TimeStamp
@@ -212,11 +205,11 @@ namespace _3TeamProject.Controllers
                 Version = version,
                 // * 商店訂單編號
                 //MerchantOrderNo = $"T{DateTime.Now.ToString("yyyyMMddHHmm")}",
-                MerchantOrderNo = payDto.ordernumber,
+                MerchantOrderNo = lastOrder.OrderId.ToString(),
                 //MerchantOrderNo = "A45645641a1a1",
                 // * 訂單金額
                 //Amt = payDto.amount,
-                Amt=payDto.SubTotal,
+                Amt = request.SubTotal,
                 // * 商品資訊
                 ItemDesc = "商品資訊(自行修改)",
                 // 支付完成 返回商店網址
@@ -226,7 +219,7 @@ namespace _3TeamProject.Controllers
                 // 商店取號網址
                 CustomerURL = _bankInfoModel.CustomerURL,
                 // * 付款人電子信箱
-                Email = payDto.Email,
+                Email = request.Email,
                 // 付款人電子信箱 是否開放修改(1=可修改 0=不可修改)
                 EmailModify = 0,
                 // 商店備註
@@ -267,8 +260,20 @@ namespace _3TeamProject.Controllers
             //回傳Content s內html字串 指定為 "text/html" 格式
             return Content(s.ToString(), "text/html");
             //return View();
+            // return RedirectToAction("Pay");
+
         }
-        public ActionResult SpgatewayReturn()
+
+        public IActionResult Rating()
+        {
+            return View();
+        }
+
+        //public IActionResult Pay(PayDto payDto)
+        //{
+            
+        //}
+        public ActionResult SpgatewayReturn(SpgatewayOutputDataModel response)
         {
             //   Request.LogFormData("SpgatewayReturn(支付完成)");
 
@@ -293,10 +298,14 @@ namespace _3TeamProject.Controllers
                 NameValueCollection decryptTradeCollection = HttpUtility.ParseQueryString(decryptTradeInfo);
                 SpgatewayOutputDataModel convertModel = LambdaUtil.DictionaryToObject<SpgatewayOutputDataModel>(decryptTradeCollection.AllKeys.ToDictionary(k => k, k => decryptTradeCollection[k]));
 
-               // LogUtil.WriteLog(JsonConvert.SerializeObject(convertModel));
+                // LogUtil.WriteLog(JsonConvert.SerializeObject(convertModel));
 
                 // TODO 將回傳訊息寫入資料庫
-
+                var order =  _context.Orders.FirstOrDefault(x => x.OrderId == int.Parse(response.MerchantOrderNo));
+                order.PaymentStatus = 1;
+                order.OrderStatus = 1; 
+                _context.Orders.Add(order);
+                _context.SaveChanges();
                 return Content(JsonConvert.SerializeObject(convertModel));
             }
             else
@@ -304,7 +313,7 @@ namespace _3TeamProject.Controllers
               //  LogUtil.WriteLog("MerchantID/TradeSha驗證錯誤");
             }
 
-            return Content(string.Empty, "text/html");
+            return Redirect("/Member/MyOrder");
         }
 
 
