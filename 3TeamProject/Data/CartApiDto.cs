@@ -14,8 +14,8 @@
         public string? ProductIntroduce { get; set; }
         public int? ProductStatusId { get; set; }
         public int? ProductHomePage { get; set; }
-        public int Amount { get; set; }
-        public int SubTotal { get; set; }
+        public int ?Amount { get; set; }
+        public int ?SubTotal { get; set; }
         public string? ProductPicturePath { get; set; } = null!;
     }
 }

@@ -4,16 +4,19 @@ using _3TeamProject.Extensions.Util;
 using _3TeamProject.Helpers;
 using _3TeamProject.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 
 namespace _3TeamProject.Controllers
 {
+    //[Route("Shop/[Action]")]
     public class ShopController : Controller
     {
         private readonly IHostEnvironment environment;
@@ -47,7 +50,7 @@ namespace _3TeamProject.Controllers
             if(CartItem!= null)
             {
                 ViewBag.Total = CartItem.Sum(n => n.SubTotal);
-                ViewBag.Amount = CartItem.Sum(n => n.Amount);
+                ViewBag.Quantity = CartItem.Sum(n => n.Quantity);
                 //CartItem = new List<Cart>()
             }
             else
@@ -71,7 +74,7 @@ namespace _3TeamProject.Controllers
             CartSessionDto item = new CartSessionDto
             {
                 ProductId = id,
-                Amount = 1,
+                Quantity = 1,
                 SubTotal = (int)_context.Products.Single(n => n.ProductId == id).ProductUnitPrice
                            //Int32.Parse(from p in _context.Products where p.ProductId == id select p.UnitStock),
                 
@@ -90,7 +93,7 @@ namespace _3TeamProject.Controllers
                 //int index = cart.Find(id);
                 if (index !=-1)
                 {
-                    cart[index].Amount += item.Amount;
+                    cart[index].Quantity += item.Quantity;
                     cart[index].SubTotal += item.SubTotal;
                 }
                 else
@@ -124,30 +127,68 @@ namespace _3TeamProject.Controllers
             //return NoContent();
             return RedirectToAction ("Cart");
         }
+        [HttpGet("/Shop/Checkout")]
         public IActionResult Checkout()
         {
             ISession session = this.HttpContext.Session;
             List<CartSessionDto> CartItem = SessionHelper.GetObjectFromJson<List<CartSessionDto>>(session, "cart");
-            if (CartItem == null)
-            {
-                return RedirectToAction("Cart");
-            }
-            else
-            {
-                Random or = new Random();//亂數種子
-                int i = or.Next(0, 100000000);//回傳0-99的亂數
-                PayDto payDto = new PayDto
+
+                if (CartItem == null)
                 {
-                    SubTotal = CartItem.Sum(n => n.SubTotal),
-                    ordernumber = DateTime.Now.ToString("yyyyMMdd") + i.ToString() ,
-                    //MemberId = 1,
-                    //AdministratorId=1,
-                    //OrderDate = DateTime.Now,
-                    //ShipDate = DateTime.Now,
+                    return RedirectToAction("Cart");
+                }
+                else
+                {
+                    PayDto payDto = new PayDto
+                    {
+                        SubTotal = CartItem.Sum(n => n.SubTotal),
+                        //ordernumber = DateTime.Now.ToString("yyyyMMdd") + i.ToString() ,
+                        //MemberId = 1,
+                        //AdministratorId=1,
+                        //OrderDate = DateTime.Now,
+                        //ShipDate = DateTime.Now,
+                    };
+                    ViewBag.Total = payDto.SubTotal;
+                }
+                return View();
+
+        }
+        [HttpPost("/Shop/Checkout")]
+        public IActionResult Checkout([FromBody] PayDto request)
+        {
+            ISession session = this.HttpContext.Session;
+            List<CartSessionDto> CartItem = SessionHelper.GetObjectFromJson<List<CartSessionDto>>(session, "cart");
+            var order = new Order
+            {
+                //OrderId = int.Parse(DateTime.Now.ToString("yyyyMMdd") + i.ToString()),
+                MemberId = 2,
+                AdministratorId = 8,
+                OrderDate = DateTime.Now,
+                ShipDate = DateTime.Now,
+                PaymentStatus = 0,
+                ShipStatus = 0,
+                ShipPostalCode = request.ShipPostalCode,
+                ShipCountry = request.ShipCountry,
+                ShipCity = request.ShipCity,
+                ShipAddress = request.ShipAddress
+            };
+            foreach (var odi in CartItem)
+            {
+                var pic = new OrderDetail
+                {
+                    ProductId = odi.ProductId,
+                    UnitPrice = odi.SubTotal,
+                    Discount = 0,
+                    Quantity = odi.Quantity
                 };
-                ViewBag.Total = payDto.SubTotal;
+                order.OrderDetails.Add(pic);
             }
-            return View();
+            _context.Orders.Add(order);
+            _context.SaveChanges();
+
+            Pay(request);
+            //return RedirectToAction("Pay");
+            return Ok();
         }
 
         public IActionResult Rating()

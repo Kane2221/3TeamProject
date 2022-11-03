@@ -22,6 +22,52 @@
                             <label>市話</label>
                             <input class="form-control" v-model="PhoneNumber" type="text" placeholder="02-1234-5678" required>
                         </div>
+
+                        <div class="col-md-12 form-group" style="display:none">
+                            <label>金額</label>
+                            <input class="form-control" name="SubTotal" type="text" value=@ViewBag.Total>
+                        </div>
+                        @*<h4 class="font-weight-semi-bold mb-4">收件人資訊</h4>*@
+                        @*<div class="collapse mb-4" id="shipping-address">*@
+                        
+                        @*<div class="row">
+                        <div class="col-md-12 form-group">
+                        <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" value="1" id="samedetail">
+                        <label class="custom-control-label" for="samedetail">與付款資訊相同</label>
+                        </div>
+                        </div>
+                        <div class="col-md-12 form-group">
+                        <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" value="2" id="shipto">
+                        <label class="custom-control-label" for="shipto" data-toggle="collapse" data-target="#shipping-address">重新填寫收件人</label>
+                        </div>
+                        </div>
+                        </div>*@
+                        @*</div>*@
+                    </div>
+                    <h4 class="font-weight-semi-bold mb-4">收貨資訊</h4>
+                    <div class="row">
+                        @*<div class="col-md-6 form-group">
+                        <label>姓名</label>
+                        <input class="form-control" type="text" placeholder="請輸入付款人姓名">
+                        </div>
+                        <div class="col-md-6 form-group">
+                        <label>電子信箱</label>
+                        <input class="form-control" type="text" placeholder="example@email.com">
+                        </div>
+                        <div class="col-md-6 form-group">
+                        <label>手機號碼</label>
+                        <input class="form-control" type="text" placeholder="0987-654-321">
+                        </div>
+                        <div class="col-md-6 form-group">
+                        <label>市話</label>
+                        <input class="form-control" type="text" placeholder="02-1234-5678">
+                        </div>
+                        <div class="col-md-12 form-group">
+                        <label>地址</label>
+                        <input class="form-control" type="text" placeholder="請輸入地址">
+                        </div>*@
                         <div class="col-md-3 form-group">
                             <label>郵遞區號</label>
                             <input class="form-control" v-model="ShipPostalCode" type="text" placeholder="請輸入郵遞區號" required>
@@ -37,50 +83,6 @@
                         <div class="col-md-12 form-group">
                             <label>地址</label>
                             <input class="form-control" v-model="ShipAddress" type="text" placeholder="請輸入地址" required>
-                        </div>
-                        <div class="col-md-12 form-group" style="display:none">
-                            <label>金額</label>
-                            <input class="form-control" name="SubTotal" type="text" value=@ViewBag.Total>
-                        </div>
-                        <h4 class="font-weight-semi-bold mb-4">收件人資訊</h4>
-                        <div class="row">
-                            <div class="col-md-12 form-group">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" value="1" id="samedetail">
-                                    <label class="custom-control-label" for="samedetail">與付款資訊相同</label>
-                                </div>
-                            </div>
-                            <div class="col-md-12 form-group">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" value="2" id="shipto">
-                                    <label class="custom-control-label" for="shipto" data-toggle="collapse" data-target="#shipping-address">重新填寫收件人</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="collapse mb-4" id="shipping-address">
-                    <h4 class="font-weight-semi-bold mb-4">收貨資訊</h4>
-                    <div class="row">
-                        <div class="col-md-6 form-group">
-                            <label>姓名</label>
-                            <input class="form-control" type="text" placeholder="請輸入付款人姓名">
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>電子信箱</label>
-                            <input class="form-control" type="text" placeholder="example@email.com">
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>手機號碼</label>
-                            <input class="form-control" type="text" placeholder="0987-654-321">
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>市話</label>
-                            <input class="form-control" type="text" placeholder="02-1234-5678">
-                        </div>
-                        <div class="col-md-12 form-group">
-                            <label>地址</label>
-                            <input class="form-control" type="text" placeholder="請輸入地址">
                         </div>
                     </div>
                 </div>
@@ -103,12 +105,12 @@
                                     <p>${{item.productUnitPrice}}</p>
                                 </div>
                                 @*<div class="d-flex justify-content-between">
-                                    <a href=""> 淺水錶</a>
-                                    <p>$123</p>
+                                <a href=""> 淺水錶</a>
+                                <p>$123</p>
                                 </div>
                                 <div class="d-flex justify-content-between">
-                                    <a href="">淺水錶</a>
-                                    <p>$123</p>
+                                <a href="">淺水錶</a>
+                                <p>$123</p>
                                 </div>*@
                             </div>
 
@@ -160,21 +162,14 @@
             ShipCountry: '',
             ShipCity: '',
             ShipAddress: '',
-            SubTotal: '',
-        },
-        methods: {
-            submit: function (index) {
-                console.log(this.$refs.form[index]);
-                this.$refs.form[index].click();
-
-            }
+            SubTotal: 0,
         },
         mounted: function () {
-            this.CartApi(),
-            this.ShopDetail()
+            this.CartApi()
+                //this.ShopDetail()
         },
-        methods:{
-            CartApi:function(){
+        methods: {
+            CartApi: function () {
                 let self = this;
                 fetch("/api/Cart")
                     .then(function (response) { return response.json() })
@@ -188,33 +183,38 @@
                     })
             },
             ShopDetail: function () {
-                let self = this;
+                let _self = this;
                 fetch("/Shop/Checkout",
-                {
-                    method:'POST',
-                    headers:{
-                        'Content-Type':'appliction/json'
-                    },
-                    body:JSON.stringify({
-                            MemberName: self.MemberName,
-                            CellPhoneNumber: self.CellPhoneNumber,
-                            PhoneNumber: self.PhoneNumber,
-                            Email: self.Email,
-                            ShipPostalCode: self.ShipPostalCode,
-                            ShipCountry: self.ShipCountry,
-                            ShipCity: self.ShipCity,
-                            ShipAddress: self.ShipAddress,
-                            SubTotal: self.SubTotal
+                    {
+                        method: 'POST',
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            MemberName: _self.MemberName,
+                            CellPhoneNumber: _self.CellPhoneNumber,
+                            PhoneNumber: _self.PhoneNumber,
+                            Email: _self.Email,
+                            ShipPostalCode: _self.ShipPostalCode,
+                            ShipCountry: _self.ShipCountry,
+                            ShipCity: _self.ShipCity,
+                            ShipAddress: _self.ShipAddress,
+                            SubTotal: _self.SubTotal
+                        })
                     })
-                })
                     .then(function (response) { return response.json() })
                     .then(function (jsonData) {
                         console.log(jsonData)
                     })
+            },
+            submit: function (index) {
+                console.log(this.$refs.form[index]);
+                this.$refs.form[index].click();
+
             }
         }
-            
-        
+
+
 
     })
 </script>
