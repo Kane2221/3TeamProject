@@ -39,12 +39,12 @@
                             <div class="form-group mb-3">
                                 <label class="label" for="name">請輸入帳號</label>
                                 <input type="text" class="form-control" v-model.lazy="Account" placeholder="帳號"
-                                       required>
+                                       required autocomplete="on">
                             </div>
                             <div class="form-group mb-3">
                                 <label class="label" for="password">請輸入密碼</label>
                                 <input type="password" class="form-control" v-model.lazy="Password" placeholder="密碼"
-                                       required>
+                                       required autocomplete="on">
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="form-control btn btn-primary rounded submit px-3">登入</button>
@@ -94,7 +94,7 @@
                     Password: '',
                     ErrMsg:'',
                     Success:'',
-                    isChecked: false
+                    isChecked: false    
                 },
                 methods: {
                     SubmitData: function () {
@@ -114,7 +114,7 @@
                                 icon: 'success',
                                 timer: 12000
                                 }).then((result =>{
-                                    window.location.assign("/home")
+                                    window.location.assign("/Member/Memberprofile")
                             }));
                             console.log(response);
                         })

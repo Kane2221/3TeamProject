@@ -29,12 +29,11 @@ namespace _3TeamProject.Controllers
         {
             return View();
         }
-        public IActionResult OrderList()
+        public IActionResult ProductList()
         {
             return View();
         }
-        [HttpGet("/Supplier/AddOrder")]
-        public IActionResult AddOrder()
+        public IActionResult AddProduct()
         {
             return View();
         }

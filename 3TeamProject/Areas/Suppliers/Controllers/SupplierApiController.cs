@@ -165,13 +165,67 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
                 });
             return Ok(products);
         }
-        //商品上架，烜嘉做了
-        //[Authorize("Suppliers")]
-        //[HttpPost("Upload")]
-        //public IActionResult UploadProduct() 
-        //{
-        //    return Ok();
-        //}
+        //商品新增及上傳圖片
+        [HttpPost("AddProduct")]
+        public async Task<IActionResult> AddProduct([FromForm] AddProduct request)
+        {
+            var UserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
+            var supplier = _context.Products.Include(p=>p.Supplier).FirstOrDefault(x => x.Supplier.UserId == UserId);
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Select(x => x.Value.Errors).Where(y => y.Count > 0).ToList();
+                return BadRequest(errors);
+            }
+            if (await _context.Products.AnyAsync(s => s.ProductName == request.ProductName))
+            {
+                return BadRequest("商品已經存在");
+            }
+            var product = new Product
+            {
+                ProductName = request.ProductName,
+                ProductCategoryId = request.ProductCategoryId,
+                QuantityPerUnit = request.QuantityPerUnit,
+                ProductUnitPrice = request.ProductUnitPrice,
+                UnitStock = request.UnitStock,
+                ProductIntroduce = request.ProductIntroduce,
+                ProductStatusId = 0,
+                AddedTime = DateTime.Now,
+                SupplierId = supplier.SupplierId,
+            };
+            //為每一張上傳圖片給值及上傳位置
+            if (request.ProductFiles != null)
+            {
+                foreach (var file in request.ProductFiles)
+                {
+                    var root = $@"{_env.ContentRootPath}\wwwroot\";
+                    var tempRoot = "";
+                    if (file.FileName.Contains(".jpg"))
+                    {
+                        tempRoot = root +"img"+"\\"+"Sight"+"\\" +"picture"+ "\\" + request.ProductName;
+                    }
+                    else
+                    {
+                        tempRoot = root +"img"+"\\"+"Sight"+"\\"+"other"+ "\\" +request.ProductName;
+                    }
+                    if (!Directory.Exists(tempRoot))
+                    {
+                        Directory.CreateDirectory(tempRoot);
+                    }
+                    var path = tempRoot +"\\" + file.FileName;
+
+                    file.CopyTo(System.IO.File.Create(path));
+                    var pic = new ProductsPictureInfo
+                    {
+                        ProductPicturePath = "\\" + path.Replace(root, ""),
+                        ProductPictureName = request.ProductName
+                    };
+                    product.ProductsPictureInfos.Add(pic);
+                }
+            }
+            _context.Products.Add(product);
+            _context.SaveChanges();
+            return Ok("已新增商品");
+        }
         //TODO 商品修改
         //TODO 商品下架(下架後隱藏)
     }

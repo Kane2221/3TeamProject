@@ -1,6 +1,9 @@
 ﻿using _3TeamProject.Areas.Administrators.Data;
 using _3TeamProject.Areas.Members.Data;
+using _3TeamProject.Data;
 using _3TeamProject.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +17,7 @@ using System.Security.Cryptography;
 
 namespace _3TeamProject.Areas.Members.Controllers
 {
-    [Authorize(Roles ="Members")]
+    [Authorize(Roles = "Members")]
     [Route("Members/[controller]")]
     [ApiController]
     public class MemberApiController : ControllerBase
@@ -197,6 +200,7 @@ namespace _3TeamProject.Areas.Members.Controllers
                     OrderCategoryName = o.OrderStatusNavigation.OrderCategoryName,
                     PaymentCategoryName = o.PaymentStatusNavigation.PaymentCategoryName,
                     ShipCategoryName = o.ShipStatusNavigation.ShipCategoryName,
+                    Total = o.OrderDetails.Sum(odd => odd.UnitPrice*odd.Quantity*(1-(decimal)odd.Discount)),
                     OrderDetails = o.OrderDetails.Select(od => new GetOrderDetailDto
                     {
                         ProductId = od.ProductId,
@@ -204,13 +208,14 @@ namespace _3TeamProject.Areas.Members.Controllers
                         UnitPrice = od.UnitPrice,
                         Discount = od.Discount,
                         Quantity = od.Quantity,
+                        SubTotal = od.UnitPrice*od.Quantity*(1-(decimal)od.Discount)
                     })
                 });
             return Ok(myOrder);
         }
         //會員訂購記錄
         [HttpGet("GetOrderRecord")]
-        public IActionResult GetOrderRecord()//TODO 待測_訂購記錄
+        public IActionResult GetOrderRecord()
         {
             var UserID = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
             var OrderRecord = _context.Orders.Include(o => o.Member).Include(o => o.OrderDetails)
@@ -224,19 +229,21 @@ namespace _3TeamProject.Areas.Members.Controllers
                                     OrderCategoryName = o.OrderStatusNavigation.OrderCategoryName,
                                     PaymentCategoryName = o.PaymentStatusNavigation.PaymentCategoryName,
                                     ShipCategoryName = o.ShipStatusNavigation.ShipCategoryName,
+                                    Total = o.OrderDetails.Sum(odd=> odd.UnitPrice*odd.Quantity*(1-(decimal)odd.Discount)),
                                     OrderDetails = o.OrderDetails.Select(od => new GetOrderDetailDto
                                     {
                                         ProductId = od.ProductId,
                                         UnitPrice = od.UnitPrice,
                                         Discount = od.Discount,
                                         Quantity = od.Quantity,
+                                        SubTotal = od.UnitPrice*od.Quantity*(1-(decimal)od.Discount)
                                     })
                                 });
             return Ok(OrderRecord);
         }
         //會員參與活動記錄
-        [HttpGet("ParticipatedRecord")]
-        public IActionResult ParticipatedRecord()
+        [HttpGet("ActRecord")]
+        public IActionResult ActRecord()
         {
             var UserID = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
             var record = _context.SocialActivities.Include(s => s.Member)
@@ -250,5 +257,6 @@ namespace _3TeamProject.Areas.Members.Controllers
 
             return Ok(record);
         }
+        
     }
 }

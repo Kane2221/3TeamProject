@@ -69,21 +69,6 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
-//新增Suppliers Area 的 Route
-//app.MapControllerRoute(
-//    name: "Members",
-//    pattern: "{area:exists}/{controller=Member}/{action=Index}/{id?}");
-
-////新增Suppliers Area 的 Route
-//app.MapControllerRoute(
-//    name: "Suppliers",
-//    pattern: "{area:exists}/{controller=Supplier}/{action=Index}/{id?}");
-
-////新增Administrators Area 的 Route
-//app.MapControllerRoute(
-//    name: "Administrators",
-//    pattern: "{area:exists}/{controller=Administrator}/{action=Index}/{id?}");
-
 
 app.MapControllerRoute(
     name: "default",

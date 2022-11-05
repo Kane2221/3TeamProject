@@ -8,20 +8,20 @@
     <link rel="stylesheet" href="~/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
     <style>
         .checked {
-          color: orange;
+            color: orange;
         }
     </style>
 
 }
-    
-<div id="VuePage">
+
+    <div id="VuePage">
         <!-- Search Bar Start -->
         <div class="container-fluid" style="background-color:#2f4f4f;">
             <div class="row align-items-center justify-content-center py-3 px-xl-5">
                 <div class="col-lg-6 col-6 text-left ">
                     <form action="">
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="搜尋景點">
+                            <input type="text" class="form-control" placeholder="搜尋活動">
                             <div class="input-group-append">
                                 <span class="btn input-group-text bg-transparent text-primary">
                                     <i class="fa fa-search"></i>
@@ -36,40 +36,10 @@
         <!-- Theme Start -->
         <div class="container-fluid pt-5">
             <div class="text-center mb-3 pb-3">
-                <h1>主題景點</h1>
-            </div>
-            <div class="row">
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="destination-item position-relative overflow-hidden mb-2">
-                        <img class="img-fluid" src="/img/destination-1.jpg" alt="">
-                        <a class="destination-overlay text-white text-decoration-none" href="Attractions/AttractionsDetail">
-                            <h5 class="text-white">景點名稱</h5>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="destination-item position-relative overflow-hidden mb-2">
-                        <img class="img-fluid" src="/img/destination-2.jpg" alt="">
-                        <a class="destination-overlay text-white text-decoration-none" href="">
-                            <h5 class="text-white">景點名稱</h5>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="destination-item position-relative overflow-hidden mb-2">
-                        <img class="img-fluid" src="/img/destination-3.jpg" alt="">
-                        <a class="destination-overlay text-white text-decoration-none" href="">
-                            <h5 class="text-white">景點名稱</h5>
-                        </a>
-                    </div>
-                </div>
+                <h1>活動清單</h1>
             </div>
         </div>
         <!-- Theme End -->
-        <br />
-        <br />
-        <br />
-
         <!-- Detail Start -->
         <div class="d-flex justify-content-center">
             <div class="col-md-2">
@@ -77,7 +47,7 @@
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="panelsStayOpen-headingOne">
                             <button class="accordion-button btn-primary collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                                景點分類
+                                活動分類
                             </button>
                         </h2>
                         <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
@@ -95,7 +65,7 @@
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
                             <button class="accordion-button btn-primary collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-                                景點分區
+                                活動分區
                             </button>
                         </h2>
                         <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
@@ -112,9 +82,10 @@
                     </div>
                 </div>
             </div>
-
+            
             <div class="col-md-10">
                 <div class="table-responsive">
+                    <input type="button" class="left-align" value="發起活動" />
                     <table class="table">
                         <thead>
                             <tr>
@@ -123,40 +94,91 @@
                                         <div class="inner-circle"></div>
                                     </div>
                                 </th>
-                                <th>景點編號</th>
-                                <th>景點名稱</th>
-                                <th>景點國家</th>
-                                <th>景點城市</th>
-                                <th>景點地址</th>
-                                <th>景點推薦度</th>
-                                <th>備註</th>
+                                <th>活動<br />編號</th>
+                                <th>揪團<br />名稱</th>
+                                <th>揪團<br />地點</th>
+                                <th>限制<br />人數</th>
+                                <th>參與<br />人數</th>
+                                <th>揪團<br />發起時間</th>
+                                <th>參與<br />截止時間</th>
+                                <th>發起人</th>
+                                <th>退出<br />活動</th>
                             </tr>
                         </thead>
-                        <tbody v-for="sight in Sightseeings" class="table-body">
+                        <tbody @*v-for="sight in Sightseeings"*@ class="table-body">
                             <tr class="cell-1">
                                 <td class="text-center">
                                     <div class="toggle-btn">
                                         <div class="inner-circle"></div>
                                     </div>
                                 </td>
-                                <td>#{{sight.sightseeingId}}</td>
-                                <td>{{sight.sightseeingName}}</td>
-                                <td>{{sight.sightseeingCountry}}</td>
-                                <td>{{sight.sightseeingCity}}</td>
-                                <td>{{sight.sightseeingAddress}}</td>
-                                <td>
-                                    <div>
-                                        <span class="fa fa-star checked"></span>
-                                        <span class="fa fa-star checked"></span>
-                                        <span class="fa fa-star checked"></span>
-                                        <span class="fa fa-star"></span>
-                                        <span class="fa fa-star"></span>
-                                        @*									<b-form-rating v-model="value" readonly></b-form-rating>
-                                    <p class="mt-2">Value: {{ value }}</p>
-                                    *@
+                                <td>#1001</td>
+                                <td>一起潛水去</td>
+                                <td>後壁湖浮潛區</td>
+                                <td>8</td>
+                                <td>1</td>
+                                <td>2022/11/3</td>
+                                <td>2022/11/6</td>
+                                <td>張三</td>
+                                <td><a href="">退出</a></td>
+                            </tr>
+                            <tr class="cell-1">
+                                <td class="text-center">
+                                    <div class="toggle-btn">
+                                        <div class="inner-circle"></div>
                                     </div>
                                 </td>
-                                <td></td>
+                                <td>#1003</td>
+                                <td>一起登山去</td>
+                                <td>象山登山步道</td>
+                                <td>8</td>
+                                <td>1</td>
+                                <td>2022/11/3</td>
+                                <td>2022/11/6</td>
+                                <td>李四</td>
+                                <td><a href="">退出</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br />
+                    <div class="text-left mb-3 pb-3">
+                        <h3>我的活動</h3>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="text-center">
+                                    <div class="toggle-btn">
+                                        <div class="inner-circle"></div>
+                                    </div>
+                                </th>
+                                <th>活動<br />編號</th>
+                                <th>揪團<br />名稱</th>
+                                <th>揪團<br />地點</th>
+                                <th>限制<br />人數</th>
+                                <th>參與<br />人數</th>
+                                <th>揪團<br />發起時間</th>
+                                <th>參與<br />截止時間</th>
+                                <th>發起人</th>
+                                <th>刪除<br />活動</th>
+                            </tr>
+                        </thead>
+                        <tbody @*v-for="sight in Sightseeings"*@ class="table-body">
+                            <tr class="cell-1">
+                                <td class="text-center">
+                                    <div class="toggle-btn">
+                                        <div class="inner-circle"></div>
+                                    </div>
+                                </td>
+                                <td>#1001</td>
+                                <td>一起潛水去</td>
+                                <td>後壁湖浮潛區</td>
+                                <td>8</td>
+                                <td>1</td>
+                                <td>2022/11/3</td>
+                                <td>2022/11/6</td>
+                                <td>張三</td>
+                                <td><a href="">刪除</a></td>
                             </tr>
                         </tbody>
                     </table>
@@ -165,8 +187,8 @@
         </div>
 
         <!-- Detail End -->
-</div>
-    
+    </div>
+
     <!-- Footer Start -->
     <div class="container-fluid bg-dark text-white-50 py-5 px-sm-3 px-lg-5" style="margin-top: 90px;">
         <div class="row pt-5">
@@ -218,9 +240,9 @@
         var VuePage = new Vue({
             el: "#VuePage",
             data: {
-                Sightseeings:[],
-                SightByTheme:[],
-                SightByArea:[],
+                Sightseeings: [],
+                SightByTheme: [],
+                SightByArea: [],
                 ErrMsg: '',
                 Success: ''
             },
@@ -230,18 +252,18 @@
                     method: 'get',
                     url: '/Sightseeings/SightseeingApi'
                 })
-                .then(function (res) {
-                    console.log(res);
-                    self.Sightseeings = res.data;
-                    //var result = new Set(res.data.categoryName);
-                    //self.Category = [...result];
+                    .then(function (res) {
+                        console.log(res);
+                        self.Sightseeings = res.data;
+                        //var result = new Set(res.data.categoryName);
+                        //self.Category = [...result];
 
-                })
-                .catch(function (error) {
-                    console.log(error);
-                })
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    })
             },
-            methods:{
+            methods: {
                 area: function () {
                     var sight = self.Sightbyarea;
                     // 提取出category
