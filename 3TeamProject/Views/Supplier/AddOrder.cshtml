@@ -100,7 +100,7 @@
                                             <div class="card-body">
                                                 <div class="form-group">
                                                     <label for="exampleFormControlTextarea1">商品介紹</label>
-                                                    <textarea class="form-control" v-model="ProductIntroduce" id="productIntroduce"></textarea>
+                                                        <textarea class="form-control" name="ProductIntroduce" id="productIntroduce"></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -112,7 +112,7 @@
                                         <i class="zmdi zmdi-"> 產品名稱</i>
                                     </div>
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control" v-model="ProductName" id="productName">
+                                            <input type="text" class="form-control" name="ProductName" id="productName">
                                     </div>
                                 </div>
                                 <br />
@@ -130,7 +130,7 @@
                                         <i class="zmdi zmdi-"> 產品種類</i>
                                     </div>
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control" v-model="ProductCategoryId" id="productCategoryId">
+                                            <input type="text" class="form-control" name="ProductCategoryId" id="productCategoryId">
                                     </div>
                                 </div>
                                 <br />
@@ -139,7 +139,7 @@
                                         <i class="zmdi zmdi-"> 產品單價</i>
                                     </div>
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control" v-model="ProductUnitPrice" id="productUnitPrice">
+                                            <input type="text" class="form-control" name="ProductUnitPrice" id="productUnitPrice">
                                     </div>
                                 </div>
                                 <br />
@@ -148,14 +148,14 @@
                                         <i class="zmdi zmdi-"> 上架數量</i>
                                     </div>
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control" v-model="UnitStock" id="unitStock">
+                                            <input type="text" class="form-control" name="UnitStock" id="unitStock">
                                     </div>
                                 </div>
                                 <br />
                                 <div>
                                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                         <button type="button" class="btn btn-outline-primary rounded px-3" href="/Member/Register">取消</button>
-                                        <button type="submit" class="btn btn-primary rounded submit px-3" >送出</button>
+                                            <button type="submit" class="btn btn-primary rounded submit px-3" >送出</button>
                                     </div>
                                 </div>
 
@@ -186,7 +186,7 @@
     }
 </script>
 <script>
-    var ProductCreate = new Vue({
+    var app = new Vue({
         el: "#ProductCreate",
         name: "ProductCreate",
         data: {
@@ -194,33 +194,40 @@
             ProductCategoryId: null,
             SupplierId: 2,
             ProductUnitPrice: null,
-            UnitStock: null,
+            UnitStock: 0,
+            ProductIntroduce:null,
             ProductStatus: 1,
 
         },
         methods: {
             insertProduct: function () {
                 let _this = this;
-                var request = {};
-                request.ProductName = _this.ProductName;
-                request.ProductCategoryId = parseInt(_this.ProductCategoryId);
-                request.SupplierId = parseFloat(_this.SupplierId);
-                request.ProductUnitPrice = parseFloat(_this.ProductUnitPrice);
-                request.UnitStock = parseFloat(_this.UnitStock);
-                request.ProductStatus = _this.ProductStatus;
-                request.ProductIntroduce = _this.ProductIntroduce;
-                request.ProductPictureName = _this.ProductPictureName
-                axios.post(window.location.origin + "/Supplier/AddOrder", request).then(response => {
-                    alert(response.data);
-                    window.location = '/Supplier/Orderlist'
-                });
+                fetch("/Supplier/AddOrder",
+                    {
+                        method: 'POST',
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            ProductName: _self.ProductName,
+                            ProductCategoryId: _self.ProductCategoryId,
+                            SupplierId: _self.SupplierId,
+                            ProductUnitPrice: _self.ProductUnitPrice,
+                            UnitStock: _self.UnitStock,
+                            ProductIntroduce: _self.ProductIntroduce,
+                        })
+                    })
+                    .then(function (response) { return response.json() })
+                    .then(function (jsonData) {
+                        console.log(jsonData)
+                    })
             },
 
         },
     });
 </script>
 
-<script>
+@*<script>
     function preview() {
         frame.src = URL.createObjectURL(event.target.files[0]);
     }
@@ -230,4 +237,4 @@
     }
 
 </script>
-
+*@

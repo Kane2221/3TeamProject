@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace _3TeamProject.Controllers
 {
-    [Route("/Supplier/[Action]")]
+    //[Route("/Supplier/[Action]")]
     public class SupplierController : Controller
     {
         private IHostEnvironment environment;
@@ -36,15 +36,28 @@ namespace _3TeamProject.Controllers
         {
             return View();
         }
-        [HttpGet("/Supplier/AddOrder")]
+        //[HttpGet("/Supplier/AddOrder")]
+        [HttpGet]
         public IActionResult AddOrder()
         {
             return View();
         }
-
-        [HttpPost("/Supplier/AddOrder")]
-        public async Task<JsonResult> AddOrder([FromBody] AddOrderDto addOrder)
+        [HttpPost]
+        //[HttpPost("/Supplier/AddOrder")]
+        public async Task<JsonResult> AddOrder([FromForm] AddOrderDto addOrder)
         {
+            var addproduct = new Product
+            {
+                ProductCategoryId = addOrder.ProductCategoryId,
+                ProductName = addOrder.ProductName,
+                UnitStock = addOrder.UnitStock,
+                AddedTime = DateTime.Now,
+                SupplierId = 2,
+                ProductUnitPrice = addOrder.ProductUnitPrice,
+                ProductStatusId = addOrder.ProductStatusId,
+                ProductIntroduce = addOrder.ProductIntroduce,
+
+            };
             foreach (var file in addOrder.files)
             {
                 var root = $@"{environment.ContentRootPath}\wwwroot\";
@@ -55,26 +68,23 @@ namespace _3TeamProject.Controllers
                 }
                 else
                 {
-                    temp = root + "other";
+                    temp = root + "img";
                 }
-                var path = temp + "\\" + DateTime.Now.Ticks.ToString() + file.FileName;
+                // var path = temp + "\\" + DateTime.Now.Ticks.ToString() + file.FileName;
+                var path = temp + "\\"  + file.FileName;
                 using (var fs = System.IO.File.Create(path))
                     file.CopyTo(fs);
+                var prodpic = new ProductsPictureInfo
+                {
+                    ProductPicturePath ="/img/"+ file.FileName,
+                    ProductPictureName = file.FileName
+                };
+                addproduct.ProductsPictureInfos.Add(prodpic);
             }
-                Product product = new Product
-            {
-                ProductCategoryId = addOrder.ProductCategoryId,
-                ProductName = addOrder.ProductName,
-                UnitStock = addOrder.UnitStock,
-                AddedTime = DateTime.Now,
-                SupplierId = addOrder.SupplierId,
-                ProductUnitPrice = addOrder.ProductUnitPrice,
-                ProductStatusId = addOrder.ProductStatusId,
-                ProductIntroduce = addOrder.ProductIntroduce,
+            
 
-            };
-
-            _context.Add(product).CurrentValues.SetValues(addOrder);
+            //_context.Add(product).CurrentValues.SetValues(addOrder);
+            _context.Add(addproduct);
             await _context.SaveChangesAsync();
             return Json("新增成功!");
         }
