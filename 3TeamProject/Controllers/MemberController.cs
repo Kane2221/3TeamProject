@@ -10,6 +10,8 @@ using System.Configuration;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace _3TeamProject.Controllers
 {
@@ -20,7 +22,7 @@ namespace _3TeamProject.Controllers
         {
             return View();
         }
-
+        
         public IActionResult Memberprofile()
         {
             return View();
@@ -28,9 +30,7 @@ namespace _3TeamProject.Controllers
 
         public IActionResult Login()
         {
-
             return View();
-            
         }
         public IActionResult GoogleLogin()
         {
@@ -60,6 +60,10 @@ namespace _3TeamProject.Controllers
             return View();
         }
         public IActionResult ResetPwd()
+        {
+            return View();
+        }
+        public IActionResult Verify()
         {
             return View();
         }

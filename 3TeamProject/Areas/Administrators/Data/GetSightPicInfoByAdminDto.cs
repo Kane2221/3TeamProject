@@ -1,6 +1,6 @@
 ﻿namespace _3TeamProject.Areas.Administrators.Data
 {
-    public class GetSightPicInfoByAdmin
+    public class GetSightPicInfoByAdminDto
     {
         public int SightseeingPictureId { get; set; }
         public string SightseeingPicturePath { get; set; } = null!;

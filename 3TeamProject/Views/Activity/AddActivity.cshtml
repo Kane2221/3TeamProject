@@ -1,0 +1,179 @@
+﻿
+<div class="container-fluid page-header">
+    <div class="container">
+        <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 250px">
+            <h3 class="display-4 text-white text-uppercase">發佈活動</h3>
+            <div class="d-inline-flex text-white">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid booking mt-5 pb-5">
+    <div class="container-fluid pb-5">
+        <div class="bg-light shadow" style="padding: 30px;">
+            <div class="row align-items-center" style="min-height: 500px;">
+
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="card mb-4">
+                            <div class="card-body text-center">
+                                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+                                     class="rounded-circle img-fluid" style="width: 150px;">
+                                <h5 class="my-3">暱稱</h5>
+                            </div>
+                        </div>
+
+                        <div class="mb-lg-0">
+                            <div class="card-body p-0 ">
+                                <ul class="list-group list-group-flush rounded-3 ">
+                                    <li class="list-group-item justify-content-between align-items-center p-3 ">
+                                        <div class="d-flex justify-content-center mb-2">
+                                            <button type="button" class="form-control btn btn-outline-primary ms-1">
+                                                <a data-toggle="click" href="/Activity/index"><i class="zmdi zmdi-case">活動清單</i></a>
+                                            </button>
+                                        </div>
+                                    </li>
+ 
+                                    <li class="list-group-item justify-content-between align-items-center p-3">
+                                        <div class="d-flex justify-content-center mb-2">
+                                            <button type="button" class="form-control btn btn-outline-primary ms-1">
+                                                登出
+                                                <i class="zmdi zmdi-arrow-right"></i>
+                                            </button>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-lg-9">
+                        <div class="mb-4">
+                            <div class="card-body" id="ActCreate">
+                                <div class="row">
+                                    <div class="col-sm-2 align-self-center">
+                                        <i class="zmdi zmdi-">揪團活動名稱</i>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control" v-model="ProductName" id="productName">
+                                    </div>
+                                    <div class="col-sm-2 align-self-center">
+                                        <i class="zmdi zmdi-">揪團活動地點</i>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="col-sm-2 align-self-center">
+                                        <i class="zmdi zmdi-">活動開始時間</i>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <input type="date" class="form-control" v-model="ProductCategoryId" id="productCategoryId">
+                                    </div>
+                                    <div class="col-sm-2 align-self-center">
+                                        <i class="zmdi zmdi-"> 活動結束時間</i>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <input type="date" class="form-control" v-model="ProductUnitPrice" id="productUnitPrice">
+                                    </div>
+                                </div>
+
+                                <br />
+                                <div class="row">
+                                    <div class="col-sm-2 align-self-center">
+                                        <i class="zmdi zmdi-">限制人數</i>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control" v-model="UnitStock" id="unitStock">
+                                    </div>
+                                    <div class="col-sm-2 align-self-center">
+                                        <i class="zmdi zmdi-">參與截止時間</i>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <input type="date" class="form-control" v-model="UnitStock" id="unitStock">
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="form-group">
+                                                    <label for="exampleFormControlTextarea1">活動介紹</label>
+                                                    <textarea class="form-control" title="活動介紹" id="exampleFormControlTextarea1" rows="3" draggable="false"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                
+                                <br />
+                                <div>
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                        <button type="button" class="btn btn-outline-primary rounded px-3" href="/Activity/index">取消</button>
+                                        <button type="button" class="btn btn-primary rounded submit px-3" @@click="submitData">送出</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts {
+    <script>
+        var VuePage = new Vue({
+            el: "#VuePage",
+            data: {
+                Email: '',
+                ErrMsg: '',
+                Success: ''
+            },
+            methods: {
+                SubmitData: function () {
+                    var self = this;
+                    axios({
+                        method: 'post',
+                        url: '/Users/UserApi/ForgotPassword',
+                        data: {
+                            Email: self.Email
+                        }
+                    })
+                        .then(function (response) {
+                            self.Success = response.data;
+                            Swal.fire({
+                                title: self.Success,
+                                icon: 'success',
+                                timer: 12000
+                            }).then((result => {
+                                window.location.assign("/Member/ResetPwd")
+                            }));
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            self.ErrMsg = error.response.data;
+                            Swal.fire({
+                                title: '失敗',
+                                text: self.ErrMsg,
+                                icon: 'error',
+                                timer: 12000
+                            });
+                            console.log(error);
+                            return;
+                        });
+                },
+                cancel: function () {
+                    window.location.assign("/Member/Login");
+                }
+            }
+        });
+
+    </script>
+    }

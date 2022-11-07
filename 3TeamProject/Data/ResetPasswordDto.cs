@@ -2,7 +2,7 @@
 
 namespace _3TeamProject.Data
 {
-    public class ResetPasswordRequest
+    public class ResetPasswordDto
     {
         [Required]
         public string Token { get; set; } = string.Empty;
@@ -11,7 +11,7 @@ namespace _3TeamProject.Data
         public string Password { get; set; } = string.Empty;
 
         [Required, Compare("Password", ErrorMessage = "密碼不一致")]
-        public string ComfirmPassword { get; set; } = string.Empty;
+        public string ConfirmPassword { get; set; } = string.Empty;
 
     }
 }

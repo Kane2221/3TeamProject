@@ -18,8 +18,6 @@ namespace _3TeamProject.Areas.Members.Data
         public string ComfirmPassword { get; set; } = string.Empty;
 
         [Required]
-        public int Roles { get; set; }
-        [Required]
         public string MemberName { get; set; } = string.Empty;
 
         public string NickName { get; set; } = string.Empty;

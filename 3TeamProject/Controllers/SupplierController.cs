@@ -32,13 +32,14 @@ namespace _3TeamProject.Controllers
         {
             return View();
         }
-        public IActionResult OrderList()
+        public IActionResult ProductList()
         {
             return View();
         }
         //[HttpGet("/Supplier/AddOrder")]
         [HttpGet]
         public IActionResult AddOrder()
+
         {
             return View();
         }
@@ -87,6 +88,10 @@ namespace _3TeamProject.Controllers
             _context.Add(addproduct);
             await _context.SaveChangesAsync();
             return Json("新增成功!");
+        }
+        public IActionResult Verify()
+        {
+            return View();
         }
     }
 }

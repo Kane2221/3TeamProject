@@ -1,7 +1,11 @@
 ﻿using _3TeamProject.Areas.Administrators.Data;
 using _3TeamProject.Areas.Members.Data;
+using _3TeamProject.Data;
 using _3TeamProject.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -28,14 +32,10 @@ namespace _3TeamProject.Areas.Members.Controllers
             _config = config;
         }
         //取得會員資料
-        [HttpGet("GetMember/{id}")]
-        public IActionResult GetMember(int id)
+        [HttpGet("GetMember")]
+        public IActionResult GetMember()
         {
             var UserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
-            if (id != UserId)
-            {
-                return BadRequest("與登入帳號不符");
-            }
             var user = _context.Users.Include(u => u.Members).FirstOrDefault(x => x.UserId == UserId);
             var member = (from u in _context.Users
                           where u.UserId == user.UserId
@@ -43,12 +43,13 @@ namespace _3TeamProject.Areas.Members.Controllers
                           on u.UserId equals m.UserId
                           select new GetMemberDto
                           {
+                              UserId = u.UserId,
                               Account = u.Account,
                               Email = u.Email,
                               RoleName = u.RolesNavigation.RoleName,
                               MemberName = m.MemberName,
                               NickName = m.NickName,
-                              Birthday = m.Birthday,
+                              Birthday = m.Birthday.ToShortDateString(),
                               IdentityNumber = m.IdentityNumber,
                               CellPhoneNumber = m.CellPhoneNumber,
                               PhoneNumber = m.PhoneNumber,
@@ -56,7 +57,8 @@ namespace _3TeamProject.Areas.Members.Controllers
                               Country = m.Country,
                               City = m.City,
                               Address = m.Address,
-                              Age = m.Age
+                              Age = m.Age,
+                              PicturePath = u.PicturePath
                           }).SingleOrDefault();
             return Ok(member);
         }
@@ -99,12 +101,12 @@ namespace _3TeamProject.Areas.Members.Controllers
                         Email = request.Email,
                         PasswordHash = passwordHsah,
                         PasswordSalt = passwordSalt,
-                        VerficationToken = Convert.ToHexString(RandomNumberGenerator.GetBytes(64)),
-                        Roles = request.Roles
+                        VerificationToken = Convert.ToHexString(RandomNumberGenerator.GetBytes(64)),
+                        Roles = 1
                     }
                 };
                 #region Send Email with verify code (正式再解開註解)
-                var root = $@"{Request.Scheme}:/{Request.Host}/User/Verify";
+                var root = $@"{Request.Scheme}:/{Request.Host}/Member/Verify";
                 //TODO 修改寄信的超連結
                 using (MailMessage mail = new MailMessage())
                 {
@@ -130,7 +132,7 @@ namespace _3TeamProject.Areas.Members.Controllers
             }
         }
         //會員資料修改
-        [HttpPut("{id}")]
+        [HttpPut("Update/{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateMemberDto request)
         {
             var UserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
@@ -186,7 +188,7 @@ namespace _3TeamProject.Areas.Members.Controllers
         }
         //會員我的訂單
         [HttpGet("GetOrder")]
-        public IActionResult GetOrder() //TODO 待測_我的訂單
+        public IActionResult GetOrder()
         {
             var UserID = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
             var myOrder = _context.Orders.Include(o => o.Member).Include(o => o.OrderDetails)
@@ -195,24 +197,27 @@ namespace _3TeamProject.Areas.Members.Controllers
                 .Select(o => new GetAllOrdersDto
                 {
                     OrderId = o.OrderId,
-                    OrderDate = o.OrderDate,
-                    ShipDate = o.ShipDate,
+                    OrderDate = o.OrderDate.ToShortDateString(),
+                    ShipDate = o.ShipDate.ToShortDateString(),
                     OrderCategoryName = o.OrderStatusNavigation.OrderCategoryName,
                     PaymentCategoryName = o.PaymentStatusNavigation.PaymentCategoryName,
                     ShipCategoryName = o.ShipStatusNavigation.ShipCategoryName,
+                    Total = o.OrderDetails.Sum(odd => odd.UnitPrice*odd.Quantity*(1-(decimal)odd.Discount)),
                     OrderDetails = o.OrderDetails.Select(od => new GetOrderDetailDto
                     {
                         ProductId = od.ProductId,
+                        ProductName = od.Product.ProductName,
                         UnitPrice = od.UnitPrice,
                         Discount = od.Discount,
                         Quantity = od.Quantity,
+                        SubTotal = od.UnitPrice*od.Quantity*(1-(decimal)od.Discount)
                     })
                 });
             return Ok(myOrder);
         }
         //會員訂購記錄
         [HttpGet("GetOrderRecord")]
-        public IActionResult GetOrderRecord()//TODO 待測_訂購記錄
+        public IActionResult GetOrderRecord()
         {
             var UserID = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
             var OrderRecord = _context.Orders.Include(o => o.Member).Include(o => o.OrderDetails)
@@ -221,27 +226,39 @@ namespace _3TeamProject.Areas.Members.Controllers
                                 .Select(o => new GetAllOrdersDto
                                 {
                                     OrderId = o.OrderId,
-                                    OrderDate = o.OrderDate,
-                                    ShipDate = o.ShipDate,
+                                    OrderDate = o.OrderDate.ToShortDateString(),
+                                    ShipDate = o.ShipDate.ToShortDateString(),
                                     OrderCategoryName = o.OrderStatusNavigation.OrderCategoryName,
                                     PaymentCategoryName = o.PaymentStatusNavigation.PaymentCategoryName,
                                     ShipCategoryName = o.ShipStatusNavigation.ShipCategoryName,
+                                    Total = o.OrderDetails.Sum(odd=> odd.UnitPrice*odd.Quantity*(1-(decimal)odd.Discount)),
                                     OrderDetails = o.OrderDetails.Select(od => new GetOrderDetailDto
                                     {
                                         ProductId = od.ProductId,
                                         UnitPrice = od.UnitPrice,
                                         Discount = od.Discount,
                                         Quantity = od.Quantity,
+                                        SubTotal = od.UnitPrice*od.Quantity*(1-(decimal)od.Discount)
                                     })
                                 });
             return Ok(OrderRecord);
         }
-        //TODO會員參與活動記錄
-        [HttpGet("ParticipatedRecord")]
-        public IActionResult ParticipatedRecord()
+        //會員參與活動記錄
+        [HttpGet("ActRecord")]
+        public IActionResult ActRecord()
         {
-            return Ok();
+            var UserID = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
+            var record = _context.SocialActivities.Include(s => s.Member)
+                .ThenInclude(m => m.User).Where(m => m.Member.UserId == UserID).Select(s => new GetActRecordDto
+                {
+                    ActivityId = s.ActivityId,
+                    ActivitiesName = s.ActivitiesName,
+                    CreatedTime = s.CreatedTime,
+                    EndTime = s.EndTime
+                }).FirstOrDefault();
+
+            return Ok(record);
         }
-        //TODO 活動退出
+        
     }
 }

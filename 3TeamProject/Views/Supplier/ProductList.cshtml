@@ -1,5 +1,8 @@
-﻿<!-- MATERIAL DESIGN ICONIC FONT -->
-<link rel="stylesheet" href="~/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
+﻿@section Head{
+    <!-- MATERIAL DESIGN ICONIC FONT -->
+    <link rel="stylesheet" href="~/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
+}
+
 
 
 <div class="container-fluid page-header">
@@ -16,13 +19,14 @@
         <div class="bg-light shadow" style="padding: 30px;">
             <div class="row align-items-center" style="min-height: 500px;">
 
-                <div class="row">
+                <div id="VuePage" class="row">
                     <div class="col-lg-3">
                         <div class="card mb-4">
                             <div class="card-body text-center">
                                 <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
                                      class="rounded-circle img-fluid" style="width: 150px;">
-                                <h5 class="my-3">暱稱</h5>
+                                    <h5 class="my-3">{{ContactName}}</h5>
+                                    <h5 class="my-3">{{CompanyName}}</h5>
                             </div>
                         </div>
 
@@ -46,7 +50,7 @@
                                     <li class="list-group-item justify-content-between align-items-center p-3">
                                         <div class="d-flex justify-content-center mb-2">
                                             <button type="button" class="form-control btn btn-outline-primary ms-1">
-                                                <a data-toggle="click" href="/Supplier/AddOrder"><i class="zmdi zmdi-plus-square"> 產品上架</i></a>
+                                                <a data-toggle="click" href="/Supplier/AddProduct"><i class="zmdi zmdi-plus-square"> 產品上架</i></a>
                                             </button>
                                         </div>
                                     </li>
@@ -87,64 +91,20 @@
                                                         <th>修改/下架</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody class="table-body">
+                                                <tbody v-for="p in Product" class="table-body">
                                                     <tr class="cell-1">
                                                         <td class="text-center">
                                                             <div class="toggle-btn">
                                                                 <div class="inner-circle"></div>
                                                             </div>
                                                         </td>
-                                                        <td>淺水錶</td>
-                                                        <td>45123</td>
-                                                        <td>8</td>
-                                                        <td>2</td>
-                                                        <td> </td>
-                                                        <td>淺水裝備</td>
-                                                        <td><span class="badge badge-success">供應中</span></td>
-                                                        <td>
-                                                            <button type="button" class="form-control btn btn-outline-primary rounded ms-1">
-                                                                修改
-                                                            </button>
-                                                            <button type="button" class="form-control btn btn-outline-primary rounded ms-1">
-                                                                下架
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="cell-1">
-                                                        <td class="text-center">
-                                                            <div class="toggle-btn">
-                                                                <div class="inner-circle"></div>
-                                                            </div>
-                                                        </td>
-                                                        <td>淺水錶</td>
-                                                        <td>45123</td>
-                                                        <td>8</td>
-                                                        <td>2</td>
-                                                        <td> </td>
-                                                        <td>淺水裝備</td>
-                                                        <td><span class="badge badge-info">審核中</span></td>
-                                                        <td>
-                                                            <button type="button" class="form-control btn btn-outline-primary rounded ms-1">
-                                                                修改
-                                                            </button>
-                                                            <button type="button" class="form-control btn btn-outline-primary rounded ms-1">
-                                                                下架
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="cell-1">
-                                                        <td class="text-center">
-                                                            <div class="toggle-btn">
-                                                                <div class="inner-circle"></div>
-                                                            </div>
-                                                        </td>
-                                                        <td>淺水錶</td>
-                                                        <td>45123</td>
-                                                        <td>8</td>
-                                                        <td>2</td>
-                                                        <td> </td>
-                                                        <td>淺水裝備</td>
-                                                        <td><span class="badge badge-danger">已下架</span></td>
+                                                        <td>{{p.productName}}</td>
+                                                        <td>{{p.productUnitPrice}}</td>
+                                                        <td>{{p.unitStock}}</td>
+                                                        <td>{{p.uniOnOrder}}</td>
+                                                        <td>{{p.productRecommendation}}</td>
+                                                        <td>{{p.categoryName}}</td>
+                                                        <td><span class="badge badge-success">{{p.statusName}}</span></td>
                                                         <td>
                                                             <button type="button" class="form-control btn btn-outline-primary rounded ms-1">
                                                                 修改
@@ -171,3 +131,43 @@
         </div>
     </div>
 </div>
+    @section scripts {
+    <script>
+        var VuePage = new Vue({
+            el: "#VuePage",
+            data: {
+                ContactName: '',
+                CompanyName: '',
+                Product:[],
+            },
+            mounted: function () {
+                var self = this;
+                axios({
+                    method: 'get',
+                    url: '/Suppliers/SupplierApi/GetProduct'
+                })
+                .then(function (res) {
+                    console.log(res);
+                    self.Product = res.data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                }),
+                    axios({
+                        method: 'get',
+                        url: '/Suppliers/SupplierApi/GetSupplier'
+                    })
+                    .then(function (res) {
+                        var r = res.data;
+                        console.log(res);
+                        self.ContactName = r.contactName;
+                        self.CompanyName = r.companyName;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    })
+            }
+        });
+
+    </script>
+    }

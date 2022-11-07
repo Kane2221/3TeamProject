@@ -8,6 +8,7 @@ namespace _3TeamProject.Models
         public SocialActivity()
         {
             ActivitiesMessageBoards = new HashSet<ActivitiesMessageBoard>();
+            JoinMembers = new HashSet<JoinMember>();
         }
 
         public int ActivityId { get; set; }
@@ -24,5 +25,6 @@ namespace _3TeamProject.Models
 
         public virtual Member Member { get; set; } = null!;
         public virtual ICollection<ActivitiesMessageBoard> ActivitiesMessageBoards { get; set; }
+        public virtual ICollection<JoinMember> JoinMembers { get; set; }
     }
 }

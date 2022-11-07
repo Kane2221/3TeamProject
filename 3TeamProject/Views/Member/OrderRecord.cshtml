@@ -1,6 +1,7 @@
-﻿<!-- MATERIAL DESIGN ICONIC FONT -->
+﻿@section Head{
+<!-- MATERIAL DESIGN ICONIC FONT -->
 <link rel="stylesheet" href="~/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
-
+}
 
 <div class="container-fluid page-header">
     <div class="container">
@@ -11,18 +12,17 @@
         </div>
     </div>
 </div>
-<div class="container-fluid booking mt-5 pb-5">
-    <div class="container pb-5">
+<div id="VuePage" class="container-fluid booking mt-5 pb-5">
+        <div class="container-fluid pb-5">
         <div class="bg-light shadow" style="padding: 30px;">
             <div class="row align-items-center" style="min-height: 500px;">
-
                 <div class="row">
                     <div class="col-lg-4">
                         <div class="card mb-4">
                             <div class="card-body text-center">
-                                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+                                    <img :src="PicturePath" alt="avatar"
                                      class="rounded-circle img-fluid" style="width: 150px;">
-                                <h5 class="my-3">暱稱</h5>
+                                    <h5 class="my-3">{{NickName}}</h5>
                             </div>
                         </div>
 
@@ -52,7 +52,7 @@
                                     </li>
                                     <li class="list-group-item justify-content-between align-items-center p-3">
                                         <div class="d-flex justify-content-center mb-2">
-                                            <button type="button" class="form-control btn btn-outline-primary ms-1">
+                                                <button type="button" class="form-control btn btn-outline-primary ms-1" v-on:click="logOut">
                                                 登出
                                                 <i class="zmdi zmdi-arrow-right"></i>
                                             </button>
@@ -86,80 +86,26 @@
                                                             <th>給予評價</th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody class="table-body">
+                                                <tbody v-for="record in OrderRecords" class="table-body">
                                                         <tr class="cell-1">
                                                             <td class="text-center">
                                                                 <div class="toggle-btn">
                                                                     <div class="inner-circle"></div>
                                                                 </div>
                                                             </td>
-                                                            <td>#1591234</td>
-                                                            <td>2022/10/18</td>
-                                                            <td><span class="badge badge-success">已完成</span></td>
-                                                            <td>$2674</td>
-                                                            <td>10/18已付款</td>
-                                                            <td>10/18送達</td>
+                                                        <td>#{{record.orderId}}</td>
+                                                        <td>{{record.orderDate}}</td>
+                                                        @*<td><span class="badge badge-success">{{record.orderCategoryName}}</span></td>*@
+                                                        <td><span>{{record.orderCategoryName}}</span></td>
+                                                        <td>${{record.total}}</td>
+                                                        <td>{{record.paymentCategoryName}}</td>
+                                                        <td>{{record.shipCategoryName}}</td>
                                                             <td>
                                                                 <button type="button" class="form-control btn btn-outline-primary ms-1">
                                                                     GO
                                                                 </button>
                                                             </td>
-                                                        </tr>
-                                                        <tr class="cell-1">
-                                                            <td class="text-center">
-                                                                <div class="toggle-btn">
-                                                                    <div class="inner-circle"></div>
-                                                                </div>
-                                                            </td>
-                                                            <td>#1591234</td>
-                                                            <td>2022/10/18</td>
-                                                            <td><span class="badge badge-info">確認中</span></td>
-                                                            <td>$3454</td>
-                                                            <td>10/18已付款</td>
-                                                            <td>尚未出貨</td>
-                                                            <td>
-@*                                                                <button type="button" class="form-control btn btn-outline-primary ms-1">
-                                                                    GO
-                                                                </button>*@
-
-                                                            </td>
-                                                        </tr>
-                                                        <tr class="cell-1">
-                                                            <td class="text-center">
-                                                                <div class="toggle-btn">
-                                                                    <div class="inner-circle"></div>
-                                                                </div>
-                                                            </td>
-                                                            <td>#1593498</td>
-                                                            <td>2020/10/17</td>
-                                                            <td><span class="badge badge-danger">尚未完成</span></td>
-                                                            <td>$6274</td>
-                                                            <td>未付款</td>
-                                                            <td>尚未出貨</td>
-                                                            <td>
-@*                                                                <button type="button" class="form-control btn btn-outline-primary ms-1">
-                                                                    GO
-                                                                </button>*@
-                                                            </td>
-                                                        </tr>
-                                                        <tr class="cell-1">
-                                                            <td class="text-center">
-                                                                <div class="toggle-btn">
-                                                                    <div class="inner-circle"></div>
-                                                                </div>
-                                                            </td>
-                                                            <td>#1649549</td>
-                                                            <td>2022/10/15</td>
-                                                            <td><span class="badge badge-success">已完成</span></td>
-                                                            <td>$637500</td>
-                                                            <td>10/16已付款</td>
-                                                            <td>10/17已送達</td>
-                                                            <td>
-                                                                <button type="button" class="form-control btn btn-outline-primary ms-1">
-                                                                    GO
-                                                                </button>
-                                                            </td>
-                                                        </tr>
+                                                        </tr> 
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -172,3 +118,59 @@
         </div>
     </div>
 </div>
+    @section scripts {
+    <script>
+        var VuePage = new Vue({
+            el: "#VuePage",
+            data: {
+                OrderRecords: [],
+                PicturePath: '',
+                NickName: '',
+                ErrMsg: '',
+                Success: '',
+            },
+            mounted: function () {
+                var self = this;
+                axios({
+                    method: 'get',
+                    url: '/Members/MemberApi/GetMember'
+                })
+                    .then(function (res) {
+                        console.log(res);
+                        self.PicturePath = res.data.picturePath;
+                        self.NickName = res.data.nickName;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+                axios({
+                    method: 'get',
+                    url: '/Members/MemberApi/GetOrderRecord'
+                })
+                    .then(function (res) {
+                        console.log(res);
+                        self.OrderRecords = res.data;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            methods: {
+                logOut: function () {
+                    axios({
+                        method: 'delete',
+                        url: '/Users/UserApi/Logout'
+                    })
+                        .then(function (res) {
+                            console.log(res);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                    window.location.assign("/home");
+                }
+            },
+        });
+
+    </script>
+    }

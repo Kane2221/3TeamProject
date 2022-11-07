@@ -37,11 +37,10 @@ namespace _3TeamProject.Migrations
                     b.Property<string>("ActivitiesMessageContent")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ActivitiesMessageState")
-                        .IsRequired()
+                    b.Property<int>("ActivitiesMessageState")
                         .HasMaxLength(10)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(10)");
+                        .HasColumnType("int");
 
                     b.Property<int>("ActivityId")
                         .HasColumnType("int")

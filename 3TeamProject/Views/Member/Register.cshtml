@@ -1,6 +1,7 @@
-﻿<!-- MATERIAL DESIGN ICONIC FONT -->
-<link rel="stylesheet" href="~/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
-
+﻿@section Head{
+    <!-- MATERIAL DESIGN ICONIC FONT -->
+    <link rel="stylesheet" href="~/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
+}
     <div class="container-fluid page-header">
         <div class="container">
             <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 500px">
@@ -15,160 +16,247 @@
             <div class="bg-light shadow" style="padding: 30px;">
                 <div class="row align-items-center" style="min-height: 500px;">
 
-		<div class="row justify-content-center">
-			<div class="col-lg-11 align-items-center">
-			<div class="container">
-						<div class="row justify-content-center">
-							<div class="col-sm-2 align-self-center">
-								<i class="zmdi zmdi-account"> 帳號</i>
-							</div>
-                            <div class="col-sm-6">
-								<input type="text" placeholder="請輸入帳號" class="form-control">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-11 align-items-center">
+                            <div id="VuePage" class="container">
+                                <div class="row justify-content-center">
+                                    <div class="col-sm-2 align-self-center">
+                                        <i class="zmdi zmdi-account"> 帳號</i>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input type="text" name="Account" placeholder="請輸入帳號(必填)" class="form-control" v-model.lazy.trim="Account" required autocomplete="on">
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row justify-content-center">
+                                    <div class="col-sm-2 align-self-center">
+                                        <i class="zmdi zmdi-lock">密碼</i>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input type="password" name="Password" placeholder="請輸入密碼(必填)(請輸入至少8個字元)" class="form-control" v-model.lazy="Password" required minlength="8">
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row justify-content-center">
+                                    <div class="col-sm-2 align-self-center">
+                                        <i class="zmdi zmdi-lock"> 密碼確認</i>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input type="password" name="ComfirmPassword" placeholder="請再次輸入密碼(必填)" class="form-control" v-model.lazy="ComfirmPassword" required minlength="8">
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row justify-content-center">
+                                    <div class="col-sm-2 align-self-center">
+                                        <i class="zmdi zmdi-account"> 姓名</i>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input type="text" name="MemberName" placeholder="請輸入姓名(必填)" class="form-control" v-model.lazy="MemberName" required autocomplete="on">
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row justify-content-center">
+                                    <div class="col-sm-2 align-self-center">
+                                        <i class="zmdi zmdi-account"> 暱稱</i>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input type="text" name="NickName" placeholder="請輸入暱稱" class="form-control" v-model.lazy="NickName" autocomplete="on">
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row justify-content-center">
+                                    <div class="col-sm-2 align-self-center">
+                                        <i class="zmdi zmdi-cake"> 生日</i>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input type="date" name="Birthday" placeholder="請輸入出生年月日(必填)" class="form-control" v-model.lazy="Birthday" required>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row justify-content-center">
+                                    <div class="col-sm-2 align-self-center">
+                                        <i class="zmdi zmdi-account"> 身分證字號</i>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input type="text" name="IdentityNumber" placeholder="請輸入身分證字號(必填)" class="form-control" v-model.lazy="IdentityNumber" required autocomplete="on">
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row justify-content-center">
+                                    <div class="col-sm-2 align-self-center">
+                                        <i class="zmdi zmdi-email"> 電子信箱</i>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input type="email" name="Email" placeholder="請輸入電子信箱(必填)" class="form-control" v-model.lazy="Email" required autocomplete="on">
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row justify-content-center">
+                                    <div class="col-sm-2 align-self-center">
+                                        <i class="zmdi zmdi-phone"> 手機號碼</i>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input type="text" name="CellPhoneNumber" placeholder="請輸入手機號碼(必填)" class="form-control" v-model.lazy="CellPhoneNumber" required autocomplete="on">
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row justify-content-center">
+                                    <div class="col-sm-2 align-self-center">
+                                        <i class="zmdi zmdi-phone"> 電話號碼</i>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input type="text" name="PhoneNumber" placeholder="請輸入電話號碼" class="form-control" v-model.lazy="PhoneNumber" autocomplete="on">
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row justify-content-center">
+                                    <div class="col-sm-2 align-self-center">
+                                        <i class="zmdi zmdi-city-alt"> 郵遞區號</i>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input type="text" name="PostalCode" placeholder="請輸入郵遞區號(必填)" class="form-control" v-model.lazy="PostalCode" required autocomplete="on">
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row justify-content-center">
+                                    <div class="col-sm-2 align-self-center">
+                                        <i class="zmdi zmdi-city"> 城市</i>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <select name="city" id="" class="form-control" v-model.lazy="City" required>
+                                            <option value="" disabled>--請選擇(必填)--</option>
+                                            <option value="台北市">台北市</option>
+                                            <option value="新北市">新北市</option>
+                                            <option value="桃園市">桃園市</option>
+                                            <option value="台中市">台中市</option>
+                                            <option value="台南市">台南市</option>
+                                            <option value="高雄市">高雄市</option>
+                                            <option value="基隆市">基隆市</option>
+                                            <option value="新竹市">新竹市</option>
+                                            <option value="嘉義市">嘉義市</option>
+                                            <option value="新竹縣">新竹縣</option>
+                                            <option value="苗栗縣">苗栗縣</option>
+                                            <option value="彰化縣">彰化縣</option>
+                                            <option value="雲林縣">雲林縣</option>
+                                            <option value="嘉義縣">嘉義縣</option>
+                                            <option value="屏東縣">屏東縣</option>
+                                            <option value="台東縣">台東縣</option>
+                                            <option value="花蓮縣">花蓮縣</option>
+                                            <option value="屏東縣">屏東縣</option>
+                                            <option value="宜蘭縣">宜蘭縣</option>
+                                            <option value="南投縣">南投縣</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row justify-content-center">
+                                    <div class="col-sm-2 align-self-center">
+                                        <i class="zmdi zmdi-home"> 地址</i>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input type="text" name="Address" placeholder="請輸入地址(必填)" class="form-control" v-model.lazy="Address" required autocomplete="on">
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="d-grid gap-2 d-md-flex justify-content-center">
+                                    <input type="checkbox" name="agree-term" id="agree-term" class="agree-term" v-model="isChecked" />
+                                    <label for="agree-term" class="align-self-end col-sm-3 label-agree-term">我同意 <a href="#" class="term-service">隱私權政策</a></label>
+                                    <button type="submit" class="form-control btn btn-outline-primary rounded submit px-3" v-on:click="SubmitData">
+                                        註冊
+                                        <i class="zmdi zmdi-arrow-right"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
-						<hr>
-                        <div class="row justify-content-center">
-							<div class="col-sm-2 align-self-center">
-								<i class="zmdi zmdi-lock"> 密碼</i>
-							</div>
-                            <div class="col-sm-6">
-								<input type="password" placeholder="請輸入密碼" class="form-control">
-                            </div>
-                        </div>
-                        <hr>
-						<div class="row justify-content-center">
-							<div class="col-sm-2 align-self-center">
-								<i class="zmdi zmdi-lock"> 密碼確認</i>
-							</div>
-                            <div class="col-sm-6">
-								<input type="password" placeholder="請再次輸入密碼" class="form-control">
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row justify-content-center">
-							<div class="col-sm-2 align-self-center">
-								<i class="zmdi zmdi-account"> 姓名</i>
-							</div>
-                            <div class="col-sm-6">
-								<input type="text" placeholder="請輸入姓名" class="form-control">
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row justify-content-center">
-							<div class="col-sm-2 align-self-center">
-								<i class="zmdi zmdi-account"> 暱稱</i>
-							</div>
-                            <div class="col-sm-6">
-								<input type="text" placeholder="請輸入暱稱" class="form-control">
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row justify-content-center">
-							<div class="col-sm-2 align-self-center">
-								<i class="zmdi zmdi-cake"> 生日</i>
-							</div>
-                            <div class="col-sm-6">
-								<input type="date" placeholder="請輸入出生年月日" class="form-control">
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row justify-content-center">
-							<div class="col-sm-2 align-self-center">
-								<i class="zmdi zmdi-account"> 身分證字號</i>
-							</div>
-                            <div class="col-sm-6">
-								<input type="text" placeholder="請輸入身分證字號" class="form-control">
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row justify-content-center">
-							<div class="col-sm-2 align-self-center">
-								<i class="zmdi zmdi-email"> 電子信箱</i>
-							</div>
-                            <div class="col-sm-6">
-								<input type="text" placeholder="請輸入電子信箱" class="form-control">
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row justify-content-center">
-							<div class="col-sm-2 align-self-center">
-								<i class="zmdi zmdi-phone"> 手機號碼</i>
-							</div>
-                            <div class="col-sm-6">
-								<input type="text" placeholder="請輸入手機號碼" class="form-control">
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row justify-content-center">
-							<div class="col-sm-2 align-self-center">
-								<i class="zmdi zmdi-phone"> 電話號碼</i>
-							</div>
-                            <div class="col-sm-6">
-								<input type="text" placeholder="請輸入電話號碼" class="form-control">
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row justify-content-center">
-							<div class="col-sm-2 align-self-center">
-								<i class="zmdi zmdi-city-alt"> 郵遞區號</i>
-							</div>
-                            <div class="col-sm-6">
-								<input type="text" placeholder="請輸入郵遞區號" class="form-control">
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row justify-content-center">
-							<div class="col-sm-2 align-self-center">
-								<i class="zmdi zmdi-city"> 城市</i>
-							</div>
-                            <div class="col-sm-6">
-								<select name="" id="" class="form-control">
-									<option value="disabled selected" >--請選擇--</option>
-									<option value="TP">台北市</option>
-									<option value="NTP">新北市</option>
-									<option value="TY">桃園市</option>
-									<option value="TC">台中市</option>
-									<option value="TN">台南市</option>
-									<option value="KS">高雄市</option>
-									<option value="KL">基隆市</option>
-									<option value="HS">新竹市</option>
-									<option value="CY">嘉義市</option>
-									<option value="HSC">新竹縣</option>
-									<option value="ML">苗栗縣</option>
-									<option value="CH">彰化縣</option>
-									<option value="YL">雲林縣</option>
-									<option value="CYC">嘉義縣</option>
-									<option value="PT">屏東縣</option>
-									<option value="TT">台東縣</option>
-									<option value="HL">花蓮縣</option>
-									<option value="PTC">屏東縣</option>
-									<option value="YL">宜蘭縣</option>
-									<option value="NT">南投縣</option>
-								</select>
-							</div>
-                        </div>
-                        <hr>
-						<div class="row justify-content-center">
-							<div class="col-sm-2 align-self-center">
-								<i class="zmdi zmdi-home"> 地址</i>
-							</div>
-                            <div class="col-sm-6">
-								<input type="text" placeholder="請輸入地址" class="form-control">
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="d-grid gap-2 d-md-flex justify-content-center">
-									<input type="checkbox" name="agree-term" id="agree-term" class="agree-term" />
-									<label for="agree-term" class="align-self-end col-sm-3 label-agree-term">我同意 <a href="#" class="term-service">隱私權政策</a></label>
-							<button type="submit" class="form-control btn btn-outline-primary rounded submit px-3" v-on:click="DoRegister()">
-							註冊
-							<i class="zmdi zmdi-arrow-right"></i>
-							</button>
-						</div>
-						</div>
+                    </div>
                 </div>
             </div>
         </div>
-                </div>
-            </div>
-        </div>
+    </div>
+
+    @section scripts {
+    <script>
+        var VuePage = new Vue({
+            el: "#VuePage",
+            data: {
+                Account: '',
+                Email: '',
+                Password: '',
+                ComfirmPassword: '',
+                MemberName: '',
+                NickName: '',
+                Birthday: '',
+                IdentityNumber: '',
+                CellPhoneNumber: '',
+                PhoneNumber: '',
+                PostalCode: '',
+                Country: '台灣',
+                City: '',
+                Address: '',
+                isChecked: false,
+                ErrMsg: '',
+                Success: ''
+            },
+            methods: {
+                SubmitData: function () {
+                    var self = this;
+                    if (self.isChecked == false) {
+                        Swal.fire({
+                            title: '註冊失敗',
+                            text: '請勾選隱私權政策',
+                            icon: 'error',
+                            timer: 12000
+                        });
+                        return;
+                    }
+                    axios({
+                        method: 'post',
+                        url: '/Members/MemberApi/Register',
+                        data: {
+                            Account: self.Account,
+                            Email: self.Email,
+                            Password: self.Password,
+                            ComfirmPassword: self.ComfirmPassword,
+                            MemberName: self.MemberName,
+                            NickName: self.NickName,
+                            Birthday: self.Birthday,
+                            Fax: self.Fax,
+                            IdentityNumber: self.IdentityNumber,
+                            CellPhoneNumber: self.CellPhoneNumber,
+                            PhoneNumber: self.PhoneNumber,
+                            PostalCode: self.PostalCode,
+                            Country: self.Country,
+                            City: self.City,
+                            Address: self.Address,
+                            ErrMsg: '',
+                            Success: ''
+                        }
+                    })
+                    .then(function (response) {
+                        self.Success = response.data;
+                        Swal.fire({
+                            title: self.Success,
+                            icon: 'success',
+                            timer: 12000
+                        }).then((result => {
+                            window.location.assign("/Member/Verify")
+                        }));
+                        console.log(response);
+                    })
+                    .catch(function (error) {
+                        self.ErrMsg = error.response.data;
+                        Swal.fire({
+                            title: '登入失敗', // TODO 驗證需修改
+                            text: '請填入選項',
+                            icon: 'error',
+                            timer: 12000
+                        });
+                        console.log(error);
+                        return;
+                    });
+                },
+            }
+        });
+
+    </script>
+    }

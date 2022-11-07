@@ -13,11 +13,18 @@ builder.Services.AddDbContext<_3TeamProjectContext>(options =>
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-//新增Cookie驗證
+//新增CORS
+//builder.Services.AddCors(c =>
+//    c.AddPolicy(
+//    name: "AllowOrigin",
+//    policy => policy.WithOrigins("https://localhost:7007").WithHeaders("*").WithMethods("*")));
+
+
+//新增Cookie驗證，第二段為新增Google第三方登入認證。
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(opt => {
-        opt.AccessDeniedPath = "/Home/Error";
-        opt.LoginPath = "/Home"; // TODO Login Path
+        opt.AccessDeniedPath = "/Home";
+        opt.LoginPath = "/Home";
         opt.ExpireTimeSpan = TimeSpan.FromMinutes(30);
        
     }).AddGoogle( opt =>
@@ -51,7 +58,7 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
+//app.UseCors();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseSession();
@@ -61,21 +68,6 @@ app.UseRouting();
 app.UseAuthentication();
 
 app.UseAuthorization();
-
-//新增Suppliers Area 的 Route
-//app.MapControllerRoute(
-//    name: "Members",
-//    pattern: "{area:exists}/{controller=Member}/{action=Index}/{id?}");
-
-////新增Suppliers Area 的 Route
-//app.MapControllerRoute(
-//    name: "Suppliers",
-//    pattern: "{area:exists}/{controller=Supplier}/{action=Index}/{id?}");
-
-////新增Administrators Area 的 Route
-//app.MapControllerRoute(
-//    name: "Administrators",
-//    pattern: "{area:exists}/{controller=Administrator}/{action=Index}/{id?}");
 
 
 app.MapControllerRoute(

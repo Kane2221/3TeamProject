@@ -19,6 +19,7 @@ namespace _3TeamProject.Models
         public virtual DbSet<ActivitiesMessageBoard> ActivitiesMessageBoards { get; set; } = null!;
         public virtual DbSet<Administrator> Administrators { get; set; } = null!;
         public virtual DbSet<AdministratorStatusCategory> AdministratorStatusCategories { get; set; } = null!;
+        public virtual DbSet<JoinMember> JoinMembers { get; set; } = null!;
         public virtual DbSet<Member> Members { get; set; } = null!;
         public virtual DbSet<MemberStatusCategory> MemberStatusCategories { get; set; } = null!;
         public virtual DbSet<Order> Orders { get; set; } = null!;
@@ -58,10 +59,6 @@ namespace _3TeamProject.Models
                 entity.Property(e => e.ActivitiesMessageId).HasColumnName("ActivitiesMessageID");
 
                 entity.Property(e => e.ActivitiesCreatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.ActivitiesMessageState)
-                    .HasMaxLength(10)
-                    .IsUnicode(false);
 
                 entity.Property(e => e.ActivityId).HasColumnName("ActivityID");
 
@@ -114,6 +111,31 @@ namespace _3TeamProject.Models
                 entity.Property(e => e.AdministratorStatusId).HasColumnName("AdministratorStatusID");
 
                 entity.Property(e => e.StatusName).HasMaxLength(10);
+            });
+
+            modelBuilder.Entity<JoinMember>(entity =>
+            {
+                entity.HasKey(e => e.JoinId);
+
+                entity.ToTable("JoinMember");
+
+                entity.Property(e => e.JoinId).HasColumnName("JoinID");
+
+                entity.Property(e => e.ActivitiesId).HasColumnName("ActivitiesID");
+
+                entity.Property(e => e.MemberId).HasColumnName("MemberID");
+
+                entity.HasOne(d => d.Activities)
+                    .WithMany(p => p.JoinMembers)
+                    .HasForeignKey(d => d.ActivitiesId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_JoinMember_SocialActivities");
+
+                entity.HasOne(d => d.Member)
+                    .WithMany(p => p.JoinMembers)
+                    .HasForeignKey(d => d.MemberId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_JoinMember_Members");
             });
 
             modelBuilder.Entity<Member>(entity =>
@@ -617,13 +639,17 @@ namespace _3TeamProject.Models
 
                 entity.Property(e => e.PasswordSalt).HasMaxLength(128);
 
-                entity.Property(e => e.ResetTokenExpires).HasColumnType("datetime");
-
-                entity.Property(e => e.VerficationToken)
-                    .HasMaxLength(128)
+                entity.Property(e => e.PicturePath)
+                    .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.ResetTokenExpires).HasColumnType("datetime");
+
                 entity.Property(e => e.VerfiedAt).HasColumnType("datetime");
+
+                entity.Property(e => e.VerificationToken)
+                    .HasMaxLength(128)
+                    .IsUnicode(false);
 
                 entity.HasOne(d => d.RolesNavigation)
                     .WithMany(p => p.Users)

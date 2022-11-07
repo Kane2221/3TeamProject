@@ -1,33 +1,13 @@
-﻿<!doctype html>
-<html lang="en">
-
-<head>
+﻿@section Head{
     <title>Login 04</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
-    <!-- Google Web Fonts -->
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
-
-    <!-- Axios -->
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <!-- SweetAlert -->
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@@11"></script>
-
     <link rel="stylesheet" href="~/css/stylelogin.css">
     <!-- Customized Bootstrap Stylesheet -->
     <link href="~/css/style.css" rel="stylesheet">
-</head>
+}
 
-<body>
+
     <div id="VuePage">
         <div class="row justify-content-center">
             <div class="col-md-12 col-lg-10">
@@ -52,16 +32,16 @@
                                 </p>
                             </div>
                         </div>
-                        <form v-on:submit.prevent="confirm" class="signin-form">
+                        <form v-on:submit.prevent="SubmitData" class="signin-form">
                             <div class="form-group mb-3">
                                 <label class="label" for="name">請輸入帳號</label>
                                 <input type="text" class="form-control" v-model.lazy="Account" placeholder="帳號"
-                                       required>
+                                       required autocomplete="on">
                             </div>
                             <div class="form-group mb-3">
                                 <label class="label" for="password">請輸入密碼</label>
                                 <input type="password" class="form-control" v-model.lazy="Password" placeholder="密碼"
-                                       required>
+                                       required autocomplete="on">
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="form-control btn btn-primary rounded submit px-3">登入</button>
@@ -70,7 +50,7 @@
                                 <div class="w-50 text-left">
                                     <label class="checkbox-wrap checkbox-primary mb-0">
                                         記住我的帳號
-                                        <input type="checkbox" checked>
+                                        <input type="checkbox" v-model="isChecked">
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>
@@ -85,7 +65,7 @@
             </div>
         </div>
 
-        <!--使用 Bootstrap Modal 樣式，當執行有錯誤時，顯示錯誤訊息-->
+        @*<!--使用 Bootstrap Modal 樣式，當執行有錯誤時，顯示錯誤訊息-->
         <div class="modal fade" id="ErrorAlert" tabindex="-1" role="dialog" v-if="ErrMsg != null">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
@@ -99,7 +79,7 @@
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
+        </div><!-- /.modal -->*@
     </div>
 
     @section scripts {
@@ -110,10 +90,11 @@
                     Account: '',
                     Password: '',
                     ErrMsg:'',
-                    Success:''
+                    Success:'',
+                    isChecked: false    
                 },
                 methods: {
-                    confirm: function () {
+                    SubmitData: function () {
                         var self = this;
                         axios({
                         method: 'post',
@@ -130,7 +111,7 @@
                                 icon: 'success',
                                 timer: 12000
                                 }).then((result =>{
-                                    window.location.assign("/home")
+                                    window.location.assign("/Member/Memberprofile")
                             }));
                             console.log(response);
                         })
@@ -150,14 +131,7 @@
             });
             
         </script>
-}
+    }
 
-        <script src="~/js/jquery.min.js"></script>
-        <script src="~/js/popper.js"></script>
-        <script src="~/js/bootstrap.min.js"></script>
-        <script src="~/js/main.js"></script>
+    
 
-
-    </body>
-
-    </html>

@@ -62,6 +62,7 @@ namespace _3TeamProject.Areas.Sightseeings.Controllers
                     SightseeingCity = s.SightseeingCity,
                     SightseeingAddress = s.SightseeingAddress,
                     SightseeingScore = s.SightseeingScore,
+                    SightseeingIntroduce = s.SightseeingIntroduce,
                     CategoryName = s.SightseeingCategory.CategoryName,
                     SightseeingPictureInfos = s.SightseeingPictureInfos.Select(p => new GetSightPicInfoDto
                     {
