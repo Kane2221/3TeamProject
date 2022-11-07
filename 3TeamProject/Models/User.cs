@@ -20,10 +20,11 @@ namespace _3TeamProject.Models
         public byte[] PasswordHash { get; set; } = null!;
         public byte[] PasswordSalt { get; set; } = null!;
         public int? Roles { get; set; }
-        public string VerficationToken { get; set; } = null!;
+        public string VerificationToken { get; set; } = null!;
         public string? PasswordResetToken { get; set; }
         public DateTime? VerfiedAt { get; set; }
         public DateTime? ResetTokenExpires { get; set; }
+        public string? PicturePath { get; set; }
 
         public virtual Role? RolesNavigation { get; set; }
         public virtual ICollection<ActivitiesMessageBoard> ActivitiesMessageBoards { get; set; }

@@ -130,7 +130,12 @@
                                         <i class="zmdi zmdi-"> 產品種類</i>
                                     </div>
                                     <div class="col-sm-6">
-                                            <input type="text" class="form-control" name="ProductCategoryId" id="productCategoryId">
+                                            <select class="form-control" name="ProductCategoryId" id="productCategoryId" required>
+                                                <option value="0">裝備/商品</option>
+                                                <option value="1">旅遊套票</option>
+                                                <option value="2">課程</option>
+                                    @*        <input type="text" class="form-control" name="ProductCategoryId" id="productCategoryId">*@
+                                            </select>
                                     </div>
                                 </div>
                                 <br />
@@ -227,7 +232,7 @@
     });
 </script>
 
-@*<script>
+<script>
     function preview() {
         frame.src = URL.createObjectURL(event.target.files[0]);
     }
@@ -237,4 +242,4 @@
     }
 
 </script>
-*@
+

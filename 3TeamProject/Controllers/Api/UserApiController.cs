@@ -73,7 +73,7 @@ namespace _3TeamProject.Controllers.Api
         //驗證帳號
         public async Task<IActionResult> Verify([FromBody] string token)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.VerficationToken == token);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.VerificationToken == token);
             
             if (user == null)
             {
@@ -84,9 +84,9 @@ namespace _3TeamProject.Controllers.Api
                 return BadRequest("已驗證過的驗證碼");
             }
             var member = _context.Members.Include(m => m.User)
-                .Where(m => m.User.VerficationToken == token).FirstOrDefault();
+                .Where(m => m.User.VerificationToken == token).FirstOrDefault();
             var supplier = _context.Suppliers.Include(m => m.User)
-                .Where(m => m.User.VerficationToken == token).FirstOrDefault();
+                .Where(m => m.User.VerificationToken == token).FirstOrDefault();
             user.VerfiedAt = DateTime.Now;
             member.MemberStatusId = 2;
             supplier.SupplierStatusId = 1;

@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace _3TeamProject.Models
 {
-    public partial class _3TeamProjectContext : DbContext
+    public partial class db_a8e856_3teamprojectContext : DbContext
     {
-        public _3TeamProjectContext()
+        public db_a8e856_3teamprojectContext()
         {
         }
 
-        public _3TeamProjectContext(DbContextOptions<_3TeamProjectContext> options)
+        public db_a8e856_3teamprojectContext(DbContextOptions<db_a8e856_3teamprojectContext> options)
             : base(options)
         {
         }
@@ -44,10 +44,17 @@ namespace _3TeamProject.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Data Source=SQL8003.site4now.net;Initial Catalog=db_a8e856_3teamproject;User Id=db_a8e856_3teamproject_admin;Password=Tgm102third;Integrated Security=false");
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.UseCollation("Chinese_Taiwan_Stroke_CI_AS");
+
             modelBuilder.Entity<ActivitiesMessageBoard>(entity =>
             {
                 entity.HasKey(e => e.ActivitiesMessageId)
@@ -617,13 +624,17 @@ namespace _3TeamProject.Models
 
                 entity.Property(e => e.PasswordSalt).HasMaxLength(128);
 
+                entity.Property(e => e.PicturePath)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.ResetTokenExpires).HasColumnType("datetime");
+
+                entity.Property(e => e.VerfiedAt).HasColumnType("datetime");
 
                 entity.Property(e => e.VerificationToken)
                     .HasMaxLength(128)
                     .IsUnicode(false);
-
-                entity.Property(e => e.VerfiedAt).HasColumnType("datetime");
 
                 entity.HasOne(d => d.RolesNavigation)
                     .WithMany(p => p.Users)

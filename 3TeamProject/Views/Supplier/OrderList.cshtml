@@ -36,7 +36,7 @@
                                             </button>
                                         </div>
                                     </li>
-@*                                  <li class="list-group-item justify-content-between align-items-center p-3">
+                                    @*                                  <li class="list-group-item justify-content-between align-items-center p-3">
                                     <div class="d-flex justify-content-center mb-2">
                                     <button type="button" class="form-control btn btn-outline-primary ms-1">
                                     <a data-toggle="click" href="/Member/OrderRecord"><i class="zmdi zmdi-chart"> 訂購紀錄</i></a>
@@ -50,7 +50,7 @@
                                             </button>
                                         </div>
                                     </li>
-									<li class="list-group-item justify-content-between align-items-center p-3">
+                                    <li class="list-group-item justify-content-between align-items-center p-3">
                                         <div class="d-flex justify-content-center mb-2">
                                             <button type="button" class="form-control btn btn-outline-primary ms-1">
                                                 登出
@@ -63,103 +63,102 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-9">
+                    <div class="col-lg-9" id=productlist>
                         <div class="card mb-4">
                             <div class="card-body">
-                                
+
                                 <div class="d-flex justify-content-center">
-                                        <div class="table-responsive">
-                                            <table class="table">
-                                                <thead>
-                                                    <tr>
-                                                        <th class="text-center">
-                                                            <div class="toggle-btn">
-                                                                <div class="inner-circle"></div>
-                                                            </div>
-                                                        </th>
-                                                        <th>產品名稱</th>
-                                                        <th>單價</th>
-                                                        <th>庫存量</th>
-                                                        <th>總訂單量</th>
-                                                        <th>產品推薦度</th>
-                                                        <th>產品種類</th>
-                                                        <th>產品狀態</th>
-                                                        <th>修改/下架</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody class="table-body">
-                                                    <tr class="cell-1">
-                                                        <td class="text-center">
-                                                            <div class="toggle-btn">
-                                                                <div class="inner-circle"></div>
-                                                            </div>
-                                                        </td>
-                                                        <td>淺水錶</td>
-                                                        <td>45123</td>
-                                                        <td>8</td>
-                                                        <td>2</td>
-                                                        <td> </td>
-                                                        <td>淺水裝備</td>
-                                                        <td><span class="badge badge-success">供應中</span></td>
-                                                        <td>
-                                                            <button type="button" class="form-control btn btn-outline-primary rounded ms-1">
-                                                                修改
-                                                            </button>
-                                                            <button type="button" class="form-control btn btn-outline-primary rounded ms-1">
-                                                                下架
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="cell-1">
-                                                        <td class="text-center">
-                                                            <div class="toggle-btn">
-                                                                <div class="inner-circle"></div>
-                                                            </div>
-                                                        </td>
-                                                        <td>淺水錶</td>
-                                                        <td>45123</td>
-                                                        <td>8</td>
-                                                        <td>2</td>
-                                                        <td> </td>
-                                                        <td>淺水裝備</td>
-                                                        <td><span class="badge badge-info">審核中</span></td>
-                                                        <td>
-                                                            <button type="button" class="form-control btn btn-outline-primary rounded ms-1">
-                                                                修改
-                                                            </button>
-                                                            <button type="button" class="form-control btn btn-outline-primary rounded ms-1">
-                                                                下架
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="cell-1">
-                                                        <td class="text-center">
-                                                            <div class="toggle-btn">
-                                                                <div class="inner-circle"></div>
-                                                            </div>
-                                                        </td>
-                                                        <td>淺水錶</td>
-                                                        <td>45123</td>
-                                                        <td>8</td>
-                                                        <td>2</td>
-                                                        <td> </td>
-                                                        <td>淺水裝備</td>
-                                                        <td><span class="badge badge-danger">已下架</span></td>
-                                                        <td>
-                                                            <button type="button" class="form-control btn btn-outline-primary rounded ms-1">
-                                                                修改
-                                                            </button>
-                                                            <button type="button" class="form-control btn btn-outline-primary rounded ms-1">
-                                                                下架
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                            <div class="d-grid gap-3 d-md-flex justify-content-md-end">
-                                                <button type="button" class="btn btn-primary  px-3" href="/Member/Register">取消</button>
-                                                <button type="submit" class="btn btn-primary  submit px-3">送出</button>
-                                            </div>
+                                    <div class="table-responsive" >
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center">
+                                                        <div class="toggle-btn">
+                                                            <div class="inner-circle"></div>
+                                                        </div>
+                                                    </th>
+                                                    <th>產品名稱</th>
+                                                    <th>單價</th>
+                                                    <th>庫存量</th>
+                                                    <th>總訂單量</th>
+                                                    <th>產品推薦度</th>
+                                                    <th>產品種類</th>
+                                                    <th>產品狀態</th>
+                                                    <th>修改/下架</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="table-body">
+                                                <tr class="cell-1">
+                                                    <td class="text-center">
+                                                        <div class="toggle-btn">
+                                                            <div class="inner-circle"></div>
+                                                        </div>
+                                                    </td>
+                                                    <td></td>
+                                                    <td>45123</td>
+                                                    <td>8</td>
+                                                    <td>2</td>
+                                                    <td> </td>
+                                                    <td>淺水裝備</td>
+                                                    <td><span class="badge badge-success">供應中</span></td>
+                                                    <td>
+                                                        <button type="button" class="form-control btn btn-outline-primary rounded ms-1">
+                                                            修改
+                                                        </button>
+                                                        <button type="button" class="form-control btn btn-outline-primary rounded ms-1">
+                                                            下架
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr class="cell-1">
+                                                    <td class="text-center">
+                                                        <div class="toggle-btn">
+                                                            <div class="inner-circle"></div>
+                                                        </div>
+                                                    </td>
+                                                    <td>淺水錶</td>
+                                                    <td>45123</td>
+                                                    <td>8</td>
+                                                    <td>2</td>
+                                                    <td> </td>
+                                                    <td>淺水裝備</td>
+                                                    <td><span class="badge badge-info">審核中</span></td>
+                                                    <td>
+                                                        <button type="button" class="form-control btn btn-outline-primary rounded ms-1">
+                                                            修改
+                                                        </button>
+                                                        <button type="button" class="form-control btn btn-outline-primary rounded ms-1">
+                                                            下架
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr class="cell-1">
+                                                    <td class="text-center">
+                                                        <div class="toggle-btn">
+                                                            <div class="inner-circle"></div>
+                                                        </div>
+                                                    </td>
+                                                    <td>淺水錶</td>
+                                                    <td>45123</td>
+                                                    <td>8</td>
+                                                    <td>2</td>
+                                                    <td> </td>
+                                                    <td>淺水裝備</td>
+                                                    <td><span class="badge badge-danger">已下架</span></td>
+                                                    <td>
+                                                        <button type="button" class="form-control btn btn-outline-primary rounded ms-1">
+                                                            修改
+                                                        </button>
+                                                        <button type="button" class="form-control btn btn-outline-primary rounded ms-1">
+                                                            下架
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="d-grid gap-3 d-md-flex justify-content-md-end">
+                                            <button type="button" class="btn btn-primary  px-3" href="/Member/Register">取消</button>
+                                            <button type="submit" class="btn btn-primary  submit px-3">送出</button>
                                         </div>
                                     </div>
                                 </div>
@@ -171,3 +170,29 @@
         </div>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.7.10/dist/vue.js"></script>
+<script>
+
+    //Vue.use(VueNumberInput);
+    //Vue.component('vue-number-input', VueNumberInput);
+    let app = new Vue({
+        el: "#productlist",
+        data: {
+            products: []
+        },
+        mounted: function () {
+            let self = this;
+            fetch("/Suppliers/SupplierApi/GetProduct")
+                //fetch("/api/Product/")
+                .then(function (response) { return response.json() })
+                .then(function (result) {
+                    self.products = result.map(function (x) {
+                        //x.qty = 0;
+
+                        return x
+                    })
+                })
+        }
+    })
+
+</script>

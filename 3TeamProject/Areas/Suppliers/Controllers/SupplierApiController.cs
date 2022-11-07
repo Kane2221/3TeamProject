@@ -89,7 +89,7 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
                         Email = request.Email,
                         PasswordHash = passwordHsah,
                         PasswordSalt = passwordSalt,
-                        VerficationToken = verifyToken,
+                        VerificationToken = verifyToken,
                         Roles = request.Roles
                     }
                 };

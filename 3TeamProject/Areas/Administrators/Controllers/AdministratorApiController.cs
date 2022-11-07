@@ -105,7 +105,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
                         Email = request.Email,
                         PasswordHash = passwordHsah,
                         PasswordSalt = passwordSalt,
-                        VerficationToken = Convert.ToHexString(RandomNumberGenerator.GetBytes(64)),
+                        VerificationToken = Convert.ToHexString(RandomNumberGenerator.GetBytes(64)),
                         Roles = request.Roles
                     }
                 };
