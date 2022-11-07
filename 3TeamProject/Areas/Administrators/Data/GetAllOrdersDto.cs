@@ -7,8 +7,8 @@ namespace _3TeamProject.Areas.Administrators.Data
         public int OrderId { get; set; }
         public int MemberId { get; set; }
         public int? AdministratorId { get; set; }
-        public DateTime OrderDate { get; set; }
-        public DateTime ShipDate { get; set; }
+        public string? OrderDate { get; set; }
+        public string? ShipDate { get; set; }
         public string OrderCategoryName { get; set; } = null!;
         public string ShipPostalCode { get; set; } = null!;
         public string ShipCountry { get; set; } = null!;

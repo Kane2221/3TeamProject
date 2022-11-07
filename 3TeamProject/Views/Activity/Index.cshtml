@@ -94,25 +94,25 @@
                                         <div class="inner-circle"></div>
                                     </div>
                                 </th>
-                                <th>活動<br />編號</th>
-                                <th>揪團<br />名稱</th>
-                                <th>揪團<br />地點</th>
-                                <th>限制<br />人數</th>
-                                <th>參與<br />人數</th>
-                                <th>揪團<br />發起時間</th>
-                                <th>參與<br />截止時間</th>
+                                <th>活動編號</th>
+                                <th>揪團名稱</th>
+                                <th>揪團地點</th>
+                                <th>限制人數</th>
+                                <th>參與人數</th>
+                                <th>揪團發起時間</th>
+                                <th>參與截止時間</th>
                                 <th>發起人</th>
-                                <th>退出<br />活動</th>
+                                <th>退出活動</th>
                             </tr>
                         </thead>
-                        <tbody @*v-for="sight in Sightseeings"*@ class="table-body">
+                        <tbody v-for="sight in Sightseeings" class="table-body">
                             <tr class="cell-1">
                                 <td class="text-center">
                                     <div class="toggle-btn">
                                         <div class="inner-circle"></div>
                                     </div>
                                 </td>
-                                <td>#1001</td>
+                                <td>#1001{{sight.sightseeingId}}</td>
                                 <td>一起潛水去</td>
                                 <td>後壁湖浮潛區</td>
                                 <td>8</td>
@@ -250,13 +250,11 @@
                 var self = this;
                 axios({
                     method: 'get',
-                    url: '/Sightseeings/SightseeingApi'
+                    url: '/SocialActivities/SocialActivitiesApi/GetAllActivities'
                 })
                     .then(function (res) {
                         console.log(res);
                         self.Sightseeings = res.data;
-                        //var result = new Set(res.data.categoryName);
-                        //self.Category = [...result];
 
                     })
                     .catch(function (error) {

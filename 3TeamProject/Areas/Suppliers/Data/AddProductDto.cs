@@ -2,7 +2,7 @@
 
 namespace _3TeamProject.Areas.Suppliers.Data
 {
-    public class AddProduct
+    public class AddProductDto
     {
         [Required]
         public string CategoryName { get; set; } = null!;

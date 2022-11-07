@@ -73,7 +73,7 @@
         <!-- Topbar End -->
         <!-- Navbar Start -->
         <div class="container-fluid position-relative nav-bar p-0">
-            <div class="container position-relative p-0" style="z-index: 9;">
+            <div class="container-fluid position-relative p-0" style="z-index: 9;">
                 <nav class="navbar navbar-expand-lg bg-light navbar-light shadow-lg py-3 py-lg-0 pl-3 pl-lg-5">
                     <a href="/Home" class="navbar-brand">
                         <h1 class="m-0 text-primary"><span class="text-dark">TRAVEL</span>ER</h1>
@@ -97,7 +97,7 @@
 
                             </div>
                             <div class="nav-item">
-                                <a class="nav-item nav-link" asp-area="" asp-controller="Home" asp-action="Index">社群揪團</a>
+                                <a class="nav-item nav-link" asp-area="" asp-controller="Activity" asp-action="Index">社群揪團</a>
                             </div>
                             <div class="nav-item">
                                 <a class="nav-item nav-link" asp-area="" asp-controller="Attractions" asp-action="Index">景點介紹</a>
@@ -110,7 +110,7 @@
         <!-- Navbar End -->
     </header>
     <div class="container-fluid">
-        <main class="container pb-3 px-lg-5" role="main">
+        <main class="container-fluid pb-3 px-lg-5" role="main">
             @RenderBody()
     </main>
     </div>

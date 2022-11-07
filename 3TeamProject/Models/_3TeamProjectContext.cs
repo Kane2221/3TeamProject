@@ -639,13 +639,17 @@ namespace _3TeamProject.Models
 
                 entity.Property(e => e.PasswordSalt).HasMaxLength(128);
 
-                entity.Property(e => e.ResetTokenExpires).HasColumnType("datetime");
-
-                entity.Property(e => e.VerficationToken)
-                    .HasMaxLength(128)
+                entity.Property(e => e.PicturePath)
+                    .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.ResetTokenExpires).HasColumnType("datetime");
+
                 entity.Property(e => e.VerfiedAt).HasColumnType("datetime");
+
+                entity.Property(e => e.VerificationToken)
+                    .HasMaxLength(128)
+                    .IsUnicode(false);
 
                 entity.HasOne(d => d.RolesNavigation)
                     .WithMany(p => p.Users)

@@ -43,6 +43,7 @@ namespace _3TeamProject.Areas.Members.Controllers
                           on u.UserId equals m.UserId
                           select new GetMemberDto
                           {
+                              UserId = u.UserId,
                               Account = u.Account,
                               Email = u.Email,
                               RoleName = u.RolesNavigation.RoleName,
@@ -56,7 +57,8 @@ namespace _3TeamProject.Areas.Members.Controllers
                               Country = m.Country,
                               City = m.City,
                               Address = m.Address,
-                              Age = m.Age
+                              Age = m.Age,
+                              PicturePath = u.PicturePath
                           }).SingleOrDefault();
             return Ok(member);
         }
@@ -99,7 +101,7 @@ namespace _3TeamProject.Areas.Members.Controllers
                         Email = request.Email,
                         PasswordHash = passwordHsah,
                         PasswordSalt = passwordSalt,
-                        VerficationToken = Convert.ToHexString(RandomNumberGenerator.GetBytes(64)),
+                        VerificationToken = Convert.ToHexString(RandomNumberGenerator.GetBytes(64)),
                         Roles = 1
                     }
                 };
@@ -130,7 +132,7 @@ namespace _3TeamProject.Areas.Members.Controllers
             }
         }
         //會員資料修改
-        [HttpPut("{id}")]
+        [HttpPut("Update/{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateMemberDto request)
         {
             var UserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
@@ -195,8 +197,8 @@ namespace _3TeamProject.Areas.Members.Controllers
                 .Select(o => new GetAllOrdersDto
                 {
                     OrderId = o.OrderId,
-                    OrderDate = o.OrderDate,
-                    ShipDate = o.ShipDate,
+                    OrderDate = o.OrderDate.ToShortDateString(),
+                    ShipDate = o.ShipDate.ToShortDateString(),
                     OrderCategoryName = o.OrderStatusNavigation.OrderCategoryName,
                     PaymentCategoryName = o.PaymentStatusNavigation.PaymentCategoryName,
                     ShipCategoryName = o.ShipStatusNavigation.ShipCategoryName,
@@ -224,8 +226,8 @@ namespace _3TeamProject.Areas.Members.Controllers
                                 .Select(o => new GetAllOrdersDto
                                 {
                                     OrderId = o.OrderId,
-                                    OrderDate = o.OrderDate,
-                                    ShipDate = o.ShipDate,
+                                    OrderDate = o.OrderDate.ToShortDateString(),
+                                    ShipDate = o.ShipDate.ToShortDateString(),
                                     OrderCategoryName = o.OrderStatusNavigation.OrderCategoryName,
                                     PaymentCategoryName = o.PaymentStatusNavigation.PaymentCategoryName,
                                     ShipCategoryName = o.ShipStatusNavigation.ShipCategoryName,
@@ -247,7 +249,7 @@ namespace _3TeamProject.Areas.Members.Controllers
         {
             var UserID = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
             var record = _context.SocialActivities.Include(s => s.Member)
-                .ThenInclude(m => m.User).Where(m => m.Member.UserId == UserID).Select(s => new GetActRecord
+                .ThenInclude(m => m.User).Where(m => m.Member.UserId == UserID).Select(s => new GetActRecordDto
                 {
                     ActivityId = s.ActivityId,
                     ActivitiesName = s.ActivitiesName,

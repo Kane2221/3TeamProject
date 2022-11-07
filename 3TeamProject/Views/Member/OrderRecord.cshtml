@@ -13,14 +13,14 @@
     </div>
 </div>
 <div id="VuePage" class="container-fluid booking mt-5 pb-5">
-    <div class="container pb-5">
+        <div class="container-fluid pb-5">
         <div class="bg-light shadow" style="padding: 30px;">
             <div class="row align-items-center" style="min-height: 500px;">
                 <div class="row">
                     <div class="col-lg-4">
                         <div class="card mb-4">
                             <div class="card-body text-center">
-                                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+                                    <img :src="PicturePath" alt="avatar"
                                      class="rounded-circle img-fluid" style="width: 150px;">
                                     <h5 class="my-3">{{NickName}}</h5>
                             </div>
@@ -52,7 +52,7 @@
                                     </li>
                                     <li class="list-group-item justify-content-between align-items-center p-3">
                                         <div class="d-flex justify-content-center mb-2">
-                                            <button type="button" class="form-control btn btn-outline-primary ms-1">
+                                                <button type="button" class="form-control btn btn-outline-primary ms-1" v-on:click="logOut">
                                                 登出
                                                 <i class="zmdi zmdi-arrow-right"></i>
                                             </button>
@@ -95,7 +95,8 @@
                                                             </td>
                                                         <td>#{{record.orderId}}</td>
                                                         <td>{{record.orderDate}}</td>
-                                                        <td><span class="badge badge-success">{{record.orderCategoryName}}</span></td>
+                                                        @*<td><span class="badge badge-success">{{record.orderCategoryName}}</span></td>*@
+                                                        <td><span>{{record.orderCategoryName}}</span></td>
                                                         <td>${{record.total}}</td>
                                                         <td>{{record.paymentCategoryName}}</td>
                                                         <td>{{record.shipCategoryName}}</td>
@@ -127,7 +128,6 @@
                 NickName: '',
                 ErrMsg: '',
                 Success: '',
-                progress: ''
             },
             mounted: function () {
                 var self = this;
@@ -154,8 +154,22 @@
                     .catch(function (error) {
                         console.log(error);
                     });
-            }
-
+            },
+            methods: {
+                logOut: function () {
+                    axios({
+                        method: 'delete',
+                        url: '/Users/UserApi/Logout'
+                    })
+                        .then(function (res) {
+                            console.log(res);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                    window.location.assign("/home");
+                }
+            },
         });
 
     </script>

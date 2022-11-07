@@ -20,5 +20,6 @@ namespace _3TeamProject.Areas.Suppliers.Data
         public string SupplierCity { get; set; } = string.Empty;
         public string SupplierAddress { get; set; } = string.Empty;
         public int? SupplierStatusId { get; set; }
+        public string? PicturePath { get; set; }
     }
 }

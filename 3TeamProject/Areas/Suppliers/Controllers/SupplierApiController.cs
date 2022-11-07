@@ -56,7 +56,8 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
                                 SupplierPostalCode = s.SupplierPostalCode,
                                 SupplierCountry = s.SupplierCountry,
                                 SupplierCity = s.SupplierCity,
-                                SupplierAddress = s.SupplierAddress
+                                SupplierAddress = s.SupplierAddress,
+                                PicturePath = u.PicturePath
                             }).SingleOrDefault();
             return Ok(supplier);
         }
@@ -89,7 +90,7 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
                         Email = request.Email,
                         PasswordHash = passwordHsah,
                         PasswordSalt = passwordSalt,
-                        VerficationToken = verifyToken,
+                        VerificationToken = verifyToken,
                         Roles = 2
                     }
                 };
@@ -167,7 +168,7 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
         }
         //商品新增及上傳圖片
         [HttpPost("AddProduct")]
-        public async Task<IActionResult> AddProduct([FromForm] AddProduct request)
+        public async Task<IActionResult> AddProduct([FromForm] AddProductDto request)
         {
             var UserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
             var supplier = _context.Products.Include(p=>p.Supplier).FirstOrDefault(x => x.Supplier.UserId == UserId);

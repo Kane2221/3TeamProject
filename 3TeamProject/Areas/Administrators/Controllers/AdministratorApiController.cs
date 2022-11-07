@@ -105,7 +105,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
                         Email = request.Email,
                         PasswordHash = passwordHsah,
                         PasswordSalt = passwordSalt,
-                        VerficationToken = Convert.ToHexString(RandomNumberGenerator.GetBytes(64)),
+                        VerificationToken = Convert.ToHexString(RandomNumberGenerator.GetBytes(64)),
                         Roles = request.Roles
                     }
                 };
@@ -233,8 +233,8 @@ namespace _3TeamProject.Areas.Administrators.Controllers
                                     OrderId = o.OrderId,
                                     MemberId = o.MemberId,
                                     AdministratorId = o.AdministratorId,
-                                    OrderDate = o.OrderDate,
-                                    ShipDate = o.ShipDate,
+                                    OrderDate = o.OrderDate.ToShortDateString(),
+                                    ShipDate = o.ShipDate.ToShortDateString(),
                                     OrderCategoryName = o.OrderStatusNavigation.OrderCategoryName,
                                     PaymentCategoryName = o.PaymentStatusNavigation.PaymentCategoryName,
                                     ShipCategoryName = o.ShipStatusNavigation.ShipCategoryName,
@@ -267,7 +267,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
                     SightseeingScore = s.SightseeingScore,
                     CategoryName = s.SightseeingCategory.CategoryName,
                     SightseeingHomePage = s.SightseeingHomePage,
-                    SightseeingPictureInfos = s.SightseeingPictureInfos.Select(p => new GetSightPicInfoByAdmin
+                    SightseeingPictureInfos = s.SightseeingPictureInfos.Select(p => new GetSightPicInfoByAdminDto
                     {
                         SightseeingPictureId = p.SightseeingPictureId,
                         SightseeingPictureName = p.SightseeingPictureName,

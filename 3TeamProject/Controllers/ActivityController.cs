@@ -12,5 +12,9 @@ namespace _3TeamProject.Controllers
         {
             return View();
         }
+        public IActionResult AddActivity()
+        {
+            return View();
+        }
     }
 }

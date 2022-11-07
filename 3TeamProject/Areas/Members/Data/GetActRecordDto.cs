@@ -1,6 +1,6 @@
 ﻿namespace _3TeamProject.Areas.Members.Data
 {
-    public class GetActRecord
+    public class GetActRecordDto
     {
         public int ActivityId { get; set; }
         public string ActivitiesName { get; set; } = null!;

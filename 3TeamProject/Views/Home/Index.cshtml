@@ -1,4 +1,5 @@
-﻿    <!-- Carousel Start -->
+﻿<div id="VuePage">
+    <!-- Carousel Start -->
     <div class="container-fluid p-0">
         <div id="header-carousel" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner">
@@ -279,3 +280,46 @@
     </div>
     <!-- Footer End -->
     <!-- Back to Top -->
+</div>  
+
+@section scripts {
+    <script>
+        var VuePage = new Vue({
+            el: "#VuePage",
+            data: {
+                Products: [],
+                Suppliers:[],
+                ErrMsg: '',
+                Success: '',
+            },
+            mounted: function () {
+                var self = this;
+                axios({
+                    method: 'get',
+                    url: '/Members/MemberApi/GetMember'
+                })
+                    .then(function (res) {
+                        console.log(res);
+                        self.PicturePath = res.data.picturePath;
+                        self.NickName = res.data.nickName;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+                axios({
+                    method: 'get',
+                    url: '/api/ProductApi/Get'
+                })
+                    .then(function (res) {
+                        console.log(res);
+                        self.Products = res.data;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            }
+
+        });
+
+    </script>
+    }

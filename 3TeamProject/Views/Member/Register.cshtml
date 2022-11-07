@@ -24,16 +24,16 @@
                                         <i class="zmdi zmdi-account"> 帳號</i>
                                     </div>
                                     <div class="col-sm-6">
-                                        <input type="text" placeholder="請輸入帳號(必填)" class="form-control" v-model.lazy.trim="Account" required>
+                                        <input type="text" name="Account" placeholder="請輸入帳號(必填)" class="form-control" v-model.lazy.trim="Account" required autocomplete="on">
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="row justify-content-center">
                                     <div class="col-sm-2 align-self-center">
-                                        <i class="zmdi zmdi-lock"> 密碼</i>
+                                        <i class="zmdi zmdi-lock">密碼</i>
                                     </div>
                                     <div class="col-sm-6">
-                                        <input type="password" placeholder="請輸入密碼(必填)" class="form-control" v-model.lazy="Password" required minlength="8">
+                                        <input type="password" name="Password" placeholder="請輸入密碼(必填)(請輸入至少8個字元)" class="form-control" v-model.lazy="Password" required minlength="8">
                                     </div>
                                 </div>
                                 <hr>
@@ -42,7 +42,7 @@
                                         <i class="zmdi zmdi-lock"> 密碼確認</i>
                                     </div>
                                     <div class="col-sm-6">
-                                        <input type="password" placeholder="請再次輸入密碼(必填)" class="form-control" v-model.lazy="ComfirmPassword" required minlength="8">
+                                        <input type="password" name="ComfirmPassword" placeholder="請再次輸入密碼(必填)" class="form-control" v-model.lazy="ComfirmPassword" required minlength="8">
                                     </div>
                                 </div>
                                 <hr>
@@ -51,7 +51,7 @@
                                         <i class="zmdi zmdi-account"> 姓名</i>
                                     </div>
                                     <div class="col-sm-6">
-                                        <input type="text" placeholder="請輸入姓名(必填)" class="form-control" v-model.lazy="MemberName" required>
+                                        <input type="text" name="MemberName" placeholder="請輸入姓名(必填)" class="form-control" v-model.lazy="MemberName" required autocomplete="on">
                                     </div>
                                 </div>
                                 <hr>
@@ -60,7 +60,7 @@
                                         <i class="zmdi zmdi-account"> 暱稱</i>
                                     </div>
                                     <div class="col-sm-6">
-                                        <input type="text" placeholder="請輸入暱稱" class="form-control" v-model.lazy="NickName">
+                                        <input type="text" name="NickName" placeholder="請輸入暱稱" class="form-control" v-model.lazy="NickName" autocomplete="on">
                                     </div>
                                 </div>
                                 <hr>
@@ -69,7 +69,7 @@
                                         <i class="zmdi zmdi-cake"> 生日</i>
                                     </div>
                                     <div class="col-sm-6">
-                                        <input type="date" placeholder="請輸入出生年月日(必填)" class="form-control" v-model.lazy="Birthday" required>
+                                        <input type="date" name="Birthday" placeholder="請輸入出生年月日(必填)" class="form-control" v-model.lazy="Birthday" required>
                                     </div>
                                 </div>
                                 <hr>
@@ -78,7 +78,7 @@
                                         <i class="zmdi zmdi-account"> 身分證字號</i>
                                     </div>
                                     <div class="col-sm-6">
-                                        <input type="text" placeholder="請輸入身分證字號(必填)" class="form-control" v-model.lazy="IdentityNumber" required>
+                                        <input type="text" name="IdentityNumber" placeholder="請輸入身分證字號(必填)" class="form-control" v-model.lazy="IdentityNumber" required autocomplete="on">
                                     </div>
                                 </div>
                                 <hr>
@@ -87,7 +87,7 @@
                                         <i class="zmdi zmdi-email"> 電子信箱</i>
                                     </div>
                                     <div class="col-sm-6">
-                                        <input type="email" placeholder="請輸入電子信箱(必填)" class="form-control" v-model.lazy="Email" required>
+                                        <input type="email" name="Email" placeholder="請輸入電子信箱(必填)" class="form-control" v-model.lazy="Email" required autocomplete="on">
                                     </div>
                                 </div>
                                 <hr>
@@ -96,7 +96,7 @@
                                         <i class="zmdi zmdi-phone"> 手機號碼</i>
                                     </div>
                                     <div class="col-sm-6">
-                                        <input type="text" placeholder="請輸入手機號碼(必填)" class="form-control" v-model.lazy="CellPhoneNumber" required>
+                                        <input type="text" name="CellPhoneNumber" placeholder="請輸入手機號碼(必填)" class="form-control" v-model.lazy="CellPhoneNumber" required autocomplete="on">
                                     </div>
                                 </div>
                                 <hr>
@@ -105,7 +105,7 @@
                                         <i class="zmdi zmdi-phone"> 電話號碼</i>
                                     </div>
                                     <div class="col-sm-6">
-                                        <input type="text" placeholder="請輸入電話號碼" class="form-control" v-model.lazy="PhoneNumber">
+                                        <input type="text" name="PhoneNumber" placeholder="請輸入電話號碼" class="form-control" v-model.lazy="PhoneNumber" autocomplete="on">
                                     </div>
                                 </div>
                                 <hr>
@@ -114,7 +114,7 @@
                                         <i class="zmdi zmdi-city-alt"> 郵遞區號</i>
                                     </div>
                                     <div class="col-sm-6">
-                                        <input type="text" placeholder="請輸入郵遞區號(必填)" class="form-control" v-model.lazy="PostalCode" required>
+                                        <input type="text" name="PostalCode" placeholder="請輸入郵遞區號(必填)" class="form-control" v-model.lazy="PostalCode" required autocomplete="on">
                                     </div>
                                 </div>
                                 <hr>
@@ -154,7 +154,7 @@
                                         <i class="zmdi zmdi-home"> 地址</i>
                                     </div>
                                     <div class="col-sm-6">
-                                        <input type="text" placeholder="請輸入地址(必填)" class="form-control" v-model.lazy="Address" required>
+                                        <input type="text" name="Address" placeholder="請輸入地址(必填)" class="form-control" v-model.lazy="Address" required autocomplete="on">
                                     </div>
                                 </div>
                                 <hr>

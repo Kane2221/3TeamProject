@@ -9,7 +9,6 @@
     <!-- Customized Bootstrap Stylesheet -->
     <link href="~/css/style.css" rel="stylesheet">
 }
-<body>
 	<div id="VuePage">
 			<div class="row justify-content-center">
 				<div class="col-md-12 col-lg-10">
@@ -53,7 +52,7 @@
 				</div>
 			</div>
 
-	<!--使用 Bootstrap Modal 樣式，當執行有錯誤時，顯示錯誤訊息-->
+	@*<!--使用 Bootstrap Modal 樣式，當執行有錯誤時，顯示錯誤訊息-->
 	<div class="modal fade" id="ErrorAlert" tabindex="-1" role="dialog">
 		<div class="modal-dialog modal-lg" role="document">
 			<div class="modal-content">
@@ -65,7 +64,7 @@
 				</div>
 			</div><!-- /.modal-content -->
 		</div><!-- /.modal-dialog -->
-	</div><!-- /.modal -->
+	</div><!-- /.modal -->*@
 	</div>
 
 	@section scripts {
@@ -135,7 +134,7 @@
                                 icon: 'success',
                                 timer: 12000
                                 }).then((result =>{
-                                    window.location.assign("/home")
+									window.location.assign("/Supplier/SupplierProfile")
                             }));
                             console.log(response);
                         })
@@ -155,13 +154,7 @@
             });
 		</script>
 	}
-	<script src="~/js/jquery.min.js"></script>
-	<script src="~/js/popper.js"></script>
-	<script src="~/js/bootstrap.min.js"></script>
-	<script src="~/js/main.js"></script>
 
-</body>
-</html>
 
 
 
