@@ -161,7 +161,7 @@
                                 <div class="d-grid gap-2 d-md-flex justify-content-center">
                                     <input type="checkbox" name="agree-term" id="agree-term" class="agree-term" v-model="isChecked" />
                                     <label for="agree-term" class="align-self-end col-sm-3 label-agree-term">我同意 <a href="#" class="term-service">隱私權政策</a></label>
-                                    <button type="submit" class="form-control btn btn-outline-primary rounded submit px-3" v-on:click="SubmitData">
+                                    <button type="submit" class="form-control btn btn-outline-primary rounded submit px-3" v-on:click="SubmitData" v-bind:disabled="isDisabled">
                                         註冊
                                         <i class="zmdi zmdi-arrow-right"></i>
                                     </button>
@@ -195,11 +195,13 @@
                 Address: '',
                 isChecked: false,
                 ErrMsg: '',
-                Success: ''
+                Success: '',
+                isDisabled:false
             },
             methods: {
                 SubmitData: function () {
                     var self = this;
+                    this.isDisabled = true;
                     if (self.isChecked == false) {
                         Swal.fire({
                             title: '註冊失敗',
@@ -239,8 +241,9 @@
                             icon: 'success',
                             timer: 12000
                         }).then((result => {
-                            window.location.assign("/Member/Verify")
+                            window.location.assign("/home")
                         }));
+                        self.isDisabled = false;
                         console.log(response);
                     })
                     .catch(function (error) {
@@ -252,6 +255,7 @@
                             timer: 12000
                         });
                         console.log(error);
+                        self.isDisabled = false;
                         return;
                     });
                 },

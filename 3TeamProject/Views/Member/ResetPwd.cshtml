@@ -43,7 +43,7 @@
                                 </div>
                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                     <button type="button" class="btn btn-outline-primary rounded px-3" v-on:click="cancel">取消</button>
-                                    <button type="submit" class="btn btn-primary rounded submit px-3">送出</button>
+                                    <button type="submit" class="btn btn-primary rounded submit px-3" v-bind:disabled="isDisabled">送出</button>
                                 </div>
 
                             </form>
@@ -54,14 +54,17 @@
 	</div>
         @section scripts {
         <script>
+            var querystring = window.location.search.substring(1);
+            var tokenvalue = querystring.split("=");
             var VuePage = new Vue({
                 el: "#VuePage",
                 data: {
-                    Token: '',
+                    Token: this.tokenvalue[1],
                     Password:'',
                     ConfirmPassword:'',
                     ErrMsg: '',
-                    Success: ''
+                    Success: '',
+                    isDisabled: false
                 },
                 methods: {
                     SubmitData: function () {
@@ -77,6 +80,7 @@
                         })
                         .then(function (response) {
                             self.Success = response.data;
+                            self.isDisabled = false;
                             Swal.fire({
                                 title: self.Success,
                                 icon: 'success',
@@ -102,6 +106,7 @@
                                 timer: 12000
                             });
                             console.log(error);
+                            self.isDisabled = false;
                             return;
                         });
                     },

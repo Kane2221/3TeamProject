@@ -1,4 +1,5 @@
 ﻿using _3TeamProject.Areas.Administrators.Data;
+using _3TeamProject.Areas.Members.Data;
 using _3TeamProject.Areas.SocialActivities.Data;
 using _3TeamProject.Areas.Suppliers.Data;
 using _3TeamProject.Models;
@@ -43,6 +44,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
                 var admin = _context.Administrators.Include(u => u.User)
                         .Where(u => u.User.Roles == 5).Select(u => new GetAdminDto
                         {
+                            UserId = u.UserId,
                             Account = u.User.Account,
                             Email = u.User.Email,
                             Roles = u.User.RolesNavigation.RoleName,
@@ -56,6 +58,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
                 var admin = _context.Administrators.Include(u => u.User)
                     .Where(u => u.User.Roles != 3).Select(u => new GetAdminDto
                     {
+                        UserId = u.UserId,
                         Account = u.User.Account,
                         Email = u.User.Email,
                         Roles = u.User.RolesNavigation.RoleName,
@@ -67,6 +70,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
             var adminSuper = _context.Administrators.Include(u => u.User)
                     .Select(u => new GetAdminDto
                     {
+                        UserId = u.UserId,
                         Account = u.User.Account,
                         Email = u.User.Email,
                         Roles = u.User.RolesNavigation.RoleName,
@@ -517,6 +521,38 @@ namespace _3TeamProject.Areas.Administrators.Controllers
             return Ok("修改成功!");
         }
         //TODO 後台首頁
+
+        //取得所有會員資料
+        [HttpGet("GetAlltMember")]
+        public IActionResult GetAlltMember()
+        {
+            var member = (from u in _context.Users
+                          join m in _context.Members
+                          on u.UserId equals m.UserId
+                          join s in _context.MemberStatusCategories
+                          on m.MemberStatusId equals s.MemberStatusId
+                          select new GetMemberDto
+                          {
+                              UserId = u.UserId,
+                              Account = u.Account,
+                              Email = u.Email,
+                              RoleName = u.RolesNavigation.RoleName,
+                              MemberName = m.MemberName,
+                              NickName = m.NickName,
+                              Birthday = m.Birthday.ToShortDateString(),
+                              IdentityNumber = m.IdentityNumber,
+                              CellPhoneNumber = m.CellPhoneNumber,
+                              PhoneNumber = m.PhoneNumber,
+                              PostalCode = m.PostalCode,
+                              Country = m.Country,
+                              City = m.City,
+                              Address = m.Address,
+                              Age = m.Age,
+                              PicturePath = u.PicturePath,
+                              MemberStatus = s.StatusName
+                          });
+            return Ok(member);
+        }
     }
 }
 

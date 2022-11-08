@@ -18,5 +18,6 @@
         public string Address { get; set; } = string.Empty;
         public int? Age { get; set; }
         public string? PicturePath { get; set; }
+        public string? MemberStatus { get; set; }
     }
 }

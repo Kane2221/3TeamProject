@@ -1,19 +1,19 @@
 ﻿@{
     Layout = "_Backstage";
 }
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+@section Head{
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-</head>
+    </head>
+}
 
-<body>
+
     <div id="page-wrapper">
         <div id="page-inner">
 
-            <div class="row">
+            <div id="VuePage" class="row">
                 <div class="col-md-12">
                     <!-- Advanced Tables -->
                     <div class="card">
@@ -48,59 +48,24 @@
                                             <th>狀態</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody v-for="mem in Members">
                                         <tr class="text-center">
-                                            <td><a herf="">#101</a></td>
-                                            <td>張三</td>
-                                            <td>chang</td>
-                                            <td>Abc1234</td>
-                                            <td>XXXXXXXXXX</td>
-                                            <td>1990/10/10</td>
-                                            <td>F125XXXXXX</td>
-                                            <td>123@@gmail.com</td>
-                                            <td>0988XXXXXXX</td>
-                                            <td>0988XXXXXXX</td>
-                                            <td>213</td>
-                                            <td>台灣</td>
-                                            <td>台北市</td>
-                                            <td>XXX@gmail.com</td>
-                                            <td>使用中</td>
+                                            <td><a herf="">#{{mem.userId}}</a></td>
+                                            <td>{{mem.memberName}}</td>
+                                            <td>{{mem.account}}</td>
+                                            <td>********</td>
+                                            <td>{{mem.nickName}}</td>
+                                            <td>{{mem.birthday}}</td>
+                                            <td>{{mem.identityNumber}}</td>
+                                            <td>{{mem.email}}</td>
+                                            <td>{{mem.cellPhoneNumber}}</td>
+                                            <td>{{mem.phoneNumber}}</td>
+                                            <td>{{mem.postalCode}}</td>
+                                            <td>{{mem.country}}</td>
+                                            <td>{{mem.city}}</td>
+                                            <td>{{mem.address}}</td>
+                                            <td>{{mem.memberStatus}}</td>
                                         </tr>
-                                        <tr class="text-center">
-                                            <td><a herf="">#102</a></td>
-                                            <td>李四</td>
-                                            <td>lee</td>
-                                            <td>Abc1234</td>
-                                            <td>XXXXXXXXXX</td>
-                                            <td>1990/10/10</td>
-                                            <td>F125XXXXXX</td>
-                                            <td>123@@gmail.com</td>
-                                            <td>0988XXXXXXX</td>
-                                            <td>0988XXXXXXX</td>
-                                            <td>213</td>
-                                            <td>台灣</td>
-                                            <td>台北市</td>
-                                            <td>XXX@gmail.com</td>
-                                            <td>使用中</td>
-                                        </tr>
-                                        <tr class="text-center">
-                                            <td><a herf="">#103</a></td>
-                                            <td>陳五</td>
-                                            <td>chen</td>
-                                            <td>Abc1234</td>
-                                            <td>XXXXXXXXXX</td>
-                                            <td>1990/10/10</td>
-                                            <td>F125XXXXXX</td>
-                                            <td>123@@gmail.com</td>
-                                            <td>0988XXXXXXX</td>
-                                            <td>0988XXXXXXX</td>
-                                            <td>213</td>
-                                            <td>台灣</td>
-                                            <td>台北市</td>
-                                            <td>XXX@gmail.com</td>
-                                            <td>使用中</td>
-                                        </tr>
-
                                     </tbody>
                                 </table>
 
@@ -114,6 +79,8 @@
 
         </div>
     </div>
+
+    @section Scripts{
     <!-- DATA TABLE SCRIPTS -->
     <script src="~/assets/js/dataTables/jquery.dataTables.js"></script>
     <script src="~/assets/js/dataTables/dataTables.bootstrap.js"></script>
@@ -123,5 +90,49 @@
         });
     </script>
 
-</body>
-</html>
+    <script>
+        var VuePage = new Vue({
+            el: "#VuePage",
+            data: {
+                Members: [],
+                ErrMsg: '',
+                Success: '',
+            },
+            mounted: function () {
+                var self = this;
+                axios({
+                    method: 'get',
+                    url: '/Administrators/AdministratorApi/GetAlltMember'
+                })
+                    .then(function (res) {
+                        console.log(res);
+                        self.Members = res.data;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            methods: {
+                logOut: function () {
+                    axios({
+                        method: 'delete',
+                        url: '/Users/UserApi/Logout'
+                    })
+                        .then(function (res) {
+                            console.log(res);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                    window.location.assign("/home");
+                }
+            }
+        });
+
+    </script>
+
+
+
+    }
+
+

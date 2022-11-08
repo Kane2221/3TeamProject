@@ -1,18 +1,16 @@
 ﻿@{
     Layout = "_Backstage";
 }
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+@section Head {
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-</head>
+    </head>
+}
 
-<body>
     <div id="page-wrapper">
         <div id="page-inner">
-
             <div class="row">
                 <div class="col-md-12">
                     <!-- Advanced Tables -->
@@ -22,9 +20,9 @@
                                 <h2>景點清單</h2>
                             </div>
                             <div style="float: right;">
-                                <button class="px-5" style="float: right;">新增</button>
-                                <button class="px-5" style="float: right;">修改</button>
                                 <button class="px-5" style="float: right;">刪除</button>
+                                <button class="px-5" style="float: right;">修改</button>
+                                <button class="px-5" style="float: right;" v-on:click="addattraction">新增</button>
                             </div>
                         </div>
                         <div class="card-content">
@@ -64,6 +62,7 @@
 
         </div>
     </div>
+    @section Scripts{
     <!-- DATA TABLE SCRIPTS -->
     <script src="~/assets/js/dataTables/jquery.dataTables.js"></script>
     <script src="~/assets/js/dataTables/dataTables.bootstrap.js"></script>
@@ -73,6 +72,94 @@
         });
 
     </script>
+    <script>
+        var VuePage = new Vue({
+            el: "#VuePage",
+            data: {
+                Account: '',
+                Email: '',
+                Password: '',
+                ComfirmPassword: '',
+                MemberName: '',
+                NickName: '',
+                Birthday: '',
+                IdentityNumber: '',
+                CellPhoneNumber: '',
+                PhoneNumber: '',
+                PostalCode: '',
+                Country: '台灣',
+                City: '',
+                Address: '',
+                isChecked: false,
+                ErrMsg: '',
+                Success: '',
+                isDisabled:false
+            },
+            methods: {
+                SubmitData: function () {
+                    var self = this;
+                    this.isDisabled = true;
+                    if (self.isChecked == false) {
+                        Swal.fire({
+                            title: '註冊失敗',
+                            text: '請勾選隱私權政策',
+                            icon: 'error',
+                            timer: 12000
+                        });
+                        return;
+                    }
+                    axios({
+                        method: 'post',
+                        url: '/Members/MemberApi/Register',
+                        data: {
+                            Account: self.Account,
+                            Email: self.Email,
+                            Password: self.Password,
+                            ComfirmPassword: self.ComfirmPassword,
+                            MemberName: self.MemberName,
+                            NickName: self.NickName,
+                            Birthday: self.Birthday,
+                            Fax: self.Fax,
+                            IdentityNumber: self.IdentityNumber,
+                            CellPhoneNumber: self.CellPhoneNumber,
+                            PhoneNumber: self.PhoneNumber,
+                            PostalCode: self.PostalCode,
+                            Country: self.Country,
+                            City: self.City,
+                            Address: self.Address,
+                            ErrMsg: '',
+                            Success: ''
+                        }
+                    })
+                    .then(function (response) {
+                        self.Success = response.data;
+                        Swal.fire({
+                            title: self.Success,
+                            icon: 'success',
+                            timer: 12000
+                        }).then((result => {
+                            window.location.assign("/home")
+                        }));
+                        self.isDisabled = false;
+                        console.log(response);
+                    })
+                    .catch(function (error) {
+                        self.ErrMsg = error.response.data;
+                        Swal.fire({
+                            title: '登入失敗', // TODO 驗證需修改
+                            text: '請填入選項',
+                            icon: 'error',
+                            timer: 12000
+                        });
+                        console.log(error);
+                        self.isDisabled = false;
+                        return;
+                    });
+                },
+            }
+        });
 
-</body>
-</html>
+    </script>
+    }
+    }
+

@@ -75,7 +75,7 @@ namespace _3TeamProject.Areas.Sightseeings.Controllers
                         MessageBoardId = m.MessageBoardId,
                         Account = m.User.Account,
                         SightseeingMessageContent = m.SightseeingMessageContent,
-                        MessageCreatedTime = m.MessageCreatedTime,
+                        MessageCreatedTime = m.MessageCreatedTime.ToShortDateString(),
                         RoleName = m.User.RolesNavigation.RoleName
                     })
                 }).FirstOrDefault();
@@ -114,7 +114,7 @@ namespace _3TeamProject.Areas.Sightseeings.Controllers
                         MessageBoardId = m.MessageBoardId,
                         Account = m.User.Account,
                         SightseeingMessageContent = m.SightseeingMessageContent,
-                        MessageCreatedTime = m.MessageCreatedTime,
+                        MessageCreatedTime = m.MessageCreatedTime.ToShortDateString(),
                         RoleName = m.User.RolesNavigation.RoleName
                     })
                 });

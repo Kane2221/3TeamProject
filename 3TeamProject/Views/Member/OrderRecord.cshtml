@@ -101,7 +101,7 @@
                                                         <td>{{record.paymentCategoryName}}</td>
                                                         <td>{{record.shipCategoryName}}</td>
                                                             <td>
-                                                                <button type="button" class="form-control btn btn-outline-primary ms-1">
+                                                                <button type="button" class="form-control btn btn-outline-primary ms-1" v-on:click="gomsg">
                                                                     GO
                                                                 </button>
                                                             </td>
@@ -168,6 +168,9 @@
                             console.log(error);
                         });
                     window.location.assign("/home");
+                },
+                gomsg:function(){
+
                 }
             },
         });

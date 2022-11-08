@@ -80,7 +80,7 @@
         <div class="container-fluid col-8">
             <div class="justify-content-end"><h5>評分及評論</h5></div>
             <hr />
-            <form v-on:submit.prevent="submitdata">
+            <form v-on:submit.prevent="postmsg">
                 <div class="d-flex my-2">
                     <p class="mb-0 mr-2">我的評分 :</p>
                     <div class="text-primary">
@@ -105,7 +105,7 @@
             <div class="justify-content-end"><h5>景點評價</h5></div>
             <hr />
             <div v-for="msg in SightseeingMessageBoards" class="media mb-4">
-                <img src="~/img/user.jpg" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
+                <img src="/img/team-3.jpg" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
                 <div class="media-body">
                     <h6>{{msg.account}}<small> - <i>{{msg.messageCreatedTime}}</i></small></h6>
                     <div class="text-primary mb-2">
@@ -115,7 +115,7 @@
                         <i class="fas fa-star-half-alt"></i>
                         <i class="far fa-star"></i>
                     </div>
-                    <p></p>
+                    <p>{{msg.sightseeingMessageContent}}</p>
                 </div>
             </div>
         </div>
@@ -164,39 +164,34 @@
                 })
             },
             methods:{
-                submitdata:function () {
-                        var self = this;
-                        axios({
+                postmsg:function(){
+                    var self = this;
+                    axios({
                         method: 'post',
-                        url: '/Sightseeings/SightseeingApi/PostMessage',
+                        url: '/Sightseeings/SightseeingApi',
                         data: {
-                            SightseeingId: self.SightseeingId,
-                            SightseeingMessageContent: self.SightseeingMessageContent
-                            }
-                        })
+                            SightseeingId : self.SightseeingId,
+                            SightseeingMessageContent : self.SightseeingMessageContent
+                        }
+                    })
                         .then(function (res) {
-                            self.CategoryName = res.data.categoryName;
-                            self.SightseeingAddress = res.data.sightseeingAddress;
-                            self.SightseeingCity = res.data.sightseeingCity;
-                            self.SightseeingCountry = res.data.sightseeingCountry;
-                            self.SightseeingId = res.data.sightseeingId;
-                            self.SightseeingMessageBoards = res.data.sightseeingMessageBoards;
-                            self.SightseeingName = res.data.sightseeingName;
-                            self.SightseeingPictureInfos = res.data.sightseeingPictureInfos;
-                            self.SightseeingScore = res.data.sightseeingScore;
-                            self.SightseeingIntroduce = res.data.sightseeingIntroduce;
                             console.log(res);
+                            Swal.fire({
+                                title: '已成功留言',
+                                icon: 'success',
+                                timer: 12000
+                            });
                         })
                         .catch(function (error) {
-                                self.ErrMsg = error.response.data;
-                                Swal.fire({
-                                    title: '留言失敗',
-									text: self.ErrMsg,
-                                    icon: 'error',
-                                    timer: 12000
-                                });
-                                console.log(error);
-                                return;
+                            self.ErrMsg = error.response.data;
+                            Swal.fire({
+                                title: '留言失敗',
+                                text: self.ErrMsg,
+                                icon: 'error',
+                                timer: 12000
+                            });
+                            console.log(error);
+                            return;
                         });
                 }
             }

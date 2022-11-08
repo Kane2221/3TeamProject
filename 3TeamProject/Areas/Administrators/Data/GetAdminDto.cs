@@ -4,7 +4,8 @@ namespace _3TeamProject.Areas.Administrators.Data
 {
     public class GetAdminDto
     {
-        
+        public int UserId { get; set; }
+
         public string Account { get; set; } = string.Empty;
 
 

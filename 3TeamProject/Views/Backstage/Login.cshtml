@@ -1,6 +1,4 @@
-﻿
-<!doctype html>
-<html lang="en">
+﻿@section Head{
 <head>
 	<title>Login 04</title>
 	<meta charset="utf-8">
@@ -26,6 +24,8 @@
 	<!-- Customized Bootstrap Stylesheet -->
 	<link href="~/css/style.css" rel="stylesheet">
 </head>
+}
+
 <body>
 	<div id="VuePage">
 		<div class="row justify-content-center">
@@ -113,7 +113,7 @@
 									icon: 'success',
 									timer: 12000
 								}).then((result => {
-									window.location.assign("/home")
+									window.location.assign("/backstage/Dashboard")
 								}));
 								console.log(response);
 							})

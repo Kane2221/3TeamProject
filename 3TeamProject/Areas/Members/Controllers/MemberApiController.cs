@@ -114,8 +114,8 @@ namespace _3TeamProject.Areas.Members.Controllers
                     mail.To.Add(request.Email);
                     mail.Priority = MailPriority.Normal;
                     mail.Subject = "帳號驗證碼";
-                    mail.Body = $"<h1>請到以下頁面輸入驗證碼</h1>/n " +
-                                $"<a href=\"{root}\"><h1>帳號驗證碼</h1></a>";
+                    mail.Body = $"<h1>請點選以下連結驗證您的帳號</h1> " +
+                                $"<a href=\"https://localhost:7007/Member/Verify?token={verifyToken}\"><h1>帳號驗證碼</h1></a>";
                     mail.IsBodyHtml = true;
                     SmtpClient MySmtp = new SmtpClient("smtp.gmail.com", 587);
                     MySmtp.UseDefaultCredentials = false;
