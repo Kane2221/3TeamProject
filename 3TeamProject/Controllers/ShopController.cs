@@ -211,7 +211,7 @@ namespace _3TeamProject.Controllers
                 //Amt = payDto.amount,
                 Amt = request.SubTotal,
                 // * 商品資訊
-                ItemDesc = "商品資訊(自行修改)",
+                ItemDesc = "商品資訊",
                 // 支付完成 返回商店網址
                 ReturnURL = _bankInfoModel.ReturnURL,
                 // 支付通知網址
