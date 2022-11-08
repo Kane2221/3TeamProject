@@ -1,7 +1,9 @@
-﻿using _3TeamProject.Data;
+﻿using _3TeamProject.Areas.Suppliers.Data;
+using _3TeamProject.Data;
 using _3TeamProject.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace _3TeamProject.Controllers
 {
@@ -45,7 +47,7 @@ namespace _3TeamProject.Controllers
         }
         [HttpPost]
         //[HttpPost("/Supplier/AddOrder")]
-        public async Task<JsonResult> AddOrder([FromForm] AddOrderDto addOrder)
+        public IActionResult AddOrder([FromForm] AddOrderDto addOrder)
         {
             var addproduct = new Product
             {
@@ -53,9 +55,9 @@ namespace _3TeamProject.Controllers
                 ProductName = addOrder.ProductName,
                 UnitStock = addOrder.UnitStock,
                 AddedTime = DateTime.Now,
-                SupplierId = 2,
+                SupplierId = 2,  //要判斷是哪個廠商登入
                 ProductUnitPrice = addOrder.ProductUnitPrice,
-                ProductStatusId = addOrder.ProductStatusId,
+                ProductStatusId = 0,
                 ProductIntroduce = addOrder.ProductIntroduce,
 
             };
@@ -86,8 +88,10 @@ namespace _3TeamProject.Controllers
 
             //_context.Add(product).CurrentValues.SetValues(addOrder);
             _context.Add(addproduct);
-            await _context.SaveChangesAsync();
-            return Json("新增成功!");
+             _context.SaveChangesAsync();
+
+            //return Json("新增成功!");
+            return RedirectToAction("OrderList");
         }
         public IActionResult Verify()
         {

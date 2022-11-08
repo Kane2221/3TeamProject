@@ -91,7 +91,11 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
                         PasswordHash = passwordHsah,
                         PasswordSalt = passwordSalt,
                         VerificationToken = verifyToken,
+<<<<<<< HEAD
                         Roles = 2
+=======
+                        Roles = request.Roles
+>>>>>>> Luka
                     }
                 };
                 _context.Suppliers.Add(supplier).CurrentValues.SetValues(request);

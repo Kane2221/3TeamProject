@@ -102,7 +102,11 @@ namespace _3TeamProject.Areas.Members.Controllers
                         PasswordHash = passwordHsah,
                         PasswordSalt = passwordSalt,
                         VerificationToken = Convert.ToHexString(RandomNumberGenerator.GetBytes(64)),
+<<<<<<< HEAD
                         Roles = 1
+=======
+                        Roles = request.Roles
+>>>>>>> Luka
                     }
                 };
                 #region Send Email with verify code (正式再解開註解)
