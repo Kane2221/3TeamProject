@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace _3TeamProject.Models
 {
-    public partial class _3TeamProjectContext : DbContext
+    public partial class db_a8e856_3teamprojectContext : DbContext
     {
-        public _3TeamProjectContext()
+        public db_a8e856_3teamprojectContext()
         {
         }
 
-        public _3TeamProjectContext(DbContextOptions<_3TeamProjectContext> options)
+        public db_a8e856_3teamprojectContext(DbContextOptions<db_a8e856_3teamprojectContext> options)
             : base(options)
         {
         }
@@ -19,7 +19,6 @@ namespace _3TeamProject.Models
         public virtual DbSet<ActivitiesMessageBoard> ActivitiesMessageBoards { get; set; } = null!;
         public virtual DbSet<Administrator> Administrators { get; set; } = null!;
         public virtual DbSet<AdministratorStatusCategory> AdministratorStatusCategories { get; set; } = null!;
-        public virtual DbSet<JoinMember> JoinMembers { get; set; } = null!;
         public virtual DbSet<Member> Members { get; set; } = null!;
         public virtual DbSet<MemberStatusCategory> MemberStatusCategories { get; set; } = null!;
         public virtual DbSet<Order> Orders { get; set; } = null!;
@@ -45,10 +44,17 @@ namespace _3TeamProject.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Data Source=SQL8003.site4now.net;Initial Catalog=db_a8e856_3teamproject;User Id=db_a8e856_3teamproject_admin;Password=Tgm102third;Integrated Security=false");
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.UseCollation("Chinese_Taiwan_Stroke_CI_AS");
+
             modelBuilder.Entity<ActivitiesMessageBoard>(entity =>
             {
                 entity.HasKey(e => e.ActivitiesMessageId)
@@ -59,6 +65,10 @@ namespace _3TeamProject.Models
                 entity.Property(e => e.ActivitiesMessageId).HasColumnName("ActivitiesMessageID");
 
                 entity.Property(e => e.ActivitiesCreatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.ActivitiesMessageState)
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.ActivityId).HasColumnName("ActivityID");
 
@@ -111,31 +121,6 @@ namespace _3TeamProject.Models
                 entity.Property(e => e.AdministratorStatusId).HasColumnName("AdministratorStatusID");
 
                 entity.Property(e => e.StatusName).HasMaxLength(10);
-            });
-
-            modelBuilder.Entity<JoinMember>(entity =>
-            {
-                entity.HasKey(e => e.JoinId);
-
-                entity.ToTable("JoinMember");
-
-                entity.Property(e => e.JoinId).HasColumnName("JoinID");
-
-                entity.Property(e => e.ActivitiesId).HasColumnName("ActivitiesID");
-
-                entity.Property(e => e.MemberId).HasColumnName("MemberID");
-
-                entity.HasOne(d => d.Activities)
-                    .WithMany(p => p.JoinMembers)
-                    .HasForeignKey(d => d.ActivitiesId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_JoinMember_SocialActivities");
-
-                entity.HasOne(d => d.Member)
-                    .WithMany(p => p.JoinMembers)
-                    .HasForeignKey(d => d.MemberId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_JoinMember_Members");
             });
 
             modelBuilder.Entity<Member>(entity =>
@@ -639,10 +624,8 @@ namespace _3TeamProject.Models
 
                 entity.Property(e => e.PasswordSalt).HasMaxLength(128);
 
-
                 entity.Property(e => e.PicturePath)
-                    .HasMaxLength(50)
-
+                    .HasMaxLength(100)
                     .IsUnicode(false);
 
                 entity.Property(e => e.ResetTokenExpires).HasColumnType("datetime");

@@ -1,4 +1,5 @@
-﻿using _3TeamProject.Data;
+﻿using _3TeamProject.Areas.Suppliers.Data;
+using _3TeamProject.Data;
 using _3TeamProject.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

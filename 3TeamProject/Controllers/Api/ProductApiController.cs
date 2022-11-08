@@ -127,6 +127,7 @@ namespace _3TeamProject.Controllers.Api
                                on product.ProductId equals Info.ProductId
                                where product.ProductStatusId == 1
                                orderby product.ProductId
+                               where product.ProductStatusId == 1
                                select new
                                {
                                    ProductId = product.ProductId,

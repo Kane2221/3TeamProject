@@ -64,12 +64,14 @@ namespace _3TeamProject.Controllers.Api
         [HttpPost("Verify")]
         public async Task<IActionResult> Verify([FromBody] VerifyDto request)
         {
+
             var user = await _context.Users.FirstOrDefaultAsync(u => u.VerificationToken == request.Token);
             var account = await _context.Users.FirstOrDefaultAsync(a=>a.Account == request.Account);
             if (account == null)
             {
                 return BadRequest("帳號錯誤");
             }
+
             if (user == null)
             {
                 return BadRequest("無效的驗證碼");
@@ -82,6 +84,7 @@ namespace _3TeamProject.Controllers.Api
                 .Where(m => m.User.VerificationToken == request.Token).FirstOrDefault();
             var supplier = _context.Suppliers.Include(m => m.User)
                 .Where(m => m.User.VerificationToken == request.Token).FirstOrDefault();
+
             user.VerfiedAt = DateTime.Now;
             if (member != null)
             {

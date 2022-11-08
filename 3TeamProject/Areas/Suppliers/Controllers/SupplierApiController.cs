@@ -92,7 +92,9 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
                         PasswordHash = passwordHsah,
                         PasswordSalt = passwordSalt,
                         VerificationToken = verifyToken,
+
                         Roles = 2
+
                     }
                 };
                 #region Send Email with verify code (正式再解開註解)
