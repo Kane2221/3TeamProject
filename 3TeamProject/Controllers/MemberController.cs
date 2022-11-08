@@ -52,8 +52,8 @@ namespace _3TeamProject.Controllers
                 value.Properties
 
             });
-            return Json(result);
-            //return Redirect("/Home/Index");
+            //return Json(result);
+            return Redirect("/Home");
         }
         public IActionResult ForgetPwd()
         {
