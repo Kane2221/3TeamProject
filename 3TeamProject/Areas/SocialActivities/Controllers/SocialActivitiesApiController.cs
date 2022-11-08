@@ -34,8 +34,8 @@ namespace _3TeamProject.Areas.SocialActivities.Controllers
                 MemberName = s.Member.MemberName,
                 ActivitiesName = s.ActivitiesName,
                 ActivitiesAddress = s.ActivitiesAddress,
-                CreatedTime = s.CreatedTime,
-                EndTime = s.EndTime,
+                CreatedTime = s.CreatedTime.ToString("d"),
+                EndTime = s.EndTime.ToString("d"),
                 LimitCount = s.LimitCount,
                 JoinCount = s.JoinCount
             });
@@ -52,8 +52,8 @@ namespace _3TeamProject.Areas.SocialActivities.Controllers
                 MemberName = s.Member.MemberName,
                 ActivitiesName = s.ActivitiesName,
                 ActivitiesAddress = s.ActivitiesAddress,
-                CreatedTime = s.CreatedTime,
-                EndTime = s.EndTime,
+                CreatedTime = s.CreatedTime.ToString("d"),
+                EndTime = s.EndTime.ToString("d"),
                 LimitCount = s.LimitCount,
                 JoinCount = s.JoinCount
             });

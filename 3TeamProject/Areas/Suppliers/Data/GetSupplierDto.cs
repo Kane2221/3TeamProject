@@ -4,6 +4,7 @@ namespace _3TeamProject.Areas.Suppliers.Data
 {
     public class GetSupplierDto
     {
+        public int UserId { get; set; }
         public string Account { get; set; } = string.Empty;
 
         public string Email { get; set; } = string.Empty;

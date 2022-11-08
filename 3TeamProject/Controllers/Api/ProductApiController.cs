@@ -125,6 +125,7 @@ namespace _3TeamProject.Controllers.Api
             var productFound = (from product in _context.Products 
                                join Info in _context.ProductsPictureInfos 
                                on product.ProductId equals Info.ProductId
+                               where product.ProductStatusId == 1
                                orderby product.ProductId
                                select new
                                {

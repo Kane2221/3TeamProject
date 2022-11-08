@@ -101,12 +101,12 @@ namespace _3TeamProject.Areas.Members.Controllers
                         Email = request.Email,
                         PasswordHash = passwordHsah,
                         PasswordSalt = passwordSalt,
-                        VerificationToken = Convert.ToHexString(RandomNumberGenerator.GetBytes(64)),
+                        VerificationToken = verifyToken,
                         Roles = 1
                     }
                 };
                 #region Send Email with verify code (正式再解開註解)
-                var root = $@"{Request.Scheme}:/{Request.Host}/Member/Verify";
+                var root = $@"{Request.Scheme}:/{Request.Host}/Member/Verify?{verifyToken}";
                 //TODO 修改寄信的超連結
                 using (MailMessage mail = new MailMessage())
                 {
@@ -114,8 +114,8 @@ namespace _3TeamProject.Areas.Members.Controllers
                     mail.To.Add(request.Email);
                     mail.Priority = MailPriority.Normal;
                     mail.Subject = "帳號驗證碼";
-                    mail.Body = $"<h1>請到以下頁面輸入驗證碼 : {verifyToken}</h1>/n " +
-                                $"<a href=\"{root}\">帳號驗證碼</a>";
+                    mail.Body = $"<h1>請到以下頁面輸入驗證碼</h1>/n " +
+                                $"<a href=\"{root}\"><h1>帳號驗證碼</h1></a>";
                     mail.IsBodyHtml = true;
                     SmtpClient MySmtp = new SmtpClient("smtp.gmail.com", 587);
                     MySmtp.UseDefaultCredentials = false;

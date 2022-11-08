@@ -92,6 +92,15 @@ namespace _3TeamProject.Controllers.Api
                 supplier.SupplierStatusId = 1;
             }
             await _context.SaveChangesAsync();
+            var claims = new List<Claim>()
+            {
+                new Claim(ClaimTypes.Name, user.Account),
+                new Claim(ClaimTypes.Sid, user.UserId.ToString()),
+                new Claim(ClaimTypes.Role, user.RolesNavigation.RoleName)
+            };
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var claimsPricipal = new ClaimsPrincipal(claimsIdentity);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPricipal);
             return Ok("驗證成功");
         }
         [HttpPost("ForgotPassword")]

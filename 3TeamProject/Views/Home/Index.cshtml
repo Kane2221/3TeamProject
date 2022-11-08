@@ -8,8 +8,8 @@
                     <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                         <div class="p-3" style="max-width: 900px;">
                             <h4 class="text-white text-uppercase mb-md-3">Tours & Travel</h4>
-                            <h1 class="display-3 text-white mb-md-4">主打名稱</h1>
-                            <a href="" class="btn btn-primary py-md-3 px-md-5 mt-2">Shop Now</a>
+                            <h1 class="display-3 text-white mb-md-4">杉林溪主題會館</h1>
+                            <a href="\Shop\Index" class="btn btn-primary py-md-3 px-md-5 mt-2">Shop Now</a>
                         </div>
                     </div>
                 </div>
@@ -18,8 +18,8 @@
                     <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                         <div class="p-3" style="max-width: 900px;">
                             <h4 class="text-white text-uppercase mb-md-3">Tours & Travel</h4>
-                            <h1 class="display-3 text-white mb-md-4">主打名稱</h1>
-                            <a href="" class="btn btn-primary py-md-3 px-md-5 mt-2">Shop Now</a>
+                            <h1 class="display-3 text-white mb-md-4">台東3天2夜</h1>
+                            <a href="\Shop\Index" class="btn btn-primary py-md-3 px-md-5 mt-2">Shop Now</a>
                         </div>
                     </div>
                 </div>
@@ -45,33 +45,37 @@
                 <h1>本月熱銷</h1>
             </div>
             <div class="row">
-                <div class="col-lg-4 col-md-6 mb-4">
+                <div @*v-for="item in Products"*@ class="col-lg-4 col-md-6 mb-4">
                     <div class="destination-item position-relative overflow-hidden mb-2">
                         <img class="img-fluid" src="img/destination-1.jpg" alt="">
-                        <a class="destination-overlay text-white text-decoration-none" href="">
-                            <h5 class="text-white">商品名稱</h5>
-                            <span>介紹詞</span>
+                        <a class="destination-overlay text-white text-decoration-none" href="\Shop\Index">
+                            <h5 class="text-white">台東3天2夜</h5>
+                            <span>旅遊套票台東行</span>
                         </a>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="destination-item position-relative overflow-hidden mb-2">
-                        <img class="img-fluid" src="img/destination-2.jpg" alt="">
-                        <a class="destination-overlay text-white text-decoration-none" href="">
-                            <h5 class="text-white">商品名稱</h5>
-                            <span>介紹詞</span>
-                        </a>
+
+                    <div @*v-for="item in Products"*@ class="col-lg-4 col-md-6 mb-4">
+                        <div class="destination-item position-relative overflow-hidden mb-2">
+                            <img class="img-fluid" src="img/destination-1.jpg" alt="">
+                        <a class="destination-overlay text-white text-decoration-none" href="\Shop\Index">
+                                <h5 class="text-white">AIDA2自由潛水課程</h5>
+                                <span>自由潛水的入門課程，課程中需掌握理論學科，通過平靜海域及開放水域課程 AIDA2（小琉球海訓）
+11/8 學科及泳池課、11/22 & 11/23 海訓</span>
+                            </a>
+                        </div>
                     </div>
-                </div>
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="destination-item position-relative overflow-hidden mb-2">
-                        <img class="img-fluid" src="img/destination-3.jpg" alt="">
-                        <a class="destination-overlay text-white text-decoration-none" href="">
-                            <h5 class="text-white">商品名稱</h5>
-                            <span>介紹詞</span>
-                        </a>
-                    </div>
-                </div>
+
+                        <div @*v-for="item in Products"*@ class="col-lg-4 col-md-6 mb-4">
+                            <div class="destination-item position-relative overflow-hidden mb-2">
+                                <img class="img-fluid" src="img/destination-1.jpg" alt="">
+                                <a class="destination-overlay text-white text-decoration-none" href="\Shop\Index">
+                                    <h5 class="text-white">杉林溪主題會館</h5>
+                                    <span>2天1夜杉林溪歡樂遊、提供早餐SPA</span>
+                                </a>
+                            </div>
+                        </div>
+                
             </div>
         </div>
     </div>
@@ -89,7 +93,7 @@
                     <div class="about-text bg-white p-4 p-lg-5 my-lg-5">
                         <h6 class="text-primary text-uppercase" style="letter-spacing: 5px;">揪團活動</h6>
                         <h2 class="mb-3">在這裡找到志同道合的夥伴們！</h2>
-                        <p>介紹xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</p>
+                        <p>許多夥伴們可以來尋找優質的活動</p>
                         <div class="row mb-4">
                             <div class="col-6">
                                 <img class="img-fluid" src="img/about-1.jpg" alt="">
@@ -98,7 +102,7 @@
                                 <img class="img-fluid" src="img/about-2.jpg" alt="">
                             </div>
                         </div>
-                        <a href="" class="btn btn-primary mt-1">馬上參加</a>
+                        <a href="\Activity\Index" class="btn btn-primary mt-1">馬上參加</a>
                     </div>
                 </div>
             </div>
@@ -296,19 +300,7 @@
                 var self = this;
                 axios({
                     method: 'get',
-                    url: '/Members/MemberApi/GetMember'
-                })
-                    .then(function (res) {
-                        console.log(res);
-                        self.PicturePath = res.data.picturePath;
-                        self.NickName = res.data.nickName;
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-                axios({
-                    method: 'get',
-                    url: '/api/ProductApi/Get'
+                    url: '/Suppliers/SupplierApi/GetProductHome'
                 })
                     .then(function (res) {
                         console.log(res);

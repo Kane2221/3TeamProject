@@ -85,7 +85,7 @@
             
             <div class="col-md-10">
                 <div class="table-responsive">
-                    <input type="button" class="left-align" value="發起活動" />
+                    <input type="button" class="left-align" value="發起活動" v-on:click="postAct"/>
                     <table class="table">
                         <thead>
                             <tr>
@@ -105,39 +105,24 @@
                                 <th>退出活動</th>
                             </tr>
                         </thead>
-                        <tbody v-for="sight in Sightseeings" class="table-body">
+                        <tbody v-for="act in Activities" class="table-body">
                             <tr class="cell-1">
                                 <td class="text-center">
                                     <div class="toggle-btn">
                                         <div class="inner-circle"></div>
                                     </div>
                                 </td>
-                                <td>#1001{{sight.sightseeingId}}</td>
-                                <td>一起潛水去</td>
-                                <td>後壁湖浮潛區</td>
-                                <td>8</td>
-                                <td>1</td>
-                                <td>2022/11/3</td>
-                                <td>2022/11/6</td>
-                                <td>張三</td>
+                                <td><a v-bind:href="'/Activity/ActivityDetail/'+ act.activityId">#{{act.activityId}}</a></td>
+                                <td>{{act.activitiesName}}</td>
+                                <td>{{act.activitiesAddress}}</td>
+                                <td>{{act.limitCount}}</td>
+                                <td>{{act.joinCount}}</td>
+                                <td>{{act.createdTime}}</td>
+                                <td>{{act.endTime}}</td>
+                                <td>{{act.memberName}}</td>
                                 <td><a href="">退出</a></td>
                             </tr>
-                            <tr class="cell-1">
-                                <td class="text-center">
-                                    <div class="toggle-btn">
-                                        <div class="inner-circle"></div>
-                                    </div>
-                                </td>
-                                <td>#1003</td>
-                                <td>一起登山去</td>
-                                <td>象山登山步道</td>
-                                <td>8</td>
-                                <td>1</td>
-                                <td>2022/11/3</td>
-                                <td>2022/11/6</td>
-                                <td>李四</td>
-                                <td><a href="">退出</a></td>
-                            </tr>
+                            
                         </tbody>
                     </table>
                     <br />
@@ -163,21 +148,21 @@
                                 <th>刪除<br />活動</th>
                             </tr>
                         </thead>
-                        <tbody @*v-for="sight in Sightseeings"*@ class="table-body">
+                        <tbody v-for="act in MyActivities" class="table-body">
                             <tr class="cell-1">
                                 <td class="text-center">
                                     <div class="toggle-btn">
                                         <div class="inner-circle"></div>
                                     </div>
                                 </td>
-                                <td>#1001</td>
-                                <td>一起潛水去</td>
-                                <td>後壁湖浮潛區</td>
-                                <td>8</td>
-                                <td>1</td>
-                                <td>2022/11/3</td>
-                                <td>2022/11/6</td>
-                                <td>張三</td>
+                                <td><a v-bind:href="'/Activity/ActivityDetail/'+ act.activityId">#{{act.activityId}}</a></td>
+                                <td>{{act.activitiesName}}</td>
+                                <td>{{act.activitiesAddress}}</td>
+                                <td>{{act.limitCount}}</td>
+                                <td>{{act.joinCount}}</td>
+                                <td>{{act.createdTime}}</td>
+                                <td>{{act.endTime}}</td>
+                                <td>{{act.memberName}}</td>
                                 <td><a href="">刪除</a></td>
                             </tr>
                         </tbody>
@@ -240,9 +225,16 @@
         var VuePage = new Vue({
             el: "#VuePage",
             data: {
-                Sightseeings: [],
-                SightByTheme: [],
-                SightByArea: [],
+                ActivitiesId:'',
+                ActivitiesName:'',
+                ActivitiesContent:'',
+                ActivitiesAddress:'',
+                EndTime:'',
+                LimitCount:'',
+                ActitiesStartDate:'',
+                ActitiesFinishDate:'',
+                Activities: [],
+                MyActivities:[],
                 ErrMsg: '',
                 Success: ''
             },
@@ -254,7 +246,19 @@
                 })
                     .then(function (res) {
                         console.log(res);
-                        self.Sightseeings = res.data;
+                        self.Activities = res.data;
+
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+                axios({
+                    method: 'get',
+                    url: '/SocialActivities/SocialActivitiesApi/GetMyActivities'
+                })
+                    .then(function (res) {
+                        console.log(res);
+                        self.MyActivities = res.data;
 
                     })
                     .catch(function (error) {
@@ -262,13 +266,18 @@
                     })
             },
             methods: {
-                area: function () {
-                    var sight = self.Sightbyarea;
-                    // 提取出category
-                    const array = self.Sightseeings.map((sight) => self.Sightseeings.categoryName)
-                    // 過濾出重複的元素
-                    return [...new Set(array)]
-                }
+                //area: function () {
+                //    var sight = self.Sightbyarea;
+                //    // 提取出category
+                //    const array = self.Sightseeings.map((sight) => self.Sightseeings.categoryName)
+                //    // 過濾出重複的元素
+                //    return [...new Set(array)]
+                //},
+                postAct:function(){
+                    window.location.assign("/Activity/AddActivity")
+                },
+
+                
             },
         });
 

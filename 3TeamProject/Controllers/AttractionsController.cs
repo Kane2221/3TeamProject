@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Security.Cryptography;
 
 namespace _3TeamProject.Controllers
 {
@@ -10,6 +11,8 @@ namespace _3TeamProject.Controllers
         }
         public IActionResult AttractionsDetail(int id)
         {
+            var pid = id;
+            ViewBag.Sight = pid;
             return View();
         }
     }

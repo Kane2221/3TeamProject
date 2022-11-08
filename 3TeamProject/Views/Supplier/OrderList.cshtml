@@ -50,7 +50,7 @@
                                     <li class="list-group-item justify-content-between align-items-center p-3">
                                         <div class="d-flex justify-content-center mb-2">
                                             <button type="button" class="form-control btn btn-outline-primary ms-1">
-                                                <a data-toggle="click" href="/Supplier/AddProduct"><i class="zmdi zmdi-plus-square"> 產品上架</i></a>
+                                                <a data-toggle="click" href="/Supplier/AddOrder"><i class="zmdi zmdi-plus-square"> 產品上架</i></a>
                                             </button>
                                         </div>
                                     </li>
@@ -106,10 +106,10 @@
                                                         <td>{{p.categoryName}}</td>
                                                         <td><span class="badge badge-success">{{p.statusName}}</span></td>
                                                         <td>
-                                                            <button type="button" class="form-control btn btn-outline-primary rounded ms-1">
+                                                            <button type="button" class="form-control btn btn-outline-primary rounded ms-1" v-on:click="revise">
                                                                 修改
                                                             </button>
-                                                            <button type="button" class="form-control btn btn-outline-primary rounded ms-1">
+                                                            <button type="button" class="form-control btn btn-outline-primary rounded ms-1" v-on:click="deleteProduct">
                                                                 下架
                                                             </button>
                                                         </td>
@@ -117,7 +117,7 @@
                                                 </tbody>
                                             </table>
                                             <div class="d-grid gap-3 d-md-flex justify-content-md-end">
-                                                <button type="button" class="btn btn-primary  px-3" href="/Member/Register">取消</button>
+                                                <button type="button" class="btn btn-primary  px-3" href="#">取消</button>
                                                 <button type="submit" class="btn btn-primary  submit px-3">送出</button>
                                             </div>
                                         </div>

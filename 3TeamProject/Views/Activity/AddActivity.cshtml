@@ -13,7 +13,7 @@
         <div class="bg-light shadow" style="padding: 30px;">
             <div class="row align-items-center" style="min-height: 500px;">
 
-                <div class="row">
+                <div id="VuePage" class="row">
                     <div class="col-lg-3">
                         <div class="card mb-4">
                             <div class="card-body text-center">
@@ -56,13 +56,13 @@
                                         <i class="zmdi zmdi-">揪團活動名稱</i>
                                     </div>
                                     <div class="col-sm-4">
-                                        <input type="text" class="form-control" v-model="ProductName" id="productName">
+                                        <input type="text" class="form-control" v-model="ActivitiesName" id="ActivitiesName">
                                     </div>
                                     <div class="col-sm-2 align-self-center">
                                         <i class="zmdi zmdi-">揪團活動地點</i>
                                     </div>
                                     <div class="col-sm-4">
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control" v-model="ActivitiesAddress" id="ActivitiesAddress">
                                     </div>
                                 </div>
                                 <br />
@@ -71,13 +71,13 @@
                                         <i class="zmdi zmdi-">活動開始時間</i>
                                     </div>
                                     <div class="col-sm-4">
-                                        <input type="date" class="form-control" v-model="ProductCategoryId" id="productCategoryId">
+                                        <input type="date" class="form-control" v-model="ActitiesStartDate" id="ActitiesStartDate">
                                     </div>
                                     <div class="col-sm-2 align-self-center">
                                         <i class="zmdi zmdi-"> 活動結束時間</i>
                                     </div>
                                     <div class="col-sm-4">
-                                        <input type="date" class="form-control" v-model="ProductUnitPrice" id="productUnitPrice">
+                                        <input type="date" class="form-control" v-model="ActitiesFinishDate" id="ActitiesFinishDate">
                                     </div>
                                 </div>
 
@@ -87,13 +87,13 @@
                                         <i class="zmdi zmdi-">限制人數</i>
                                     </div>
                                     <div class="col-sm-4">
-                                        <input type="text" class="form-control" v-model="UnitStock" id="unitStock">
+                                        <input type="text" class="form-control" v-model="LimitCount" id="LimitCount">
                                     </div>
                                     <div class="col-sm-2 align-self-center">
                                         <i class="zmdi zmdi-">參與截止時間</i>
                                     </div>
                                     <div class="col-sm-4">
-                                        <input type="date" class="form-control" v-model="UnitStock" id="unitStock">
+                                        <input type="date" class="form-control" v-model="EndTime" id="EndTime">
                                     </div>
                                 </div>
                                 <br />
@@ -103,7 +103,7 @@
                                             <div class="card-body">
                                                 <div class="form-group">
                                                     <label for="exampleFormControlTextarea1">活動介紹</label>
-                                                    <textarea class="form-control" title="活動介紹" id="exampleFormControlTextarea1" rows="3" draggable="false"></textarea>
+                                                    <textarea class="form-control" v-model="ActivitiesContent" title="活動介紹" id="exampleFormControlTextarea1" rows="3" draggable="false"></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -115,7 +115,7 @@
                                 <div>
                                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                         <button type="button" class="btn btn-outline-primary rounded px-3" href="/Activity/index">取消</button>
-                                        <button type="button" class="btn btn-primary rounded submit px-3" @@click="submitData">送出</button>
+                                        <button type="button" class="btn btn-primary rounded submit px-3" @@click="postAct">送出</button>
                                     </div>
                                 </div>
 
@@ -132,18 +132,33 @@
         var VuePage = new Vue({
             el: "#VuePage",
             data: {
-                Email: '',
+                ActivitiesName:'',
+                ActivitiesContent:'',
+                ActivitiesAddress:'',
+                EndTime:'',
+                LimitCount:'',
+                ActitiesStartDate:'',
+                ActitiesFinishDate:'',
+                Activities: [],
                 ErrMsg: '',
                 Success: ''
             },
             methods: {
-                SubmitData: function () {
+                postAct: function () {
                     var self = this;
                     axios({
                         method: 'post',
-                        url: '/Users/UserApi/ForgotPassword',
+                        url: '/SocialActivities/SocialActivitiesApi/PostActivity',
                         data: {
-                            Email: self.Email
+                            ActivitiesName: self.ActivitiesName,
+                            ActivitiesContent: self.ActivitiesContent,
+                            ActivitiesAddress: self.ActivitiesAddress,
+                            EndTime: self.EndTime,
+                            LimitCount: self.LimitCount,
+                            ActitiesStartDate: self.ActitiesStartDate,
+                            ActitiesFinishDate: self.ActitiesFinishDate,
+                            ErrMsg: '',
+                            Success: ''
                         }
                     })
                         .then(function (response) {
@@ -152,16 +167,15 @@
                                 title: self.Success,
                                 icon: 'success',
                                 timer: 12000
-                            }).then((result => {
-                                window.location.assign("/Member/ResetPwd")
-                            }));
+                            });
                             console.log(response);
+                            window.location.assign("/Activity/Index")
                         })
                         .catch(function (error) {
                             self.ErrMsg = error.response.data;
                             Swal.fire({
-                                title: '失敗',
-                                text: self.ErrMsg,
+                                title: '發佈失敗', // TODO 驗證需修改
+                                text: '請填入必填選項',
                                 icon: 'error',
                                 timer: 12000
                             });
@@ -169,9 +183,6 @@
                             return;
                         });
                 },
-                cancel: function () {
-                    window.location.assign("/Member/Login");
-                }
             }
         });
 
