@@ -60,17 +60,12 @@ namespace _3TeamProject.Controllers.Api
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPricipal);
             return Ok("登入成功");
         }
-        //註冊驗證帳號
+        //註冊後驗證帳號
         [HttpPost("Verify")]
         public async Task<IActionResult> Verify([FromBody] VerifyDto request)
         {
 
             var user = await _context.Users.FirstOrDefaultAsync(u => u.VerificationToken == request.Token);
-            var account = await _context.Users.FirstOrDefaultAsync(a=>a.Account == request.Account);
-            if (account == null)
-            {
-                return BadRequest("帳號錯誤");
-            }
 
             if (user == null)
             {
@@ -95,15 +90,6 @@ namespace _3TeamProject.Controllers.Api
                 supplier.SupplierStatusId = 1;
             }
             await _context.SaveChangesAsync();
-            var claims = new List<Claim>()
-            {
-                new Claim(ClaimTypes.Name, user.Account),
-                new Claim(ClaimTypes.Sid, user.UserId.ToString()),
-                new Claim(ClaimTypes.Role, user.RolesNavigation.RoleName)
-            };
-            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            var claimsPricipal = new ClaimsPrincipal(claimsIdentity);
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPricipal);
             return Ok("驗證成功");
         }
         [HttpPost("ForgotPassword")]
@@ -118,8 +104,8 @@ namespace _3TeamProject.Controllers.Api
             var verifyToken = Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
             user.PasswordResetToken = verifyToken;
             user.ResetTokenExpires = DateTime.Now.AddMinutes(30);
-
-            var root = $@"{Request.Scheme}:/{Request.Host}/User/Verify";
+            var root = $@"Https:/{Request.Host}/Member/Verify?token={verifyToken}";
+            //var root = $@"Https:/{Request.Host}/User/Verify";
             //TODO 修改寄信的超連結
             using (MailMessage mail = new MailMessage())
             {
@@ -127,8 +113,8 @@ namespace _3TeamProject.Controllers.Api
                 mail.To.Add(request.Email);
                 mail.Priority = MailPriority.Normal;
                 mail.Subject = "帳號重設驗證碼";
-                mail.Body = $"<h1>請到以下頁面輸入驗證碼 : {verifyToken}</h1>/n " +
-                            $"<a href=\"{root}\">帳號重設驗證碼</a>";
+                mail.Body = $"<h1>請點選以下連結驗證您的帳號</h1> " +
+                                $"<a href=\"https://localhost:7007/Member/Verify?token={verifyToken}\"><h1>帳號驗證碼</h1></a>";
                 mail.IsBodyHtml = true;
                 SmtpClient MySmtp = new SmtpClient("smtp.gmail.com", 587);
                 MySmtp.UseDefaultCredentials = false;

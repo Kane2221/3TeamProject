@@ -106,7 +106,8 @@ namespace _3TeamProject.Areas.Members.Controllers
                     }
                 };
                 #region Send Email with verify code (正式再解開註解)
-                var root = $@"{Request.Scheme}:/{Request.Host}/Member/Verify?{verifyToken}";
+                //var root = $@"{Request.Scheme}:/{Request.Host}/Member/Verify?{verifyToken}";
+                var root = $@"https://localhost:7007/Member/Verify";
                 //TODO 修改寄信的超連結
                 using (MailMessage mail = new MailMessage())
                 {
@@ -115,7 +116,7 @@ namespace _3TeamProject.Areas.Members.Controllers
                     mail.Priority = MailPriority.Normal;
                     mail.Subject = "帳號驗證碼";
                     mail.Body = $"<h1>請點選以下連結驗證您的帳號</h1> " +
-                                $"<a href=\"https://localhost:7007/Member/Verify?token={verifyToken}\"><h1>帳號驗證碼</h1></a>";
+                                $"<a href=\"https://localhost:7007/Member/Verify?token={verifyToken}&account={request.Account}\"><h1>帳號驗證碼</h1></a>";
                     mail.IsBodyHtml = true;
                     SmtpClient MySmtp = new SmtpClient("smtp.gmail.com", 587);
                     MySmtp.UseDefaultCredentials = false;

@@ -27,14 +27,14 @@
                             <form v-on:submit.prevent="SubmitData" class="fgpwd-form">
                                 <div class="form-group mb-5">
                                     <label class="label" for="text">請輸入驗證碼</label>
-                                    <input type="text" v-model.lazy="Token" class="form-control" placeholder="驗證碼" required>
+                                    <input type="text" v-model.lazy="Token" class="form-control" placeholder="驗證碼" disabled>
                                 </div>
                                 <div class="form-group mb-5">
                                     <label class="label" for="text">請輸入帳號</label>
-                                    <input type="text" v-model.lazy="Account" class="form-control" placeholder="帳號" required>
+                                <input type="text" v-model.lazy="Account" class="form-control" placeholder="帳號" disabled>
                                 </div>
                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                    <button type="button" class="btn btn-outline-primary rounded px-3" v-on:click="cancel">取消</button>
+                                    <button type="button" class="btn btn-outline-primary rounded px-3">取消</button>
                                 <button type="submit" class="btn btn-primary rounded submit px-3" v-bind:disabled="isDisabled">送出</button>
                                 </div>
                             </form>
@@ -47,18 +47,19 @@
         @section scripts {
         <script>
         var querystring = window.location.search.substring(1);
-        var tokenvalue = querystring.split("=");
+        var qsstring = querystring.split("&");
+        var tokenvalue = qsstring[0].split("=")
+        var accountvalue = qsstring[1].split("=")
             var VuePage = new Vue({
                 el: "#VuePage",
                 data: {
                     Token: this.tokenvalue[1],
-                    Account: '',
+                    Account: this.accountvalue[1],
                     ErrMsg: '',
                     Success: '',
                     isDisabled: false
                 },
-                methods: {
-                    SubmitData: function () {
+                mounted: function () {
                         var self = this;
                         this.isDisabled = true;
                         axios({
@@ -77,7 +78,7 @@
                                     icon: 'success',
                                     timer: 12000
                                 }).then((result => {
-                                window.location.assign("/Member/MemberProfile")
+                                window.location.assign("/Member/login")
                                 }));
                                 console.log(response);
                                 
@@ -92,12 +93,9 @@
                                 });
                                 console.log(error);
                                 self.isDisabled = false;
-                                return;
+                            window.location.assign("/Member/login")
                             });
-                    },
-                    cancel: function () {
-                        window.location.assign("/Member/Login");
-                    }
+                    
                 }
             });
 
