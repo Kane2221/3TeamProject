@@ -24,7 +24,7 @@
                             </div>
                         </div>
                         <div id="VuePage">
-                            <form v-on:submit.prevent="SubmitData" class="fgpwd-form">
+                            <form class="fgpwd-form">
                                 <div class="form-group mb-5">
                                     <label class="label" for="text">請輸入驗證碼</label>
                                     <input type="text" v-model.lazy="Token" class="form-control" placeholder="驗證碼" disabled>
@@ -33,10 +33,10 @@
                                     <label class="label" for="text">請輸入帳號</label>
                                 <input type="text" v-model.lazy="Account" class="form-control" placeholder="帳號" disabled>
                                 </div>
-                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+@*                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                     <button type="button" class="btn btn-outline-primary rounded px-3">取消</button>
                                 <button type="submit" class="btn btn-primary rounded submit px-3" v-bind:disabled="isDisabled">送出</button>
-                                </div>
+                                </div>*@
                             </form>
                         </div>
 
@@ -57,11 +57,9 @@
                     Account: this.accountvalue[1],
                     ErrMsg: '',
                     Success: '',
-                    isDisabled: false
                 },
                 mounted: function () {
                         var self = this;
-                        this.isDisabled = true;
                         axios({
                             method: 'post',
                             url: '/Users/UserApi/Verify',
@@ -72,7 +70,6 @@
                         })
                             .then(function (response) {
                                 self.Success = response.data;
-                                self.isDisabled = false;
                                 Swal.fire({
                                     title: self.Success,
                                     icon: 'success',

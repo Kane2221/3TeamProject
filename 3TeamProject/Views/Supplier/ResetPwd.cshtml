@@ -2,10 +2,12 @@
     <title>Login 04</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/css/stylelogin.css">
     <!-- Customized Bootstrap Stylesheet -->
     <link href="~/css/style.css" rel="stylesheet">
 }
+    <body>
         <div class="row justify-content-center">
             <div class="col-md-12 col-lg-10">
                 <div class="wrap d-md-flex">
@@ -14,32 +16,35 @@
                     <div class="login-wrap p-4 p-md-5">
                         <div class="d-flex">
                             <div class="w-100">
-                                <h3 class="mb-4">帳號驗證</h3>
+                                <h3 class="mb-4">重新設定密碼</h3>
                             </div>
                             <div class="w-100">
                                 <p class="social-media d-flex justify-content-end">
-                                    <a href="#" class="social-icon d-flex align-items-center justify-content-center"><span class="fab fa-facebook-f"></span></a>
-                                    <a href="#" class="social-icon d-flex align-items-center justify-content-center"><span class="fab fa-google"></span></a>
+                                    <a href="#" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-facebook"></span></a>
+                                    <a href="#" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-google"></span></a>
                                 </p>
                             </div>
                         </div>
                         <div id="VuePage">
-                            <form class="fgpwd-form">
-                                <div class="form-group mb-5">
-                                    <label class="label" for="text">請輸入驗證碼</label>
-                                    <input type="text" v-model.lazy="Token" class="form-control" placeholder="驗證碼" disabled>
-                                </div>
-                                <div class="form-group mb-5">
-                                    <label class="label" for="text">請輸入帳號</label>
-                                    <input type="text" v-model.lazy="Account" class="form-control" placeholder="帳號" disabled>
-                                </div>
-@*                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                    <button type="button" class="btn btn-outline-primary rounded px-3" v-on:click="cancel">取消</button>
-                                    <button type="submit" class="btn btn-primary rounded submit px-3">送出</button>
+                            <form v-on:submit.prevent="SubmitData" class="fgpwd-form">
+@*                                <div class="form-group mb-3">
+                                    <label class="label" for="Token">請輸入驗證碼</label>
+                                    <input type="password" v-model.lazy="Token" class="form-control" placeholder="驗證碼" disabled>
                                 </div>*@
+                                <div class="form-group mb-3">
+                                    <label class="label" for="Password">請輸入新密碼</label>
+                                    <input type="password" v-model.lazy="Password" class="form-control" placeholder="新密碼" required>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label class="label" for="ConfirmPassword">請再次輸入新密碼</label>
+                                    <input type="password" v-model.lazy="ConfirmPassword" class="form-control" placeholder="再次輸入新密碼" required>
+                                </div>
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <button type="button" class="btn btn-outline-primary rounded px-3" v-on:click="cancel">取消</button>
+                                    <button type="submit" class="btn btn-primary rounded submit px-3" v-bind:disabled="isDisabled">送出</button>
+                                </div>
                             </form>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -47,26 +52,28 @@
         @section scripts {
         <script>
             var querystring = window.location.search.substring(1);
-            var qsstring = querystring.split("&");
-            var tokenvalue = qsstring[0].split("=")
-            var accountvalue = qsstring[1].split("=")
+            var tokenvalue = querystring.split("=");
             var VuePage = new Vue({
                 el: "#VuePage",
                 data: {
                     Token: this.tokenvalue[1],
-                    Account: this.accountvalue[1],
+                    Password: '',
+                    ConfirmPassword: '',
                     ErrMsg: '',
                     Success: '',
                     isDisabled: false
                 },
-                mounted: function () {
+                methods: {
+                    SubmitData: function () {
                         var self = this;
+                        this.isDisabled = true;
                         axios({
                             method: 'post',
-                            url: '/Users/UserApi/Verify',
+                            url: '/Users/UserApi/ResetPassword',
                             data: {
-                                Token: this.Token,
-                                Account: this.Account
+                                Token: self.Token,
+                                Password: self.Password,
+                                ConfirmPassword: self.ConfirmPassword
                             }
                         })
                             .then(function (response) {
@@ -77,12 +84,20 @@
                                     icon: 'success',
                                     timer: 12000
                                 }).then((result => {
-                                    window.location.assign("/Supplier/login")
+                                    window.location.assign("/Supplier/Login")
                                 }));
                                 console.log(response);
                             })
                             .catch(function (error) {
+                                var er = error.response.data.errors;
                                 self.ErrMsg = error.response.data;
+                                self.isDisabled = false;
+                                if (er != null) {
+                                    var confirm = er.ConfirmPassword != null ? er.ConfirmPassword + ',' : '';
+                                    var pass = er.Password != null ? er.Password : '';
+                                    self.ErrMsg = confirm + pass;
+                                }
+                                //TODO 驗證需修改
                                 Swal.fire({
                                     title: '失敗',
                                     text: self.ErrMsg,
@@ -91,12 +106,16 @@
                                 });
                                 console.log(error);
                                 self.isDisabled = false;
-                                window.location.assign("/Member/login")
+                                return;
                             });
                     },
-                
+                    cancel: function () {
+                        window.location.assign("/Supplier/Login");
+                    }
+                }
             });
 
         </script>
     }
+    </body>
 
