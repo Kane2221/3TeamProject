@@ -113,8 +113,16 @@ namespace _3TeamProject.Controllers.Api
                 mail.To.Add(request.Email);
                 mail.Priority = MailPriority.Normal;
                 mail.Subject = "帳號重設驗證碼";
-                mail.Body = $"<h1>請點選以下連結驗證您的帳號</h1> " +
-                                $"<a href=\"https://localhost:7007/Member/Verify?token={verifyToken}\"><h1>帳號驗證碼</h1></a>";
+                if (user.Roles==2)
+                {
+                    mail.Body = $"<h1>請點選以下連結驗證您的帳號</h1> " +
+                                $"<a href=\"https://localhost:7007/Supplier/ResetPwd?token={verifyToken}\"><h1>帳號驗證碼</h1></a>";
+                }
+                else if (user.Roles==1)
+                {
+                    mail.Body = $"<h1>請點選以下連結驗證您的帳號</h1> " +
+                                $"<a href=\"https://localhost:7007/Member/ResetPwd?token={verifyToken}\"><h1>帳號驗證碼</h1></a>";
+                }
                 mail.IsBodyHtml = true;
                 SmtpClient MySmtp = new SmtpClient("smtp.gmail.com", 587);
                 MySmtp.UseDefaultCredentials = false;
