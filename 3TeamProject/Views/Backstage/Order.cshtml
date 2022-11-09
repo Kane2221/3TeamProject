@@ -1,17 +1,14 @@
 ﻿@{
     Layout = "_Backstage";
 }
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-</head>
-
-<body>
+@section Head{
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    </head>
+}
     <div id="page-wrapper">
-        <div id="page-inner">
+        <div id="page-inner" style="margin-top:0px">
 
             <div class="row">
                 <div class="col-md-12">
@@ -75,6 +72,7 @@
 
         </div>
     </div>
+    @section Scripts{
     <!-- DATA TABLE SCRIPTS -->
     <script src="~/assets/js/dataTables/jquery.dataTables.js"></script>
     <script src="~/assets/js/dataTables/dataTables.bootstrap.js"></script>
@@ -83,6 +81,4 @@
             $('#dataTables-example').dataTable();
         });
     </script>
-
-</body>
-</html>
+    }

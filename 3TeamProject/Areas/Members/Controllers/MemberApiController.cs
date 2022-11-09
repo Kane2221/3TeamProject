@@ -37,6 +37,10 @@ namespace _3TeamProject.Areas.Members.Controllers
         {
             var UserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
             var user = _context.Users.Include(u => u.Members).FirstOrDefault(x => x.UserId == UserId);
+            if (user == null)
+            {
+                return NotFound("帳號不存在");
+            }
             var member = (from u in _context.Users
                           where u.UserId == user.UserId
                           join m in _context.Members

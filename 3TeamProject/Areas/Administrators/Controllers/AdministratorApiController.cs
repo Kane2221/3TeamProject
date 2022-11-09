@@ -79,6 +79,27 @@ namespace _3TeamProject.Areas.Administrators.Controllers
                     });
             return Ok(adminSuper);
         }
+        [HttpGet("GetAdmins")]//登入管理員的資料
+        public IActionResult GetAdmins()
+        {
+            var UserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
+            var user = _context.Users.Include(u => u.Administrators).FirstOrDefault(x => x.UserId == UserId);
+            if (user == null)
+            {
+                return NotFound("帳號不存在");
+            }
+            var admin = _context.Administrators.Include(u => u.User).Where(u=>u.UserId == user.UserId)
+                    .Select(u => new GetAdminDto
+                    {
+                        UserId = user.UserId,
+                        Account = u.User.Account,
+                        Email = u.User.Email,
+                        Roles = u.User.RolesNavigation.RoleName,
+                        AdministratorName = u.AdministratorName,
+                        PhoneNumber = u.PhoneNumber
+                    }).SingleOrDefault();
+            return Ok(admin);
+        }
         //新增管理員, 最高權限才能新增。
         [Authorize(Roles = "SuperAdministrator")]
         [HttpPost("Register")]
@@ -189,6 +210,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
                            on u.UserId equals s.UserId
                            select new GetSupplierDto
                            {
+                               UserId = u.UserId,
                                Account = u.Account,
                                Email = u.Email,
                                RoleName = u.RolesNavigation.RoleName,
@@ -202,7 +224,7 @@ namespace _3TeamProject.Areas.Administrators.Controllers
                                SupplierCountry = s.SupplierCountry,
                                SupplierCity = s.SupplierCity,
                                SupplierAddress = s.SupplierAddress,
-                               SupplierStatusId = s.SupplierStatusId,
+                               StatusName = s.SupplierStatus.StatusName,
                            };
             return Ok(supplier);
         }
@@ -220,8 +242,8 @@ namespace _3TeamProject.Areas.Administrators.Controllers
                 UnitStock = p.UnitStock,
                 UniOnOrder = p.UniOnOrder,
                 ProductRecommendation = p.ProductRecommendation,
-                AddedTime = p.AddedTime,
-                RemovedTime = p.RemovedTime,
+                AddedTime = p.AddedTime.Value.ToShortDateString(),
+                RemovedTime = p.RemovedTime.Value.ToShortDateString(),
                 ProductIntroduce = p.ProductIntroduce,
                 StatusName = p.ProductStatus.StatusName,
                 ProductHomePage = p.ProductHomePage

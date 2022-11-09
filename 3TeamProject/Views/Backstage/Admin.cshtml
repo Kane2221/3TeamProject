@@ -11,7 +11,7 @@
 }
 
 	<div id="page-wrapper">
-		<div id="page-inner">
+		<div id="page-inner" style="margin-top:0px">
             <div id="VuePage" class="row">
                 <div class="col-md-12">
                     <!-- Advanced Tables -->
@@ -27,6 +27,10 @@
                             </div>
                         </div>
                         <div class="card-content">
+                            <label class="form-checkbox">
+                                <input class="checkbox" type="checkbox">
+                                <i class="form-icon"></i>
+                            </label>
                             <div class="table-responsive">
                                 <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                     <thead>
@@ -48,8 +52,8 @@
                                             <td>{{ad.account}}</td>
                                             <td>********</td>
                                             <td>{{ad.phoneNumber}}</td>
+                                            <td>{{ad.email}}</td>
                                             <td>{{ad.roles}}</td>
-                                            <td></td>
                                             <td></td>
                                         </tr>
                                     </tbody>
@@ -60,26 +64,29 @@
                         </div>
                     </div>
                     <!--End Advanced Tables -->
+                    
                 </div>
             </div>
 
 		</div>
 	</div>
-
+    
     @section Scripts{
-    <!-- DATA TABLE SCRIPTS -->
+@*    <!-- DATA TABLE SCRIPTS -->
     <script src="~/assets/js/dataTables/jquery.dataTables.js"></script>
     <script src="~/assets/js/dataTables/dataTables.bootstrap.js"></script>
     <script>
         $(document).ready(function () {
             $('#dataTables-example').dataTable();
         });
-    </script>
+    </script>*@
     <script>
         var VuePage = new Vue({
             el: "#VuePage",
             data: {
                 Admins: [],
+                selected:'',
+                selectAll:'',
                 ErrMsg: '',
                 Success: '',
             },
@@ -110,6 +117,9 @@
                             console.log(error);
                         });
                     window.location.assign("/home");
+                },
+                select:function(){
+
                 }
             }
         });

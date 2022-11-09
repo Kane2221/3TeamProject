@@ -11,13 +11,10 @@
 	<link href="~/assets/css/bootstrap.css" rel="stylesheet" />
 	<!-- FontAwesome Styles-->
 	<link href="~/assets/css/font-awesome.css" rel="stylesheet" />
-	<!-- Morris Chart Styles-->
-	<link href="~/assets/js/morris/morris-0.4.3.min.css" rel="stylesheet" />
+
 	<!-- Custom Styles-->
 	<link href="~/assets/css/custom-styles.css" rel="stylesheet" />
-	<!-- Google Fonts-->
-	<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
-	<link rel="stylesheet" href="~/assets/js/Lightweight-Chart/cssCharts.css"> 
+
 	<!-- Axios -->
 	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 	<!-- SweetAlert -->
@@ -28,18 +25,18 @@
 </head>
 
 <body>
-		<nav class="navbar navbar-default top-navbar" role="navigation">
+		<nav id="VueMainPage" class="navbar navbar-default top-navbar" role="navigation" style="top:0px;">
 			<div class="navbar-header">
 				<a class="navbar-brand waves-effect waves-dark" href="/Backstage/Dashboard"><i class="large material-icons">insert_chart</i> <strong>TRAVELER</strong></a>
 			<div id="sideNav" href=""><i class="material-icons dp48">toc</i></div>
 			</div>
-			<ul class="nav navbar-top-links navbar-right"> 
-				<li><a class="dropdown-button waves-effect waves-dark" href="#!" data-activates="dropdown1"><i class="fa fa-user fa-fw"></i> <b>使用者名稱</b> <i class="material-icons right">arrow_drop_down</i></a></li>
+			<ul class="nav navbar-top-links navbar-right">
+			<li><a class="dropdown-button waves-effect waves-dark" href="#!" data-activates="dropdown1"><i class="fa fa-user fa-fw"></i> <b>{{Admins.administratorName}}</b> <i class="material-icons right">arrow_drop_down</i></a></li>
 			</ul>
 		</nav>
 		<!-- Dropdown Structure -->
 		<ul id="dropdown1" class="dropdown-content">
-			<li><a href="#"><i class="fa fa-user fa-fw"></i> 個人資料</a>
+			<li><a href="#"><i class="fa fa-user fa-fw"></i>個人資料</a>
 			</li>
 			<li><a href="#"><i class="fa fa-sign-out fa-fw"></i> 登出</a>
 			</li>
@@ -95,6 +92,31 @@
 	<!-- Custom Js -->
 	<script src="~/assets/js/custom-scripts.js"></script> 
 	@await RenderSectionAsync("Scripts", required: false)
+	<script>
+		var VueMainPage = new Vue({
+			el: "#VueMainPage",
+			data: {
+				Admins: [],
+				ErrMsg: '',
+				Success: '',
+			},
+			mounted: function () {
+				var self = this;
+				axios({
+					method: 'get',
+					url: '/Administrators/AdministratorApi/GetAdmins'
+				})
+					.then(function (res) {
+						console.log(res);
+						self.Admins = res.data;
+					})
+					.catch(function (error) {
+						console.log(error);
+					});
+			},
+		});
+
+	</script>
 </body>
 
 </html>

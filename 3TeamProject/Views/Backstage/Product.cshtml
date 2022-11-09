@@ -1,19 +1,15 @@
 ﻿@{
     Layout = "_Backstage";
 }
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-</head>
-
-<body>
+@section Head{
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    </head>
+}
     <div id="page-wrapper">
-        <div id="page-inner">
-
-            <div class="row">
+        <div id="page-inner" style="margin-top:0px">
+            <div id="VuePage" class="row">
                 <div class="col-md-12">
                     <!-- Advanced Tables -->
                     <div class="card">
@@ -47,38 +43,22 @@
                                             <th>設定商品主打區</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody v-for="p in Products">
                                         <tr class="text-center">
-                                            <th>#1111</th>
-                                            <th>蛙鏡</th>
-                                            <th>1支</th>
-                                            <th>$1000</th>
-                                            <th>10</th>
-                                            <th>1</th>
-                                            <th>12</th>
-                                            <th>2022/10/10</th>
+                                            <th>#{{p.productId}}</th>
+                                            <th>{{p.productName}}</th>
+                                            <th>{{p.quantityPerUnit}}</th>
+                                            <th>${{p.productUnitPrice}}</th>
+                                            <th>{{p.unitStock}}</th>
                                             <th></th>
-                                            <th>上架中</th>
-                                            <th>3</th>
-                                            <th><a herf="#">評價</a>評價</th>
-                                            <th>V</th>
+                                            <th>{{p.uniOnOrder}}</th>
+                                            <th>{{p.addedTime}}</th>
+                                            <th>{{p.removedTime}}</th>
+                                            <th>{{p.statusName}}</th>
+                                            <th>{{p.productRecommendation}}</th>
+                                            <th><a v-bind:href="'/Shop/ProductDetail?id='+ p.productId">評價</a></th>
+                                            <th>{{p.productHomePage}}</th>
                                         </tr>
-                                        <tr class="text-center">
-                                            <th>#1112</th>
-                                            <th>蛙鞋</th>
-                                            <th>1雙</th>
-                                            <th>$1200</th>
-                                            <th>8</th>
-                                            <th>1</th>
-                                            <th>3</th>
-                                            <th>2022/10/05</th>
-                                            <th></th>
-                                            <th>上架中</th>
-                                            <th>4</th>
-                                            <th><a herf="#">評價</a>評價</th>
-                                            <th>V</th>
-                                        </tr>
-
                                     </tbody>
                                 </table>
                             </div>
@@ -91,14 +71,42 @@
 
         </div>
     </div>
-    <!-- DATA TABLE SCRIPTS -->
-    <script src="~/assets/js/dataTables/jquery.dataTables.js"></script>
-    <script src="~/assets/js/dataTables/dataTables.bootstrap.js"></script>
+    @section Scripts{
+        <!-- DATA TABLE SCRIPTS -->
+        <script src="~/assets/js/dataTables/jquery.dataTables.js"></script>
+        <script src="~/assets/js/dataTables/dataTables.bootstrap.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('#dataTables-example').dataTable();
+            });
+        </script>
     <script>
-        $(document).ready(function () {
-            $('#dataTables-example').dataTable();
-        });
-    </script>
+        var VuePage = new Vue({
+            el: "#VuePage",
+            data: {
+                Products: [],
+                selected: '',
+                selectAll: '',
+                ErrMsg: '',
+                Success: '',
+            },
+            mounted: function () {
+                var self = this;
+                axios({
+                    method: 'get',
+                    url: '/Administrators/AdministratorApi/GetAllProduct'
+                })
+                    .then(function (res) {
+                        console.log(res);
+                        self.Products = res.data;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
 
-</body>
-</html>
+        });
+
+    </script>
+    }
+ 
