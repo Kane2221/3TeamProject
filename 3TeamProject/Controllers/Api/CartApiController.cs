@@ -26,8 +26,8 @@ namespace _3TeamProject.Controllers.Api
             //var C = CartItem.Count;
             //var temp= CartItem[0].ProductId;
             var ids = CartItem.Select(x => x.ProductId).ToList();
-            var quantity = CartItem.Select(q=>q.Quantity).ToList();
-            var subTotal = CartItem.Select(m=>m.SubTotal).ToList();
+            //var quantity = CartItem.Select(q=>q.Quantity).ToList();
+            //var subTotal = CartItem.Select(m=>m.SubTotal).ToList();
 
             var cart = _context.Products.Include(x => x.ProductsPictureInfos)
                 .Where(x => ids.Contains(x.ProductId)).ToList()
@@ -43,26 +43,7 @@ namespace _3TeamProject.Controllers.Api
                     
 
                 });
-            //var sss = _context.Products.Select(x=>x).ToList();
 
-
-
-            //var cart = from p in _context.Products
-            //           join i in _context.ProductsPictureInfos
-            //           on p.ProductId equals i.ProductId
-            //           where p.ProductId== CartItem.First().ProductId
-            //           select new CartApiDto
-            //           {
-            //               ProductId = p.ProductId,
-            //               UnitStock = p.UnitStock,
-            //               ProductName = p.ProductName,
-            //               ProductUnitPrice = p.ProductUnitPrice,
-            //               ProductPicturePath = i.ProductPicturePath,
-            //               Amount = CartItem.First().Amount,
-            //               //SubTotal = CartItem.Sum(n => n.SubTotal)
-            //           };
-            //var cartinfo = from product in _context.Products
-            //               join cart in Models.Cart
             return Ok(cart);
         }
     }

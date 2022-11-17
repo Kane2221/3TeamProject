@@ -3,12 +3,14 @@ using _3TeamProject.Extensions;
 using _3TeamProject.Extensions.Util;
 using _3TeamProject.Helpers;
 using _3TeamProject.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Data;
 using System.IO;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -22,6 +24,7 @@ namespace _3TeamProject.Controllers
     {
         private readonly IHostEnvironment environment;
         private _3TeamProjectContext _context;
+        private IConfiguration Config;
         private BankInfoModel _bankInfoModel = new BankInfoModel
         {
             //MerchantID = "MS144606325",
@@ -33,9 +36,10 @@ namespace _3TeamProject.Controllers
             AuthUrl = "https://ccore.spgateway.com/MPG/mpg_gateway",
             CloseUrl = "https://core.newebpay.com/API/CreditCard/Close"
         };
-        public ShopController(_3TeamProjectContext context)
+        public ShopController(_3TeamProjectContext context, IConfiguration config)
         {
             this._context = context;
+            Config = config;
         }
         public IActionResult Index()
         {
@@ -128,6 +132,7 @@ namespace _3TeamProject.Controllers
             //return NoContent();
             return RedirectToAction ("Cart");
         }
+        [Authorize(Roles = "Members")]
         [HttpGet("/Shop/Checkout")]
         public IActionResult Checkout()
         {
@@ -192,7 +197,7 @@ namespace _3TeamProject.Controllers
 
             
             string version = "1.5";
-            IConfiguration Config = new ConfigurationBuilder().AddJsonFile("appSettings.json").Build();
+            Config = new ConfigurationBuilder().AddJsonFile("appSettings.json").Build();
             TradeInfo tradeInfo = new TradeInfo()
             {
                 // * 商店代號
@@ -205,7 +210,7 @@ namespace _3TeamProject.Controllers
                 Version = version,
                 // * 商店訂單編號
                 //MerchantOrderNo = $"T{DateTime.Now.ToString("yyyyMMddHHmm")}",
-                MerchantOrderNo = lastOrder.OrderId.ToString(),
+                MerchantOrderNo = (lastOrder.OrderId+1).ToString(),
                 //MerchantOrderNo = "A45645641a1a1",
                 // * 訂單金額
                 //Amt = payDto.amount,
