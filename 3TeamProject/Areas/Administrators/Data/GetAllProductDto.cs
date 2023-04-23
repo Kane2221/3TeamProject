@@ -15,5 +15,6 @@
         public string? ProductIntroduce { get; set; }
         public string StatusName { get; set; } = null!;
         public int? ProductHomePage { get; set; }
+        public int? ProductStatusId { get; set; }
     }
 }

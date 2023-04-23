@@ -1,142 +1,170 @@
 ﻿@{
     Layout = "_Backstage";
 }
-@section Head{
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    </head>
-}
-
-    <!-- /. NAV SIDE  -->
-        <div id="page-wrapper">
-        <div id="page-inner" style="margin-top:0px">
-
-                <div class="row">
-                    <div class="col-xs-12 col-sm-6 col-md-3">
-                        <div class="card horizontal cardIcon waves-effect waves-dark">
-                            <div class="card-image red">
-                                <i class="fa fa-eye fa-5x"></i>
-                            </div>
-                            <div class="card-stacked">
-                                <div class="card-content">
-                                    <h3>5</h3>
-                                </div>
-                                <div class="card-action">
-                                    <strong> 待審核商品</strong>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-6 col-md-3">
-                        <div class="card horizontal cardIcon waves-effect waves-dark">
-                            <div class="card-image red">
-                                <i class="fa fa-eye fa-5x"></i>
-                            </div>
-                            <div class="card-stacked">
-                                <div class="card-content">
-                                    <h3>3</h3>
-                                </div>
-                                <div class="card-action">
-                                    <strong> 待審核廠商</strong>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xs-12 col-sm-6 col-md-3">
-                        <div class="card horizontal cardIcon waves-effect waves-dark">
-                            <div class="card-image orange">
-                                <i class="fa fa-shopping-cart fa-5x"></i>
-                            </div>
-                            <div class="card-stacked">
-                                <div class="card-content">
-                                    <h3>20</h3>
-                                </div>
-                                <div class="card-action">
-                                    <strong> 待付款資料</strong>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-6 col-md-3">
-                        <div class="card horizontal cardIcon waves-effect waves-dark">
-                            <div class="card-image orange">
-                                <i class="fa fa-shopping-cart fa-5x"></i>
-                            </div>
-                            <div class="card-stacked">
-                                <div class="card-content">
-                                    <h3>50</h3>
-                                </div>
-                                <div class="card-action">
-                                    <strong> 待出貨資料</strong>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xs-12 col-sm-6 col-md-3">
-                        <div class="card horizontal cardIcon waves-effect waves-dark">
-                            <div class="card-image blue">
-                                <i class="fa fa-check-circle-o fa-5x"></i>
-                            </div>
-                            <div class="card-stacked">
-                                <div class="card-content">
-                                    <h3>25</h3>
-                                </div>
-                                <div class="card-action">
-                                <strong> 已出貨訂單</strong>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-6 col-md-3">
-                        <div class="card horizontal cardIcon waves-effect waves-dark">
-                            <div class="card-image blue">
-                                <i class="fa fa-dollar fa-5x"></i>
-                            </div>
-                            <div class="card-stacked">
-                                <div class="card-content">
-                                    <h3>31,225</h3>
-                                </div>
-                                <div class="card-action">
-                                    <strong> 本月銷售金額</strong>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-6 col-md-3">
-                        <div class="card horizontal cardIcon waves-effect waves-dark">
-                            <div class="card-image">
-                                <i class="fa fa-users fa-5x"></i>
-                            </div>
-                            <div class="card-stacked">
-                                <div class="card-content">
-                                    <h3>525</h3>
-                                </div>
-                                <div class="card-action">
-                                    <strong> 會員數</strong>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-6 col-md-3">
-                        <div class="card horizontal cardIcon waves-effect waves-dark">
-                            <div class="card-image">
-                                <i class="fa fa-thumbs-up fa-5x"></i>
-                            </div>
-                            <div class="card-stacked">
-                                <div class="card-content">
-                                    <h3>11</h3>
-                                </div>
-                                <div class="card-action">
-                                    <strong> 發起活動數量</strong>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-1 mt-1">
+            <div class="col-sm-6">
+                <h1 class="m-0">後台首頁</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item active">Home</li>
+                </ol>
             </div>
         </div>
+    </div>
+</div>
+<!-- /.content-header -->
+<!-- Main content -->
+<section id="VueDashPage" class="content">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-6 g-3">
+                <div class="card text-center text-bg-secondary" style="width: 250px;">
+                    <div class="card-body">
+                        <h3 class="card-title">{{dash.monthlySales}}</h3>
+                        <p class="card-text">本月銷售金額</p>
+                        <a href="/Backstage/Order" class="btn btn-primary">更多資訊<i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6 g-3">
+                <div class="card text-center text-bg-secondary" style="width: 250px;">
+                    <div class="card-body">
+                        <h3 class="card-title">{{dash.memberCount}}</h3>
+                        <p class="card-text">會員數</p>
+                        <a href="/Backstage/Member" class="btn btn-primary">更多資訊<i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6 g-3">
+                <div class="card text-center text-bg-secondary" style="width: 250px;">
+                    <div class="card-body">
+                        <h3 class="card-title">{{dash.activityCount}}</h3>
+                        <p class="card-text">發起活動數量</p>
+                        <a href="/Backstage/Community" class="btn btn-primary">更多資訊<i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6 g-3">
+                <div class="card text-center text-bg-secondary" style="width: 250px;">
+                    <div class="card-body">
+                        <h3 class="card-title">{{dash.activityMessageCount}}</h3>
+                        <p class="card-text">活動總留言數</p>
+                        <a href="/Backstage/Community" class="btn btn-primary">更多資訊<i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6 g-3">
+                <div class="card text-center text-bg-secondary" style="width: 250px;">
+                    <div class="card-body">
+                        <h3 class="card-title">{{dash.unpaymentOrderCount}}</h3>
+                        <p class="card-text">待付款訂單</p>
+                        <a href="/Backstage/Order" class="btn btn-primary">更多資訊<i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6 g-3">
+                <div class="card text-center text-bg-secondary" style="width: 250px;">
+                    <div class="card-body">
+                        <h3 class="card-title">{{dash.unShipOrderCount}}</h3>
+                        <p class="card-text">未出貨訂單</p>
+                        <a href="/Backstage/Order" class="btn btn-primary">更多資訊<i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6 g-3">
+                <div class="card text-center text-bg-secondary" style="width: 250px;">
+                    <div class="card-body">
+                        <h3 class="card-title">{{dash.unpaymentOrderCount}}</h3>
+                        <p class="card-text">待審核商品</p>
+                        <a href="/Backstage/Product" class="btn btn-primary">更多資訊<i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6 g-3">
+                <div class="card text-center text-bg-secondary" style="width: 250px;">
+                    <div class="card-body">
+                        <h3 class="card-title">{{dash.unproveSpplierCount}}</h3>
+                        <p class="card-text">待審核廠商</p>
+                        <a href="/Backstage/Supplier" class="btn btn-primary">更多資訊<i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div>
+        <h2 class="m-2">月銷售額</h2>
+    </div class="mb-40">
+    <div class="chart-container" style="position: relative; width:80vw; margin: auto">
+        <canvas id="myChart" aria-label="月銷售額" role="img"></canvas>
+    </div>
+
+</section>
+<!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+@section Scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script>
+        var VueDashPage = new Vue({
+            el: "#VueDashPage",
+            data: {
+                dash: [],
+                ErrMsg: '',
+                Success: ''
+            },
+            mounted: function () {
+                this.getDash();
+            },
+            methods: {
+                getDash: function () {
+                    var self = this;
+                    axios({
+                        method: 'get',
+                        url: '/Administrators/AdministratorApi/GetDash'
+                    })
+                        .then(function (res) {
+                            console.log(res);
+                            self.dash = res.data;
+                            const yearsMonths = self.dash.sixMonthlySales.map(sale => sale.date);
+                            const sales = self.dash.sixMonthlySales.map(sale => sale.sales);
+                            const ctx = document.getElementById('myChart');
+                            let chart = new Chart(ctx, {
+                                type: 'bar',
+                                data: {
+                                    labels: yearsMonths,
+                                    datasets: [{
+                                        label: '銷售額',
+                                        data: sales,
+                                        borderWidth: 1,
+                                        backgroundColor: '#34E1EB'
+                                    }]
+                                },
+                                options: {
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true
+                                        }
+                                    },
+                                    layout: {
+                                        padding: 20
+                                    }
+                                }
+                            });
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                }
+            }
+        });
+
+    </script>
+}
+
+

@@ -1,13 +1,17 @@
 ﻿using _3TeamProject.Areas.Suppliers.Data;
 using _3TeamProject.Data;
 using _3TeamProject.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 using System.Security.Claims;
 
 namespace _3TeamProject.Controllers
 {
-    //[Route("/Supplier/[Action]")]
+
+    [Authorize(Roles = "Suppliers")]
+    [Route("/Supplier/[Action]")]
     public class SupplierController : Controller
     {
         private IHostEnvironment environment;
@@ -17,15 +21,17 @@ namespace _3TeamProject.Controllers
             this._context = context;
             this.environment = environment;
         }
-
+        [AllowAnonymous]
         public IActionResult Login()
         {
             return View();
         }
+        [AllowAnonymous]
         public IActionResult Register()
         {
             return View();
         }
+        [AllowAnonymous]
         public IActionResult ForgetPwd()
         {
             return View();
@@ -97,10 +103,12 @@ namespace _3TeamProject.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("OrderList");
         }
+        [AllowAnonymous]
         public IActionResult Verify()
         {
             return View();
         }
+        [AllowAnonymous]
         public IActionResult ResetPwd()
         {
             return View();

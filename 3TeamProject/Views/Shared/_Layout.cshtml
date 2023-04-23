@@ -7,17 +7,12 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 
-    @*<link rel="stylesheet" href="~/_3TeamProject.styles.css" asp-append-version="true" />*@
-    
-
     <!-- Axios -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <!-- SweetAlert -->
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@@11"></script>
-
-   @* <link rel="stylesheet" href="~/Project2.styles.css" asp-append-version="true" />*@
     <!-- Favicon -->
-    <link href="~/img/favicon.ico" rel="icon">
+    <link href="/favicon.ico" rel="icon">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -36,7 +31,6 @@
 </head>
 <body>
     <header>
-
         <!-- Topbar Start -->
         <div class="container-fluid bg-light pt-3 d-none d-lg-block">
             <div class="container">
@@ -84,17 +78,13 @@
                     <div class="collapse navbar-collapse justify-content-between px-3" id="navbarCollapse">
                         <div class="navbar-nav ml-auto py-0">
                             <div class="nav-item">
-                                <a class="nav-item nav-link" asp-area="" asp-controller="Member" asp-action="Login">會員專區</a>
+                                <a class="nav-item nav-link" asp-area="" asp-controller="Member" asp-action="Memberprofile">會員專區</a>
                             </div>
                             <div class="nav-item">
-                                <a class="nav-item nav-link" asp-area="" asp-controller="Supplier" asp-action="Login">廠商專區</a>
+                                <a class="nav-item nav-link" asp-area="" asp-controller="Supplier" asp-action="SupplierProfile">廠商專區</a>
                             </div>
                             <div class="nav-item">
-
-                                @*<a class="nav-item nav-link" asp-area="" asp-controller="Product" asp-action="Index">購物商城</a>*@
-
                                 <a class="nav-item nav-link" asp-area="" asp-controller="Shop" asp-action="Index">購物商城</a>
-
                             </div>
                             <div class="nav-item">
                                 <a class="nav-item nav-link" asp-area="" asp-controller="Activity" asp-action="Index">社群揪團</a>
@@ -140,7 +130,7 @@
     </footer>
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="fa fa-angle-double-up"></i></a>
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@@3.4.1/dist/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/easing/easing.min.js"></script>
     <script src="~/lib/owlcarousel/owl.carousel.min.js"></script>
@@ -153,12 +143,12 @@
     <script src="~/mail/contact.js"></script> -->
 
     <!-- Template Javascript -->
-    <script src="~/js/main.js"></script>
-    <script src="~/js/mainmember.js"></script>
+    <script src="/js/main.js"></script>
+    @* <script src="/js/mainmember.js"></script> *@
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    @* <script src="~/js/site.js" asp-append-version="true"></script> *@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

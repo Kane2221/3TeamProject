@@ -92,9 +92,7 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
                         PasswordHash = passwordHsah,
                         PasswordSalt = passwordSalt,
                         VerificationToken = verifyToken,
-
                         Roles = 2
-
                     }
                 };
                 #region Send Email with verify code (正式再解開註解)
@@ -126,15 +124,22 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
         [HttpPut("Update/{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateSupplierDto request)
         {
+            var UserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
+            var supplier = _context.Suppliers.Include(s => s.User).Where(s => s.UserId == UserId)
+                .Select(s => s).SingleOrDefault();
             if (!ModelState.IsValid)
             {
                 var errors = ModelState.Select(x => x.Value.Errors).Where(y => y.Count > 0).ToList();
                 return BadRequest(errors);
             }
-            var UserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
-            var supplier = _context.Suppliers.Include(s => s.User).Where(s => s.UserId == UserId)
-                .Select(s => s).SingleOrDefault();
-
+            if (id != UserId)
+            {
+                return BadRequest("刪除帳號與登入帳號不符!");
+            }
+            if (supplier == null)
+            {
+                return BadRequest("無此帳號!");
+            }
             using (var hmac = new HMACSHA512())
             {
                 var passwordSalt = hmac.Key;
@@ -169,7 +174,7 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
         }
         //廠商管理的所有商品資料by登入帳號
         [HttpGet("GetProduct")]
-        public IActionResult GetProduct() //TODO 待測_廠商管理商品
+        public IActionResult GetProduct() //待測_廠商管理商品
         {
             var UserID = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
             var products = _context.Products.Include(p => p.ProductStatus).Include(p => p.ProductCategory)
@@ -250,29 +255,68 @@ namespace _3TeamProject.Areas.Sppliers.Controllers
             _context.SaveChanges();
             return Ok("已新增商品");
         }
-        //TODO 商品修改
-        //TODO 商品下架(下架後隱藏)
-        //首頁商品主打區
-        [HttpGet("GetProductHome")]
-        public ActionResult<List<Product>> Get()
+        //商品修改by登入帳號
+        [HttpPut("UpdateProduct/{id}")]
+        public async Task<IActionResult> UpdateProduct(int? id, [FromBody] UpdateProductDto request)
         {
-            var productFound = (from product in _context.Products
-                                join Info in _context.ProductsPictureInfos
-                                on product.ProductId equals Info.ProductId
-                                join cate in _context.ProductCategories
-                                on product.ProductCategoryId equals cate.CategoryId
-                                where product.ProductHomePage == 1
-                                orderby product.ProductId
-                                select new
-                                {
-                                    ProductIntroduce = product.ProductIntroduce,
-                                    ProductCategoryName = cate.CategoryName,
-                                    ProductName = product.ProductName,
-                                    ProductUnitPrice = product.ProductUnitPrice,
-                                    ProductPicturePath = Info.ProductPicturePath
+            var UserID = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
+            var product = await _context.Products.Include(s=>s.Supplier)
+                .FirstOrDefaultAsync(a => a.ProductId == id);
+            if (product == null)
+            {
+                return BadRequest("無此商品");
+            }
+            if (product.Supplier.UserId != UserID)
+            {
+                return BadRequest("不是登入廠商的商品");
+            }
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Select(x => x.Value.Errors).Where(y => y.Count > 0).ToList();
+                return BadRequest(errors);
+            }
+            product.ProductName = request.ProductName;
+            product.ProductStatusId = request.ProductStatusId;
+            product.ProductCategoryId = request.ProductCategoryID;
+            product.ProductIntroduce = request.ProductIntroduce;
+            product.ProductUnitPrice = request.ProductUnitPrice;
+            product.QuantityPerUnit = request.QuantityPerUnit;
+            product.UnitStock = request.UnitStock;
 
-                                });
-            return Ok(productFound);
+            _context.Products.Update(product);
+            await _context.SaveChangesAsync();
+            return Ok("修改成功!");
+        }
+        //首頁商品主打區
+        [HttpPut("GetProductHome")]
+        public IActionResult GetProductHome(List<int> request)
+        {
+            if (request == null)
+            {
+                return BadRequest("無勾選設定首頁項目");
+            }
+            if (request.Count > 5)
+            {
+                return BadRequest("最大設定數量為5個");
+            }
+            var LastSelectedProducts = _context.Products.Where(p => p.ProductHomePage != 1);
+            if (LastSelectedProducts.Any())
+            {
+                foreach (Product item in LastSelectedProducts)
+                {
+                    item.ProductHomePage = 1;
+                }
+            }
+
+
+            var SelectedProducts = _context.Products.Where(p => request.Contains(p.ProductId));
+            foreach (Product item in SelectedProducts)
+            {
+                item.ProductHomePage = 0;
+            }
+
+            _context.SaveChanges();
+            return Ok("已設定");
         }
     }
 }

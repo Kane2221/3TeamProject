@@ -41,15 +41,12 @@
 							</div>
 							<div class="form-group d-md-flex">
 								<div class="w-50 text-left">
-									<label class="checkbox-wrap checkbox-primary mb-0">
-										記住我的帳號
-										<input type="checkbox" checked>
-										<span class="checkmark"></span>
-									</label>
+									<input id="check" type="checkbox" v-model="Remember">
+									<label for="check">記住我的帳號</label>
 								</div>
-								<div class="w-50 text-md-right">
+								@* <div class="w-50 text-md-right">
 									<a data-toggle="click" href="/Supplier/ForgetPwd">忘記密碼</a>
-								</div>
+								</div> *@
 							</div>
 						</form>
 						@*<p class="text-center"> <a data-toggle="click" href="/Supplier/Register">點此註冊</a></p>*@
@@ -57,20 +54,6 @@
 				</div>
 			</div>
 		</div>
-
-		<!--使用 Bootstrap Modal 樣式，當執行有錯誤時，顯示錯誤訊息-->
-		<div class="modal fade" id="ErrorAlert" tabindex="-1" role="dialog">
-			<div class="modal-dialog modal-lg" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						<h4 class="modal-title">錯誤訊息</h4>
-					</div>
-					<div class="modal-body" id="ErrorMsg" style="overflow-x:auto;width:100%;">
-					</div>
-				</div><!-- /.modal-content -->
-			</div><!-- /.modal-dialog -->
-		</div><!-- /.modal -->
 	</div>
 
 	@section scripts {
@@ -81,8 +64,16 @@
 					Account: '',
 					Password: '',
 					ErrMsg: '',
-					Success: ''
+					Success: '',
+					Remember: false
 				},
+				mounted: function () {
+                    const storedAccount = localStorage.getItem('Account');
+					if (storedAccount) {
+						this.Account = storedAccount;
+						this.Remember = true;
+					}
+					},
 				methods: {
 					confirm: function () {
 						var self = this;
@@ -93,9 +84,15 @@
 								Account: self.Account,
 								Password: self.Password
 							}
-						})
+							})
 							.then(function (response) {
 								self.Success = response.data;
+								if (self.Remember){
+                                	localStorage.setItem('Account', self.Account);
+								}
+								else {
+									localStorage.removeItem('Account');
+								}
 								Swal.fire({
 									title: self.Success,
 									icon: 'success',

@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace _3TeamProject.Controllers
 {
+    //[Authorize(Policy = "AdminPolicy")]
+    [Authorize(Roles = ("Administrator, ChiefAdministrator, SuperAdministrator"))]
     public class BackstageController : Controller
     {
         public IActionResult Dashboard()
@@ -40,6 +43,7 @@ namespace _3TeamProject.Controllers
         {
             return View();
         }
+        [AllowAnonymous]
         public IActionResult Login()
         {
             return View();

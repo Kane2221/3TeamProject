@@ -15,9 +15,10 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace _3TeamProject.Controllers
 {
+    [Authorize(Roles = "Members")]
     public class MemberController : Controller
     {
-        //        
+        [AllowAnonymous]        
         public IActionResult Register()
         {
             return View();
@@ -27,11 +28,12 @@ namespace _3TeamProject.Controllers
         {
             return View();
         }
-
+        [AllowAnonymous]
         public IActionResult Login()
         {
             return View();
         }
+        [AllowAnonymous]
         public IActionResult GoogleLogin()
         {
             AuthenticationProperties authentication = new AuthenticationProperties()
@@ -41,6 +43,7 @@ namespace _3TeamProject.Controllers
             };
             return Challenge(authentication, GoogleDefaults.AuthenticationScheme);
         }
+        [AllowAnonymous]
         public async Task<IActionResult> LoginResult()
         {
             var token = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
@@ -55,14 +58,17 @@ namespace _3TeamProject.Controllers
             //return Json(result);
             return Redirect("/Home");
         }
+        [AllowAnonymous]
         public IActionResult ForgetPwd()
         {
             return View();
         }
+        [AllowAnonymous]
         public IActionResult ResetPwd()
         {
             return View();
         }
+        [AllowAnonymous]
         public IActionResult Verify()
         {
             return View();

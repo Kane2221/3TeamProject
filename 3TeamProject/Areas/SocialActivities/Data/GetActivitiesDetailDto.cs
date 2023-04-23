@@ -15,6 +15,8 @@ namespace _3TeamProject.Areas.SocialActivities.Data
         public int JoinCount { get; set; }
         public DateTime ActitiesStartDate { get; set; }
         public DateTime ActitiesFinishDate { get; set; }
+        public string? ActivityPictureName { get; set; }
+        public string? ActivityPicturePath { get; set; }
 
         public virtual IEnumerable<GetActMsgBoardDto>? ActivitiesMessageBoards { get; set; }
     }

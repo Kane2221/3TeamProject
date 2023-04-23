@@ -5,32 +5,31 @@ namespace _3TeamProject.Areas.Suppliers.Data
 {
     public class UpdateSupplierDto
     {
-        //[Required, EmailAddress]
+        [Required, EmailAddress]
         public string? Email { get; set; }
-
-        //[Required, MinLength(8), PasswordPropertyText]
+        [Required, MinLength(8), PasswordPropertyText]
         public string? Password { get; set; }
-
-        //[Required, Compare("Password"), PasswordPropertyText]
+        [Required, Compare("Password"), PasswordPropertyText]
         public string? ComfirmPassword { get; set; }
-
-        //[Required]
+        [Required]
         public string? ContactName { get; set; }
+        [Required]
         public string? CompanyName { get; set; }
-        //[Required]
+        [Required]
         public int TaxId { get; set; }
+        [Required]
         public string? Fax { get; set; }
-        //[Required]
+        [Required]
         public string? CellPhoneNumber { get; set; }
-        //[Required]
-        public string? SupplierPhoneNumber { get; set; } 
-        //[Required]
-        public string? SupplierPostalCode { get; set; } 
-        //[Required]
+        [Required]
+        public string? SupplierPhoneNumber { get; set; }
+        [Required]
+        public string? SupplierPostalCode { get; set; }
+        [Required]
         public string? SupplierCountry { get; set; }
-        //[Required]
-        public string? SupplierCity { get; set; } 
-        //[Required]
+        [Required]
+        public string? SupplierCity { get; set; }
+        [Required]
         public string? SupplierAddress { get; set; }
     }
 }

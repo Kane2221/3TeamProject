@@ -38,8 +38,6 @@ namespace _3TeamProject.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ActivitiesMessageState")
-                        .HasMaxLength(10)
-                        .IsUnicode(false)
                         .HasColumnType("int");
 
                     b.Property<int>("ActivityId")
@@ -114,6 +112,32 @@ namespace _3TeamProject.Migrations
                         .HasName("PK__Administ__7EDF6BB32262A51C");
 
                     b.ToTable("AdministratorStatusCategory", (string)null);
+                });
+
+            modelBuilder.Entity("_3TeamProject.Models.JoinMember", b =>
+                {
+                    b.Property<int>("JoinId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("JoinID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("JoinId"), 1L, 1);
+
+                    b.Property<int>("ActivitiesId")
+                        .HasColumnType("int")
+                        .HasColumnName("ActivitiesID");
+
+                    b.Property<int>("MemberId")
+                        .HasColumnType("int")
+                        .HasColumnName("MemberID");
+
+                    b.HasKey("JoinId");
+
+                    b.HasIndex("ActivitiesId");
+
+                    b.HasIndex("MemberId");
+
+                    b.ToTable("JoinMember", (string)null);
                 });
 
             modelBuilder.Entity("_3TeamProject.Models.Member", b =>
@@ -793,6 +817,7 @@ namespace _3TeamProject.Migrations
                         .HasColumnType("varchar(20)");
 
                     b.Property<string>("CompanyName")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -802,6 +827,7 @@ namespace _3TeamProject.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Fax")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("varchar(20)");
@@ -833,7 +859,7 @@ namespace _3TeamProject.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(20)");
 
-                    b.Property<int?>("SupplierStatusId")
+                    b.Property<int>("SupplierStatusId")
                         .HasColumnType("int")
                         .HasColumnName("SupplierStatusID");
 
@@ -909,20 +935,25 @@ namespace _3TeamProject.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("varbinary(128)");
 
+                    b.Property<string>("PicturePath")
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
                     b.Property<DateTime?>("ResetTokenExpires")
                         .HasColumnType("datetime");
 
                     b.Property<int?>("Roles")
                         .HasColumnType("int");
 
-                    b.Property<string>("VerficationToken")
+                    b.Property<DateTime?>("VerfiedAt")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("VerificationToken")
                         .IsRequired()
                         .HasMaxLength(128)
                         .IsUnicode(false)
                         .HasColumnType("varchar(128)");
-
-                    b.Property<DateTime?>("VerfiedAt")
-                        .HasColumnType("datetime");
 
                     b.HasKey("UserId");
 
@@ -968,6 +999,25 @@ namespace _3TeamProject.Migrations
                     b.Navigation("AdministratorStatus");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("_3TeamProject.Models.JoinMember", b =>
+                {
+                    b.HasOne("_3TeamProject.Models.SocialActivity", "Activities")
+                        .WithMany("JoinMembers")
+                        .HasForeignKey("ActivitiesId")
+                        .IsRequired()
+                        .HasConstraintName("FK_JoinMember_SocialActivities");
+
+                    b.HasOne("_3TeamProject.Models.Member", "Member")
+                        .WithMany("JoinMembers")
+                        .HasForeignKey("MemberId")
+                        .IsRequired()
+                        .HasConstraintName("FK_JoinMember_Members");
+
+                    b.Navigation("Activities");
+
+                    b.Navigation("Member");
                 });
 
             modelBuilder.Entity("_3TeamProject.Models.Member", b =>
@@ -1179,6 +1229,8 @@ namespace _3TeamProject.Migrations
                     b.HasOne("_3TeamProject.Models.SupplierStatusCategoy", "SupplierStatus")
                         .WithMany("Suppliers")
                         .HasForeignKey("SupplierStatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
                         .HasConstraintName("FK_Suppliers_SupplierStatusCategoy");
 
                     b.HasOne("_3TeamProject.Models.User", "User")
@@ -1217,6 +1269,8 @@ namespace _3TeamProject.Migrations
 
             modelBuilder.Entity("_3TeamProject.Models.Member", b =>
                 {
+                    b.Navigation("JoinMembers");
+
                     b.Navigation("Orders");
 
                     b.Navigation("ProductsMessageBoards");
@@ -1293,6 +1347,8 @@ namespace _3TeamProject.Migrations
             modelBuilder.Entity("_3TeamProject.Models.SocialActivity", b =>
                 {
                     b.Navigation("ActivitiesMessageBoards");
+
+                    b.Navigation("JoinMembers");
                 });
 
             modelBuilder.Entity("_3TeamProject.Models.Supplier", b =>

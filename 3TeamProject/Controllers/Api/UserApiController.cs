@@ -33,7 +33,7 @@ namespace _3TeamProject.Controllers.Api
             var user = await _context.Users.Include(u => u.RolesNavigation)
                 .Include(u=>u.Members).Include(u=>u.Suppliers)
                 .FirstOrDefaultAsync(u => u.Account == request.Account);
-            if (user == null || 
+            if (user == null ||
                 user.Members.Where(m=>m.MemberStatusId == 4).SingleOrDefault() != null || 
                 user.Suppliers.Where(s=>s.SupplierStatusId == 3).SingleOrDefault() != null)
             {
@@ -183,6 +183,10 @@ namespace _3TeamProject.Controllers.Api
         {
             var UserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
             var user = _context.Users.FirstOrDefault(x => x.UserId == UserId);
+            if (user == null)
+            {
+                NotFound("找不到使用者");
+            }
             //為每一張上傳圖片給值及上傳位置
             if (request.UserPicFiles != null)
             {
@@ -203,10 +207,12 @@ namespace _3TeamProject.Controllers.Api
                     var path = tempRoot +"\\" + request.UserPicFiles.FileName;
                     request.UserPicFiles.CopyTo(System.IO.File.Create(path));
                     user.PicturePath = "\\" + path.Replace(root, "");
+                    _context.Users.Update(user);
+                _context.SaveChanges();
+                return Ok("已上傳成功");
             }
-            _context.Users.Update(user);
-            _context.SaveChanges();
-            return Ok("已上傳成功");
+            return NotFound("沒有圖片");
+            
         }
     }
 }

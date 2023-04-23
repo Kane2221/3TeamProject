@@ -1,4 +1,5 @@
 using _3TeamProject.Models;
+using _3TeamProject.Service;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -6,44 +7,68 @@ using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var TeamProjectconnectionString = builder.Configuration.GetConnectionString("Team3ProjectOnline");
+var TeamProjectconnectionString = builder.Configuration.GetConnectionString("Team3Project");
 builder.Services.AddDbContext<_3TeamProjectContext>(options =>
     options.UseSqlServer(TeamProjectconnectionString));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-//·s¼WCORS
+builder.Services.AddScoped<MailService>();
+
+//CORS
 //builder.Services.AddCors(c =>
 //    c.AddPolicy(
 //    name: "AllowOrigin",
 //    policy => policy.WithOrigins("https://localhost:7007").WithHeaders("*").WithMethods("*")));
 
 
-//·s¼WCookieÅçÃÒ¡A²Ä¤G¬q¬°·s¼WGoogle²Ä¤T¤èµn¤J»{ÃÒ¡C
+//ï¿½sï¿½WCookieï¿½ï¿½ï¿½Ò¡Aï¿½Ä¤Gï¿½qï¿½ï¿½ï¿½sï¿½WGoogleï¿½Ä¤Tï¿½ï¿½nï¿½Jï¿½{ï¿½Ò¡C
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(opt => {
-        opt.AccessDeniedPath = "/Home";
         opt.LoginPath = "/Home";
         opt.ExpireTimeSpan = TimeSpan.FromMinutes(180);
-       
+        opt.LogoutPath = "/Home";
+        opt.AccessDeniedPath = "/Home";
+        opt.Events = new CookieAuthenticationEvents {
+            OnRedirectToLogin = context => {
+                // å¦‚æžœæœªç¶“èº«ä»½é©—è­‰çš„ç”¨æˆ¶è¨ªå•/backstage/ä»¥ä¸‹çš„ç¶²é ï¼Œå‰‡é‡å®šå‘åˆ°/backstage/login
+                if (context.Request.Path.StartsWithSegments("/backstage"))
+                {
+                    context.Response.Redirect("/backstage/login");
+                }
+                // å¦‚æžœæœªç¶“èº«ä»½é©—è­‰çš„ç”¨æˆ¶è¨ªå•/member/ä»¥ä¸‹çš„ç¶²é ï¼Œå‰‡é‡å®šå‘åˆ°/member/login
+                else if (context.Request.Path.StartsWithSegments("/member"))
+                {
+                    context.Response.Redirect("/member/login");
+                }
+                // å¦‚æžœæœªç¶“èº«ä»½é©—è­‰çš„ç”¨æˆ¶è¨ªå•/supplier/ä»¥ä¸‹çš„ç¶²é ï¼Œå‰‡é‡å®šå‘åˆ°/suppier/login
+                else if (context.Request.Path.StartsWithSegments("/Supplier"))
+                {
+                    context.Response.Redirect("/Supplier/login");
+                }
+
+                return Task.CompletedTask;
+            }
+        };
     }).AddGoogle( opt =>
     {
         opt.ClientId= builder.Configuration.GetSection("GoogleOAuth:ID").Value;
         opt.ClientSecret = builder.Configuration.GetSection("GoogleOAuth:Password").Value;
         opt.Events.OnCreatingTicket = ctx =>
         {
-            ctx.Identity.AddClaim(new System.Security.Claims.Claim(ClaimTypes.Role, "Admin")); // Role ¼W¥[ Admin
+            ctx.Identity.AddClaim(new System.Security.Claims.Claim(ClaimTypes.Role, "Admin")); // Role ï¿½Wï¿½[ Admin
             return Task.CompletedTask;
         };
     });
+
 builder.Services.AddSession(
     (opt) =>
     {
         opt.IdleTimeout = TimeSpan.FromMinutes(10);
     });
 
-//·s¼WªºªA°È¡A¬°¤F¦b¦ê±µ¨â±i¥H¤Wªºªí¡A¤£­«ÂÐÅª¨ú
+//ï¿½sï¿½Wï¿½ï¿½ï¿½Aï¿½È¡Aï¿½ï¿½ï¿½Fï¿½bï¿½ê±µï¿½ï¿½iï¿½Hï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åªï¿½ï¿½
 builder.Services.AddMvc()
     .AddNewtonsoftJson(options => 
     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore
@@ -60,7 +85,9 @@ if (!app.Environment.IsDevelopment())
 }
 //app.UseCors();
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
+
 app.UseSession();
 
 app.UseRouting();
@@ -68,7 +95,6 @@ app.UseRouting();
 app.UseAuthentication();
 
 app.UseAuthorization();
-
 
 app.MapControllerRoute(
     name: "default",

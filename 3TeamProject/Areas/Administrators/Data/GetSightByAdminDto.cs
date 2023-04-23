@@ -11,7 +11,9 @@ namespace _3TeamProject.Areas.Administrators.Data
         public string? SightseeingAddress { get; set; }
         public double? SightseeingScore { get; set; }
         public string? CategoryName { get; set; }
+        public int? SightseeingCategoryId { get; set; }
+        public string? SightseeingIntroduce { get; set; }
         public int? SightseeingHomePage { get; set; }
-        public virtual IEnumerable<GetSightPicInfoByAdminDto> SightseeingPictureInfos { get; set; }
+        public virtual IEnumerable<GetSightPicInfoByAdminDto>? SightseeingPictureInfos { get; set; }
     }
 }

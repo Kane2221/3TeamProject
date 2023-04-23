@@ -19,16 +19,14 @@
         <div class="container-fluid" style="background-color:#2f4f4f;">
             <div class="row align-items-center justify-content-center py-3 px-xl-5">
                 <div class="col-lg-6 col-6 text-left ">
-                    <form action="">
                         <div class="input-group">
                             <input type="text" class="form-control" placeholder="搜尋景點">
                             <div class="input-group-append">
-                                <span class="btn input-group-text bg-transparent text-primary">
+                                <span class="btn input-group-text bg-transparent text-primary" v-on:click="searchSight">
                                     <i class="fa fa-search"></i>
                                 </span>
                             </div>
                         </div>
-                    </form>
                 </div>
             </div>
         </div>
@@ -79,18 +77,14 @@
                         <h2 class="accordion-header" id="panelsStayOpen-headingOne">
                             <button class="accordion-button btn-primary collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
                                 景點分類
-
                             </button>
                         </h2>
                         <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
-                            <div class="accordion-body">
+                            <div class="accordion-body" v-for="cat in category">
                                 <button class="btn btn-secondary">
-                                    登山
+                                    {{cat}}
                                 </button>
                                 <br />
-                                <button class="btn btn-secondary">
-                                    潛水
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -101,14 +95,11 @@
                             </button>
                         </h2>
                         <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
-                            <div class="accordion-body">
+                            <div class="accordion-body" v-for="c in city">
                                 <button class="btn btn-secondary">
-                                    台北市
+                                    {{c}}
                                 </button>
                                 <br />
-                                <button class="btn btn-secondary">
-                                    新北市
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -222,7 +213,6 @@
             data: {
                 Sightseeings:[],
                 SightByTheme:[],
-                SightByArea:[],
                 ErrMsg: '',
                 Success: ''
             },
@@ -235,21 +225,29 @@
                 .then(function (res) {
                     console.log(res);
                     self.Sightseeings = res.data;
-                    //var result = new Set(res.data.categoryName);
-                    //self.Category = [...result];
-
                 })
                 .catch(function (error) {
                     console.log(error);
                 })
             },
-            methods:{
-                area: function () {
-                    var sight = self.Sightbyarea;
+            computed:{
+                category(){
                     // 提取出category
-                    const array = self.Sightseeings.map((sight) => self.Sightseeings.categoryName)
-                    // 過濾出重複的元素
+                    const array = this.Sightseeings.map((sight) => sight.categoryName)
+                    // 過濾重複的元素
                     return [...new Set(array)]
+                },
+                city(){
+                    // 提取出category
+                    const array = this.Sightseeings.map((sight) => sight.sightseeingCity)
+                    // 過濾重複的元素
+                    return [...new Set(array)]
+                },
+                
+            },
+            methods:{
+                searchSight: function () {
+                    
                 }
             },
         });

@@ -14,86 +14,121 @@
 
 }
 
-    <div id="VuePage">
-        <!-- Search Bar Start -->
-        <div class="container-fluid" style="background-color:#2f4f4f;">
-            <div class="row align-items-center justify-content-center py-3 px-xl-5">
-                <div class="col-lg-6 col-6 text-left ">
-                    <form action="">
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="搜尋活動">
-                            <div class="input-group-append">
-                                <span class="btn input-group-text bg-transparent text-primary">
-                                    <i class="fa fa-search"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <!-- Search Bar End -->
-        <!-- Theme Start -->
-        <div class="container-fluid pt-5">
-            <div class="text-center mb-3 pb-3">
-                <h1>活動清單</h1>
-            </div>
-        </div>
-        <!-- Theme End -->
-        <!-- Detail Start -->
-        <div class="d-flex justify-content-center">
-            <div class="col-md-2">
-                <div class="accordion" id="accordionPanelsStayOpenExample">
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-                            <button class="accordion-button btn-primary collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                                活動分類
-                            </button>
-                        </h2>
-                        <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
-                            <div class="accordion-body">
-                                <button class="btn btn-secondary">
-                                    登山
-                                </button>
-                                <br />
-                                <button class="btn btn-secondary">
-                                    潛水
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
-                            <button class="accordion-button btn-primary collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-                                活動分區
-                            </button>
-                        </h2>
-                        <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
-                            <div class="accordion-body">
-                                <button class="btn btn-secondary">
-                                    台北市
-                                </button>
-                                <br />
-                                <button class="btn btn-secondary">
-                                    新北市
-                                </button>
-                            </div>
-                        </div>
+<div id="VuePage">
+    <!-- Search Bar Start -->
+    <div class="container-fluid" style="background-color:#2f4f4f;">
+        <div class="row align-items-center justify-content-center py-3 px-xl-5">
+            <div class="col-lg-6 col-6 text-left ">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="搜尋活動">
+                    <div class="input-group-append">
+                        <span class="btn input-group-text bg-transparent text-primary" v-on:click="searchActivity">
+                            <i class="fa fa-search"></i>
+                        </span>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <!-- Search Bar End -->
+    <!-- Theme Start -->
+    <div class="container-fluid pt-5">
+        <div class="text-center mb-3 pb-3">
+            <h1>活動清單</h1>
+        </div>
+    </div>
+    <!-- Theme End -->
+    <!-- Detail Start -->
+    <div class="d-flex justify-content-center">
+        <div class="col-md-2">
+            <div class="accordion" id="accordionPanelsStayOpenExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                        <button class="accordion-button btn-primary collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true"
+                            aria-controls="panelsStayOpen-collapseOne">
+                            活動分類
+                        </button>
+                    </h2>
+                    <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show"
+                        aria-labelledby="panelsStayOpen-headingOne">
+                        <div class="accordion-body">
+                            <button class="btn btn-secondary">
+                                登山
+                            </button>
+                            <br />
+                            <button class="btn btn-secondary">
+                                潛水
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+                        <button class="accordion-button btn-primary collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false"
+                            aria-controls="panelsStayOpen-collapseTwo">
+                            活動分區
+                        </button>
+                    </h2>
+                    <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse"
+                        aria-labelledby="panelsStayOpen-headingTwo">
+                        <div class="accordion-body">
+                            <button class="btn btn-secondary">
+                                台北市
+                            </button>
+                            <br />
+                            <button class="btn btn-secondary">
+                                新北市
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            <div class="col-md-10">
-                <div class="table-responsive">
-                    <input type="button" class="left-align" value="發起活動" v-on:click="postAct" />
+        <div class="col-md-10">
+            <div class="table-responsive">
+                <a class="btn btn-info btn-sm" href="/Activity/AddActivity">發起活動</a>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>活動編號</th>
+                            <th>揪團名稱</th>
+                            <th>揪團地點</th>
+                            <th>限制人數</th>
+                            <th>參與人數</th>
+                            <th>揪團發起時間</th>
+                            <th>參與截止時間</th>
+                            <th>發起人</th>
+                            <th>退出活動</th>
+                        </tr>
+                    </thead>
+                    <tbody v-for="act in Activities" class="table-body" :key="act.activityId">
+                        <tr class="cell-1">
+                            <td><a v-bind:href="'/Activity/ActivityDetail'+'?id='+ act.activityId">#{{act.activityId}}</a>
+                            </td>
+                            <td>{{act.activitiesName}}</td>
+                            <td>{{act.activitiesAddress}}</td>
+                            <td>{{act.limitCount}}</td>
+                            <td>{{act.joinCount}}</td>
+                            <td>{{act.createdTime}}</td>
+                            <td>{{act.endTime}}</td>
+                            <td>{{act.memberName}}</td>
+                            <td> <a class="btn btn-danger btn-sm" href="#" v-on:click="quitAct(act)"><i
+                                        class="fas fa-trash"></i>退出活動</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br />
+                <div v-if="MyActivities != null">
+                    <div class="text-left mb-3 pb-3">
+                        <h3>我的活動</h3>
+                    </div>
                     <table class="table">
                         <thead>
                             <tr>
-                                <th class="text-center">
-                                    <div class="toggle-btn">
-                                        <div class="inner-circle"></div>
-                                    </div>
-                                </th>
                                 <th>活動編號</th>
                                 <th>揪團名稱</th>
                                 <th>揪團地點</th>
@@ -102,17 +137,13 @@
                                 <th>揪團發起時間</th>
                                 <th>參與截止時間</th>
                                 <th>發起人</th>
-                                <th>退出活動</th>
+                                <th>編輯活動</th>
                             </tr>
                         </thead>
-                        <tbody v-for="act in Activities" class="table-body">
+                        <tbody v-for="act in MyActivities" class="table-body" :key="act.activityId">
                             <tr class="cell-1">
-                                <td class="text-center">
-                                    <div class="toggle-btn">
-                                        <div class="inner-circle"></div>
-                                    </div>
+                                <td><a v-bind:href="'/Activity/ActivityDetail?id='+ act.activityId">#{{act.activityId}}</a>
                                 </td>
-                                <td><a v-bind:href="'/Activity/ActivityDetail/'+ act.activityId">#{{act.activityId}}</a></td>
                                 <td>{{act.activitiesName}}</td>
                                 <td>{{act.activitiesAddress}}</td>
                                 <td>{{act.limitCount}}</td>
@@ -120,75 +151,92 @@
                                 <td>{{act.createdTime}}</td>
                                 <td>{{act.endTime}}</td>
                                 <td>{{act.memberName}}</td>
-                                <td><a href="">退出</a></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <br />
-                    <div class="text-left mb-3 pb-3">
-                        <h3>我的活動</h3>
-                    </div>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th class="text-center">
-                                    <div class="toggle-btn">
-                                        <div class="inner-circle"></div>
-                                    </div>
-                                </th>
-                                <th>活動<br />編號</th>
-                                <th>揪團<br />名稱</th>
-                                <th>揪團<br />地點</th>
-                                <th>限制<br />人數</th>
-                                <th>參與<br />人數</th>
-                                <th>揪團<br />發起時間</th>
-                                <th>參與<br />截止時間</th>
-                                <th>發起人</th>
-                                <th>刪除<br />活動</th>
-                            </tr>
-                        </thead>
-                        <tbody v-for="act in MyActivities" class="table-body">
-                            <tr class="cell-1">
-                                <td class="text-center">
-                                    <div class="toggle-btn">
-                                        <div class="inner-circle"></div>
-                                    </div>
+                                <td> <a class="btn btn-info btn-sm" href="#" data-bs-toggle="modal"
+                                        data-bs-target="#editModal" v-on:click="editModal(act)"><i
+                                            class="fas fa-pencil-alt"></i>修改</a>
+                                    <a class="btn btn-danger btn-sm" href="#" v-on:click="deleteInfo(act)"><i
+                                            class="fas fa-trash"></i>刪除</a>
                                 </td>
-                                <td><a v-bind:href="'/Activity/ActivityDetail/'+ act.activityId">#{{act.activityId}}</a></td>
-                                <td>{{act.activitiesName}}</td>
-                                <td>{{act.activitiesAddress}}</td>
-                                <td>{{act.limitCount}}</td>
-                                <td>{{act.joinCount}}</td>
-                                <td>{{act.createdTime}}</td>
-                                <td>{{act.endTime}}</td>
-                                <td>{{act.memberName}}</td>
-                                <td><a href="">刪除</a></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
+
             </div>
         </div>
-
-        <!-- Detail End -->
     </div>
 
+    <!-- Detail End -->
+    <!-- Modal EditActivity-->
+            <div class="modal fade" id="editModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">修改活動資料</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                                v-on:click="close"></button>
+                        </div>
+                        <div class="modal-body" v-if="editActivity != null">
+                            <div class="row mb-1">
+                                <label class="col-sm-4">活動編號 :</label>
+                                <label class="col-sm-5">{{editActivity.activityId}}</label>
+                            </div>
+                            <div class="row mb-1">
+                                <label class="col-sm-4">發起人 :</label>
+                                <label class="col-sm-5">{{editActivity.memberName}}</label>
+                            </div>
+                            <div class="row mb-1">
+                                <label class="col-sm-4">揪團發起時間 :</label>
+                                <label class="col-sm-5">{{editActivity.createdTime}}</label>
+                            </div>
+                            <div class="row mb-1">
+                                <label class="col-sm-4">參與人數 :</label>
+                                <label class="col-sm-5">{{editActivity.joinCount}}</label>
+                            </div>
+                            <div class="row mb-1">
+                                <label for="editActivitiesName" class="col-sm-4">揪團名稱 :</label>
+                                <input id="editActivitiesName" class="col-sm-5" type="text"
+                                    v-model="editActivity.activitiesName" placeholder="輸入揪團名稱">
+                            </div>
+                            <div class="row mb-1">
+                                <label for="editActivitiesAddress" class="col-sm-4">揪團地點 :</label>
+                                <input id="editActivitiesAddress" class="col-sm-5" type="text"
+                                    v-model="editActivity.activitiesAddress" placeholder="輸入揪團地點">
+                            </div>
+                            <div class="row mb-1">
+                                <label for="editLimitCount" class="col-sm-4">限制人數 :</label>
+                                <input id="editLimitCount" class="col-sm-5" type="text"
+                                    v-model="editActivity.limitCount" placeholder="輸入限制人數">
+                            </div>
+                            <div class="row mb-1">
+                                <label for="editEndTime" class="col-sm-4">參與截止時間 :</label>
+                                <input id="editEndTime" class="col-sm-5" type="date" v-model="editActivity.endTime"
+                                    placeholder="輸入參與截止時間">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                v-on:click="close">取消</button>
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                                v-on:click="editinfo">確認修改</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.card-body -->
+</div>
 
-    @section scripts {
+
+@section scripts {
     <script>
         var VuePage = new Vue({
             el: "#VuePage",
             data: {
-                ActivitiesId: '',
-                ActivitiesName: '',
-                ActivitiesContent: '',
-                ActivitiesAddress: '',
-                EndTime: '',
-                LimitCount: '',
-                ActitiesStartDate: '',
-                ActitiesFinishDate: '',
                 Activities: [],
-                MyActivities: [],
+                MyActivities: null,
+                editActivity: null,
                 ErrMsg: '',
                 Success: ''
             },
@@ -226,13 +274,114 @@
                 //    // 過濾出重複的元素
                 //    return [...new Set(array)]
                 //},
-                postAct: function () {
-                    window.location.assign("/Activity/AddActivity")
+ 
+                searchActivity: function () {
                 },
+                quitAct: function (request) {
+                    var self = this;
+                    self.editActivity = { ...request };
+                    axios({
+                        method: 'delete',
+                        url: `/Administrators/AdministratorApi/QuitAct/${self.editActivity.activityId}`,
+                    })
+                        .then(function (res) {
+                            console.log(res);
+                            self.Success = res.data;
+                            self.editActivity.joinCount -= 1;
+                            const index = self.activities.findIndex(a => a.activityId === self.editActivity.activityId);
+                            self.activities.splice(index, 1, self.editActivity);
+                            self.editActivity = null;
+                                Swal.fire({
+                                    title: self.Success,
+                                    icon: 'success',
+                                    timer: 12000
+                                });
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                            self.ErrMsg = error.response.data.errors;
+                            var message = Object.values(error.response.data.errors).join('<br>');
+                            Swal.fire({
+                                title: '修改失敗',
+                                text: `${message}`,
+                                icon: 'error',
+                                timer: 12000
+                            });
+                        });
+                },
+                editModal: function (request) {
+                    this.editActivity = { ...request };
+                },
+                editinfo: function () {
+                    var self = this;
+                    axios({
+                        method: 'put',
+                        url: `/Administrators/AdministratorApi/UpdateActivity/${self.editActivity.activityId}`,
+                        data: self.editActivity,
+                    })
+                        .then(function (res) {
+                            console.log(res);
+                            self.Success = res.data;
+                            const index = self.activities.findIndex(a => a.activityId === self.editActivity.activityId);
+                            self.activities.splice(index, 1, self.editActivity);
+                            self.editActivity = null;
+                                Swal.fire({
+                                    title: self.Success,
+                                    icon: 'success',
+                                    timer: 12000
+                                });
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                            self.ErrMsg = error.response.data.errors;
+                            var message = Object.values(error.response.data.errors).join('<br>');
+                            Swal.fire({
+                                title: '修改失敗',
+                                text: `${message}`,
+                                icon: 'error',
+                                timer: 12000
+                            });
+                        });
+
+                },
+                close: function () {
+                    this.editActivity = null;
+                },
+                deleteInfo: function (request) {
+                    var self = this;
+                    Swal.fire({
+                        title: '確認要刪除?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: '是的, 刪除!',
+                        cancelButtonText: '取消!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            axios({
+                                method: 'delete',
+                                url: `/SocialActivities/SocialActivitiesApi/DeleteAct/${request.activityId}`
+                            }).then(function (res) {
+                                console.log(res);
+                                const index = self.activities.findIndex(a => a.activityId === request.activityId);
+                                self.activities.splice(index, 1);
+                            })
+                                .catch(function (error) {
+                                    console.log(error);
+                                });
+                            Swal.fire(
+                                '刪除!',
+                                '資料已刪除.',
+                                'success'
+                            );
+                        }
+                    })
+                }
 
 
             },
         });
 
     </script>
-    }
+}

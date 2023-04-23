@@ -133,7 +133,8 @@ namespace _3TeamProject.Areas.Members.Controllers
 
                 _context.Members.Add(member);
                 await _context.SaveChangesAsync();
-                return Ok("註冊成功，請等待驗證信件");
+                User? user = _context.Users.Where(u => u.Account == request.Account).FirstOrDefault();
+                return Ok($"註冊成功，請等待驗證信件，會員編號:{user?.UserId}");
             }
         }
         //會員資料修改
@@ -141,6 +142,8 @@ namespace _3TeamProject.Areas.Members.Controllers
         public async Task<IActionResult> Update(int id, [FromBody] UpdateMemberDto request)
         {
             var UserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
+            var member = _context.Members.Include(a => a.User)
+                    .Where(a => a.UserId == id).Select(a => a).SingleOrDefault();
             if (id != UserId)
             {
                 return BadRequest("與登入帳號不符");
@@ -150,42 +153,48 @@ namespace _3TeamProject.Areas.Members.Controllers
                 var errors = ModelState.Select(x => x.Value.Errors).Where(y => y.Count > 0).ToList();
                 return BadRequest(errors);
             }
-
-            var member = _context.Members.Include(a => a.User)
-                    .Where(a => a.UserId == id).Select(a => a).SingleOrDefault();
-
-            using (var hmac = new HMACSHA512())
+            if (member == null)
             {
-                var passwordSalt = hmac.Key;
-                var passwordHsah = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(request.Password));
-                member.MemberName = request.MemberName;
-                member.NickName = request.NickName;
-                member.Birthday = request.Birthday;
-                member.IdentityNumber = request.IdentityNumber;
-                member.CellPhoneNumber = request.CellPhoneNumber;
-                member.PhoneNumber = request.PhoneNumber;
-                member.PostalCode = request.PostalCode;
-                member.Country = request.Country;
-                member.City = request.City;
-                member.Address = request.Address;
-                member.User.Email = request.Email;
-                member.User.PasswordHash = passwordHsah;
-                member.User.PasswordSalt = passwordSalt;
-                _context.Members.Update(member);
-                await _context.SaveChangesAsync();
+                return NotFound(("無此帳號"));
             }
+            
+            if (request.Password != "********")
+            {
+                using (var hmac = new HMACSHA512())
+                {
+                    var passwordSalt = hmac.Key;
+                    var passwordHsah = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(request.Password));
+                    member.User.PasswordSalt = passwordSalt;
+                    member.User.PasswordHash = passwordHsah;
+                }
+            }
+
+            member.MemberName = request.MemberName;
+            member.NickName = request.NickName;
+            member.Birthday = request.Birthday;
+            member.IdentityNumber = request.IdentityNumber;
+            member.CellPhoneNumber = request.CellPhoneNumber;
+            member.PhoneNumber = request.PhoneNumber;
+            member.PostalCode = request.PostalCode;
+            member.Country = request.Country;
+            member.City = request.City;
+            member.Address = request.Address;
+            member.User.Email = request.Email;
+            _context.Members.Update(member);
+            await _context.SaveChangesAsync();
+            
             return Ok("修改成功!");
         }
         //會員刪除
         [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var UserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
+            int UserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
             if (id != UserId)
             {
                 return BadRequest("與登入帳號不符");
             }
-            var member = _context.Members.Include(u => u.User).FirstOrDefault(x => x.UserId == id);
+            Member? member = _context.Members.Include(u => u.User).FirstOrDefault(x => x.UserId == id);
             member.MemberStatusId = 4;
             _context.Members.Update(member);
             await _context.SaveChangesAsync();
@@ -195,7 +204,7 @@ namespace _3TeamProject.Areas.Members.Controllers
         [HttpGet("GetOrder")]
         public IActionResult GetOrder()
         {
-            var UserID = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
+            int UserID = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
             var myOrder = _context.Orders.Include(o => o.Member).Include(o => o.OrderDetails)
                 .Include(o => o.OrderStatusNavigation).Include(o => o.PaymentStatusNavigation)
                 .Include(o => o.ShipStatusNavigation).Where(o => o.Member.UserId == UserID && o.ShipStatus != 2)
@@ -224,7 +233,7 @@ namespace _3TeamProject.Areas.Members.Controllers
         [HttpGet("GetOrderRecord")]
         public IActionResult GetOrderRecord()
         {
-            var UserID = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
+            int UserID = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
             var OrderRecord = _context.Orders.Include(o => o.Member).Include(o => o.OrderDetails)
                 .Include(o => o.OrderStatusNavigation).Include(o => o.PaymentStatusNavigation)
                 .Include(o => o.ShipStatusNavigation).Where(o => o.Member.UserId == UserID && o.ShipStatus == 2)
@@ -252,7 +261,7 @@ namespace _3TeamProject.Areas.Members.Controllers
         [HttpGet("ActRecord")]
         public IActionResult ActRecord()
         {
-            var UserID = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
+            int UserID = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
             var record = _context.SocialActivities.Include(s => s.Member)
                 .ThenInclude(m => m.User).Where(m => m.Member.UserId == UserID).Select(s => new GetActRecordDto
                 {
